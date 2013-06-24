@@ -1,0 +1,127 @@
+/* 
+[Table of contents]
+
+01.TABLET (Portrait)
+02.MOBILE (Portrait)
+03.MOBILE (Landscape)
+------------------------------------------------*/
+
+/* ........................................................... [01.TABLET (Portrait)] */
+
+/* Note: Design for a width of 768px */
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+
+  .visible-tablet ,
+  .hidden-desktop     { display: inherit; }
+
+  .hidden-tablet ,
+  .visible-desktop    { display: none; }
+
+  .container          { width: 768px; }
+
+  /* Columns */
+
+  .container .one     { width: 44px;  }
+  .container .two     { width: 108px; }
+  .container .three   { width: 172px; }
+  .container .four    { width: 236px; }
+  .container .five    { width: 300px; }
+  .container .six     { width: 364px; }
+  .container .seven   { width: 428px; }
+  .container .eight   { width: 492px; }
+  .container .nine    { width: 556px; }
+  .container .ten     { width: 620px; }
+  .container .eleven  { width: 684px; }
+  .container .twelve  { width: 748px; }
+
+  /* Offsets */
+
+  .container .offset-one     { margin-left: 64px;  }
+  .container .offset-two     { margin-left: 128px; }
+  .container .offset-three   { margin-left: 192px; }
+  .container .offset-four    { margin-left: 256px; }
+  .container .offset-five    { margin-left: 320px; }
+  .container .offset-six     { margin-left: 384px; }
+  .container .offset-seven   { margin-left: 448px; }
+  .container .offset-eight   { margin-left: 512px; }
+  .container .offset-nine    { margin-left: 576px; }
+  .container .offset-ten     { margin-left: 640px; }
+  .container .offset-eleven  { margin-left: 704px; }
+
+}
+
+/* ........................................................... [02.MOBILE (Portrait)] */
+
+/* Note: Design for a width of 320px */
+
+@media only screen and (max-width: 767px) {
+
+  .visible-phone ,
+  .hidden-desktop  { display: inherit; }
+
+  .hidden-phone ,
+  .visible-desktop { display: none; }
+
+  .container ,
+  .container .one,
+  .container .two,
+  .container .three,
+  .container .four,
+  .container .five,
+  .container .six,
+  .container .seven,
+  .container .eight,
+  .container .nine,
+  .container .ten,
+  .container .eleven,
+  .container .twelve { width: 300px; margin-left:auto; margin-right:auto; }
+
+  /* Offsets */
+  .container .offset-one,
+  .container .offset-two,
+  .container .offset-three,
+  .container .offset-four,
+  .container .offset-five,
+  .container .offset-six,
+  .container .offset-seven,
+  .container .offset-eight,
+  .container .offset-nine,
+  .container .offset-ten,
+  .container .offset-eleven { margin-left: 0; }
+
+  /* Fluid */
+  .fluid.container .one,
+  .fluid.container .two,
+  .fluid.container .three,
+  .fluid.container .four,
+  .fluid.container .five,
+  .fluid.container .six,
+  .fluid.container .seven,
+  .fluid.container .eight,
+  .fluid.container .nine,
+  .fluid.container .ten,
+  .fluid.container .eleven,
+  .fluid.container .twelve { width: 100%; }
+}
+
+
+/* ........................................................... [03.MOBILE (Landscape)] */
+
+/* Note: Design for a width of 480px */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  .container ,
+  .container .one,
+  .container .two,
+  .container .three,
+  .container .four,
+  .container .five,
+  .container .six,
+  .container .seven,
+  .container .eight,
+  .container .nine,
+  .container .ten,
+  .container .eleven,
+  .container .twelve { width: 420px; }
+}

@@ -1,0 +1,204 @@
+/* Base Theme
+------------------------------------------------
+[Table of contents]
+
+00.RESET
+01.BASIC
+02.TYPOGRAPHY
+03.GENERAL
+04.FORMS
+05.HEADER
+06.CONTENT
+07.FOOTER
+08.MEDIA QUERIES
+------------------------------------------------*/
+/* ........................................................... [00.RESET] */
+
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+	margin:0;
+	padding:0;
+	border:0;
+	font-size:100%;
+	font:inherit;
+	vertical-align:baseline;
+}
+
+/* ........................................................... [01.BASIC] */
+
+body {
+	font:14px/21px Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing:antialiased;
+	-webkit-text-size-adjust:100%; /* Fix for webkit rendering */
+}
+
+#doc, header, footer {
+  position:relative;
+}
+
+/* ........................................................... [02.TYPOGRAPHY] */
+
+/* General */
+
+p { margin:0 0 1.5em 0; word-spacing:0.08em; letter-spacing:0.03em; }
+small { font-size: 80%; }
+strong { font-style: inherit; font-weight: bold; }
+
+/* Links */
+
+a, a:visited, a:hover, a:active , a:focus { text-decoration:none; outline: 0; }
+p a, p a:visited { line-height: inherit; }
+
+/* Headings */
+
+h1, h2, h3, h4, h5, h6 { font-weight: normal; text-rendering:optimizelegibility;}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
+h1 { font-size: 2.143em; line-height: 1.4em;  }
+h2 { font-size: 1.71em;  line-height: 1.75em; }
+h3 { font-size: 1.28em;  line-height: 2.35em; }
+h4 { font-size: 1em;     line-height: 1.52em; }
+h5 { font-size: 0.85em;  line-height: 1.70em; }
+h6 { font-size: 0.79em;  line-height: 1.90em; }
+
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img { margin: 0; }
+
+/* #Lists */
+
+ul, ol { padding:0; margin: 0 0 1.5em 0; }
+ul { list-style: none outside; }
+ol { list-style: decimal; }
+ul ul, ol, ul.square, ul.circle, ul.disc { margin-left: 1.5em; }
+li ul, li ol { margin: 0 0 0 1.5em; }
+ul.square { list-style: square outside; }
+ul.circle { list-style: circle outside; }
+ul.disc { list-style: disc outside; }
+ul.inline li, ol.inline li  { display: inline-block; }
+dt { font-weight: bold; }
+
+/* Images */
+
+a img { margin: 0 auto; }
+img{ margin:0; padding:0; border:0; display:block; }
+img.scale { max-width: 100%; height: auto; }
+img.v-scale { height: 100%; max-width:100%; }
+img.h-scale { width: 100%; max-height:100%; }
+p img.left { float: left; margin: 0 1em 1em 0; padding: 0; }
+p img.right { float: right; margin: 0 0 1em 1em;  }
+
+/* Misc */
+
+abbr, acronym { border-bottom: 1px dotted #000; }
+address { display: block; }
+
+blockquote { padding-left:1.5em; margin: 1.5em; font-family:georgia, serif; font-style:italic;  }
+blockquote:before { position:relative; top:0.5em; content:"\201C"; font-size:3em; margin-left:-.625em; font-family:georgia, serif; color:#aaa; line-height:0; }
+blockquote > p { padding:0; margin:0; }
+
+em, dfn { font-style: italic; font-weight: inherit; line-height: inherit; }
+dfn { font-weight: bold; }
+pre, code { margin: 1.5em 0; white-space: pre; }
+pre, code, tt { font: 1em monospace; line-height: 1.5; } 
+tt { display: block; margin: 1.5em 0; }
+hr { border: none; clear: both; margin: 1.5em 0; height: 2px; }
+sub,sup {position:relative;font-size:75%;line-height:0;vertical-align:baseline;}
+sup { top:-0.5em; }
+sub { bottom:-0.25em; }
+
+/* Tables */
+
+th, td { text-align: left; }
+table { width:100%; border-collapse: collapse; border-spacing: 0; }
+th, td { line-height: 2.95em; padding: 0 1em ; }
+th:first-child, td:first-child { padding-left: 0; }
+th:last-child, td:last-child { padding-right: 0; }
+
+/* ........................................................... [03.FORMS] */
+
+form {
+	margin-bottom: 1em;
+}
+
+fieldset {
+	margin-bottom:1.5em;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+ background:#fff;
+ border: 1px solid #222;
+ padding: .6em .5em;
+ width: 100%;
+	-webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="email"]:hover,
+textarea:hover {
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+}
+
+textarea {
+	min-height:120px;
+  height:340px;
+  max-height:600px;
+}
+
+legend {
+	display:block;
+	font-weight:700;
+	font-size: 0.9em;
+}
+
+input[type="checkbox"] {
+	display:inline;
+}
+
+label {
+  display: block;
+  margin-bottom:0.5em;
+}
+
+input[type=submit] {
+	-webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/* ........................................................... [04.GENERAL] */
+/* ........................................................... [04.HEADER] */
+/* ........................................................... [06.CONTENT] */
+/* ........................................................... [07.FOOTER] */
+/* ........................................................... [08.MEDIA QUERIES] */
+
+/* Smaller than standard 960 (devices and browsers) */
+@media only screen and (max-width: 959px) {
+  body:after { content: 'mobile'; display: none; }
+}
+
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  body:after { content: 'tablet'; display: none; }
+}
+
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {
+  body:after { content: 'phone'; display: none; }
+}
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+}

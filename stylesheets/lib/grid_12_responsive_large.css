@@ -1,0 +1,43 @@
+/* 
+[Table of contents]
+
+01.LARGE DESKTOP
+------------------------------------------------*/
+
+/* ........................................................... [01.LARGE DESKTOP] */
+
+@media (min-width: 1200px) {
+
+  .visible-desktop { display: inherit; }
+
+  .container         { width: 1180px; }
+
+  /* Columns */
+
+  .container .one    { width: 80px;   }
+  .container .two    { width: 180px;  }
+  .container .three  { width: 280px;  }
+  .container .four   { width: 380px;  }
+  .container .five   { width: 480px;  }
+  .container .six    { width: 580px;  }
+  .container .seven  { width: 680px;  }
+  .container .eight  { width: 780px;  }
+  .container .nine   { width: 880px;  }
+  .container .ten    { width: 980px;  }
+  .container .eleven { width: 1080px; }
+  .container .twelve { width: 1180px; }
+
+  /* Offsets */
+
+  .container .offset-one    { margin-left: 100px;   }
+  .container .offset-two    { margin-left: 200px;  }
+  .container .offset-three  { margin-left: 300px;  }
+  .container .offset-four   { margin-left: 400px;  }
+  .container .offset-five   { margin-left: 500px;  }
+  .container .offset-six    { margin-left: 600px;  }
+  .container .offset-seven  { margin-left: 700px;  }
+  .container .offset-eight  { margin-left: 800px;  }
+  .container .offset-nine   { margin-left: 900px;  }
+  .container .offset-ten    { margin-left: 1000px;  }
+  .container .offset-eleven { margin-left: 1100px; }
+}

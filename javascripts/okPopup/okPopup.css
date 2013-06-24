@@ -1,0 +1,134 @@
+/* Example Styles */
+
+#gallery-example {
+  width: 100%;
+}
+
+#gallery-example li {
+  display: inline-block;
+}
+
+/* General */
+
+.ui-popup {
+  z-index:1001;
+}
+
+.ui-overlay {
+  background: rgba(0,0,0,0.2);
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0;
+  bottom: 0;
+  z-index:1000;
+}
+
+/* Tooltips */
+
+.ui-popup.tooltip {
+  padding: 5px;
+  background: rgba(0,0,0,0.7);
+  position: relative;
+  display: inline;
+  border: 1px solid #fff;
+  color:#fff;
+  -moz-border-radius: 4px 4px 4px 4px;
+  -webkit-border-radius: 4px 4px 4px 4px;
+}
+
+.ui-popup.tooltip:after {
+  content:'\0020';
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom:-5px;
+  left: 50%;
+  margin-left: -5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0,0,0,0.7);
+}
+
+/* Notification Queue */
+
+.ui-popup.notification {
+  padding:10px;
+  width:300px;
+  text-align:left;
+  margin-bottom:10px;
+  -moz-border-radius: 8px 8px 8px 8px;
+  -webkit-border-radius: 8px 8px 8px 8px;
+  -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+  background:#E6EFC2;
+  color:#264409;
+  border-color:#C6D880;
+}
+
+#notification-queue {
+  position:fixed;
+  top:10px;
+  right:10px;
+}
+
+/* Modals */
+
+.ui-popup.modal {
+  padding: 5px;
+  background: #fff url(images/spinner.gif) center center no-repeat;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #aaa;
+  box-shadow: 0 0 5px #000;
+  width: 32px;
+  height: 32px;
+  color: #222;
+}
+
+.ui-popup ul {
+  margin-bottom: 0;
+}
+
+.ui-popup .close ,
+.ui-popup .navigation {
+  position: absolute;
+  z-index: 100;
+}
+
+.ui-popup .navigation {
+  bottom: 0;
+  left: 0;
+}
+
+.ui-popup .navigation li{
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.ui-popup .close {
+  top: 0;
+  right: 0;
+}
+
+.ui-popup nav,
+.ui-popup header{
+  background: rgba(0,0,0,0.7);
+  position: absolute;
+}
+
+.ui-popup header{
+  top: 0;
+  right: 0;
+}
+
+.ui-popup nav {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.ui-popup nav a{
+  margin-right: 10px;
+}
