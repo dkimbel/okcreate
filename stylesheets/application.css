@@ -1,9 +1,9 @@
-/* Base Theme
+/* okcreate!
 ------------------------------------------------
 [Table of contents]
 
 00.RESET
-01.BASIC
+01.BASE
 02.TYPOGRAPHY
 03.GENERAL
 04.FORMS
@@ -23,51 +23,51 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	vertical-align:baseline;
 }
 
-/* ........................................................... [01.BASIC] */
+/* ........................................................... [01.BASE] */
 
 body {
-	font:14px/21px Helvetica, Arial, sans-serif;
+	font:14px/21px Helvetica, Arial, sans-serif; /* 1em = 14px */
+  color: #222;
 	-webkit-font-smoothing:antialiased;
 	-webkit-text-size-adjust:100%; /* Fix for webkit rendering */
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 
-#doc, header, footer {
+#doc, #header, #footer {
   position:relative;
 }
 
 /* ........................................................... [02.TYPOGRAPHY] */
 
-/* General */
-
-p { margin:0 0 1.5em 0; word-spacing:0.08em; letter-spacing:0.03em; }
-small { font-size: 80%; }
-strong { font-style: inherit; font-weight: bold; }
-
 /* Links */
 
 a, a:visited, a:hover, a:active , a:focus { text-decoration:none; outline: 0; }
+a:hover, a:active , a:focus {}
 p a, p a:visited { line-height: inherit; }
 
 /* Headings */
 
-h1, h2, h3, h4, h5, h6 { font-weight: normal; text-rendering:optimizelegibility;}
+h1, h2, h3, h4, h5, h6 { font-weight: normal; text-rendering:optimizelegibility; margin-bottom: 1em;}
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
 h1 { font-size: 2.143em; line-height: 1.4em;  }
 h2 { font-size: 1.71em;  line-height: 1.75em; }
-h3 { font-size: 1.28em;  line-height: 2.35em; }
-h4 { font-size: 1em;     line-height: 1.52em; }
-h5 { font-size: 0.85em;  line-height: 1.70em; }
-h6 { font-size: 0.79em;  line-height: 1.90em; }
+h3 { font-size: 1.28em;  line-height: 1.27em; }
+h4 { font-size: 1em;     line-height: 1.5em; margin-bottom: 1.6em; }
+h5 { font-size: 0.85em;  line-height: 1.70em; margin-bottom: 1.8em;}
+h6 { font-size: 0.79em;  line-height: 1.90em; margin-bottom: 1.9em;}
 
 h1 img, h2 img, h3 img, h4 img, h5 img, h6 img { margin: 0; }
 
 /* #Lists */
 
-ul, ol { padding:0; margin: 0 0 1.5em 0; }
+dl, ul, ol { padding:0; margin: 0 0 1em 0; }
 ul { list-style: none outside; }
 ol { list-style: decimal; }
-ul ul, ol, ul.square, ul.circle, ul.disc { margin-left: 1.5em; }
 li ul, li ol { margin: 0 0 0 1.5em; }
+ol,ul.square, ul.circle, ul.disc { margin-left: 1.5em; }
 ul.square { list-style: square outside; }
 ul.circle { list-style: circle outside; }
 ul.disc { list-style: disc outside; }
@@ -78,79 +78,183 @@ dt { font-weight: bold; }
 
 a img { margin: 0 auto; }
 img{ margin:0; padding:0; border:0; display:block; }
-img.scale { max-width: 100%; height: auto; }
-img.v-scale { height: 100%; max-width:100%; }
-img.h-scale { width: 100%; max-height:100%; }
-p img.left { float: left; margin: 0 1em 1em 0; padding: 0; }
-p img.right { float: right; margin: 0 0 1em 1em;  }
+img.scale { max-width: 100%; height: auto; }  /* Scale images to fit container */
+img.v-scale { height: 100%; max-width:100%; } /* Scale images to fit container - prioritize vertical */
+img.h-scale { width: 100%; max-height:100%; } /* Scale images to fit container - prioritize horizontal */
 
-/* Misc */
+/* Tables */
 
-abbr, acronym { border-bottom: 1px dotted #000; }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+  border: none;
+  width:100%; 
+  margin-bottom: 1em;
+  border: 1px solid #222;
+}
+
+caption {
+  padding: 1em 0;
+  text-align: center;
+}
+
+td, th {
+  border-left: none;
+  font-size: inherit;
+  margin: 0;
+  overflow: visible;
+  padding: 0.375em 0.5em;
+  text-align: left;
+  opacity: 0.6;
+  line-height: 1.44em;
+  border-left: 1px solid #222;
+}
+
+th:first-child, 
+td:first-child { 
+  border-left-width: 0; 
+}
+
+thead {
+  text-align: left;
+  vertical-align: bottom;
+}
+
+/* Everything Else */
+
+p { margin:0 0 1.5em 0; word-spacing:0.08em; letter-spacing:0.03em; }
+
+small { font-size: 80%; }
+
+strong { font-style: inherit; font-weight: bold; }
+
+abbr:hover { cursor: help; }
+
 address { display: block; }
 
 blockquote { padding-left:1.5em; margin: 1.5em; font-family:georgia, serif; font-style:italic;  }
-blockquote:before { position:relative; top:0.5em; content:"\201C"; font-size:3em; margin-left:-.625em; font-family:georgia, serif; color:#aaa; line-height:0; }
+blockquote:before { position:relative; top:0.5em; content:"\201C"; font-size:3em; margin-left:-.625em; font-family:georgia, serif; line-height:0; }
 blockquote > p { padding:0; margin:0; }
 
 em, dfn { font-style: italic; font-weight: inherit; line-height: inherit; }
 dfn { font-weight: bold; }
-pre, code { margin: 1.5em 0; white-space: pre; }
-pre, code, tt { font: 1em monospace; line-height: 1.5; } 
-tt { display: block; margin: 1.5em 0; }
-hr { border: none; clear: both; margin: 1.5em 0; height: 2px; }
+
+pre code { word-wrap: normal; white-space: -moz-pre-wrap; white-space: pre-wrap; }
+pre { white-space: pre; }
+code { white-space: pre; font-family: monospace; }
+
+hr { border: 1px solid #222; clear: both; margin: 1.5em 0; height: 2px; }
+
 sub,sup {position:relative;font-size:75%;line-height:0;vertical-align:baseline;}
 sup { top:-0.5em; }
 sub { bottom:-0.25em; }
 
-/* Tables */
-
-th, td { text-align: left; }
-table { width:100%; border-collapse: collapse; border-spacing: 0; }
-th, td { line-height: 2.95em; padding: 0 1em ; }
-th:first-child, td:first-child { padding-left: 0; }
-th:last-child, td:last-child { padding-right: 0; }
-
 /* ........................................................... [03.FORMS] */
 
-form {
+form ,
+fieldset {
 	margin-bottom: 1em;
 }
 
-fieldset {
-	margin-bottom:1.5em;
+textarea {
+	min-height:10.5em;
+}
+
+label {
+  margin-bottom: 0.5em;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="url"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="week"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+input[type=submit],
 textarea,
 select {
- background:#fff;
- border: 1px solid #222;
- padding: .6em .5em;
- width: 100%;
-	-webkit-box-sizing: border-box; 
+  background:#fff;
+  border: 1px solid #222;
+  padding: .5em;
+  width: 100%;
+ 	-webkit-box-sizing: border-box; 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+  margin-bottom: 1em;
+}
+
+input[type="checkbox"] {
+  margin-left: 0.5em;
+	display:inline;
+}
+
+input[type=submit] {
+  width: auto;
 }
 
 input[type="text"]:hover,
 input[type="password"]:hover,
 input[type="email"]:hover,
+input[type="url"]:hover,
+input[type="date"]:hover,
+input[type="month"]:hover,
+input[type="time"]:hover,
+input[type="datetime"]:hover,
+input[type="datetime-local"]:hover,
+input[type="week"]:hover,
+input[type="number"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+input[type="color"]:hover,
 textarea:hover {
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
 textarea:focus {
 }
 
-textarea {
-	min-height:120px;
-  height:340px;
-  max-height:600px;
+input[type="text"][disabled],
+input[type="password"][disabled],
+input[type="email"][disabled],
+input[type="url"][disabled],
+input[type="date"][disabled],
+input[type="month"][disabled],
+input[type="time"][disabled],
+input[type="datetime"][disabled],
+input[type="datetime-local"][disabled],
+input[type="week"][disabled],
+input[type="number"][disabled],
+input[type="search"][disabled],
+input[type="tel"][disabled],
+input[type="color"][disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  border: 1px solid #888;
 }
 
 legend {
@@ -159,19 +263,8 @@ legend {
 	font-size: 0.9em;
 }
 
-input[type="checkbox"] {
-	display:inline;
-}
-
 label {
   display: block;
-  margin-bottom:0.5em;
-}
-
-input[type=submit] {
-	-webkit-box-sizing: border-box; 
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
 }
 
 /* ........................................................... [04.GENERAL] */
