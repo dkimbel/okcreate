@@ -14,6 +14,7 @@
   <link href="../stylesheets/lib/grid_12_responsive.css" rel="stylesheet" type="text/css" media="all">
   <link href="../stylesheets/lib/normalize.css" rel="stylesheet" type="text/css" media="all">
   <link href="../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="demo.css" rel="stylesheet" type="text/css" media="screen">
   <!--[if lt IE 9]>
     <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -26,54 +27,57 @@
 <body>
 
   <div id="doc">
-    <header>
-    </header><!-- header -->
 
     <div id='main' class='container'>
-      <!-- <header class="twelve"> -->
-        <!-- <h1>Typography</h1> -->
-        <!-- <p> -->
-          <!-- This page show basic typography elements and how ok create! renders them.  -->
-        <!-- </p> -->
-      <!-- </header> -->
+      <header class="twelve">
+        <h1>Typography</h1>
+        <p>
+          This page demonstrates how okcreate! renders typographical elements. 
+        </p>
+      </header>
       <section class="six">
-        <h1>Heading — h1 with multiple lines is not just a single line heading but a multi-line heading</h1>
-        <h2>Heading — h2 with multiple lines is not just a single line heading but a multi-line heading</h2>
-        <h3>Heading — h3 with multiple lines is not just a single line heading but a multi-line heading</h3>
+        <h1>h1 with multiple lines is not just a single line heading but a multi-line heading</h1>
+        <h2>h2 with multiple lines is not just a single line heading but a multi-line heading</h2>
+        <h3>h3 with multiple lines is not just a single line heading but a multi-line heading</h3>
+        <h4>h4 with multiple lines is not just a single line heading but a multi-line heading. And the song goes on and on</h4>
+        <h5>h5 with multiple lines is not just a single line heading but a multi-line heading. And the song goes on and on</h5>
+        <h6>h6 with multiple lines is not just a single line heading but a multi-line heading. And the song goes on and on, forever and ever</h6>
         <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed 
+          Paragraph. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed 
           diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
           volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation 
           ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
         </p>
-        <h4>Heading — h4</h4>
         <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed 
+          Paragraph. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed 
           diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
           volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation 
           ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
         </p>
-        <h5>Heading — h5</h5>
-        <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed 
-          diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-          volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation 
-          ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-        </p>
-        <h6>Heading — h6</h6>
-        <p>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed 
-          diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-          volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation 
-          ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-        </p>
-        <form>
-          
+        <form action=''>
+          <div class='input'>
+            <label>Text Input</label>
+            <input type='text' />
+          </div>
+          <div class='input'>
+            <label>Select</label>
+            <select>
+              <option value=''>Select</option>
+            </select>
+          </div>
+          <div class='input'>
+            <label>Checkbox:<input type='checkbox' /></label>
+          </div>
+          <div class='input'>
+            <label>Text Area</label>
+            <textarea></textarea>
+          </div>
+          <div class='input'>
+            <input type='submit' />
+          </div>
         </form>
-
       </section>
       <section class="six">
-        <h2>List Types</h2>
         <h3>Ordered list</h3>
         <ol>
           <li>List item</li>
@@ -116,10 +120,8 @@
           <dt>Definition list title</dt>
           <dd>Definition list data</dd>
         </dl>
-        <h2>Blockquote</h2>
-        <blockquote>
-          <p>Duis autem vel eum iriure dolor in hendrerit in <q>vulputate velit esse molestie consequat</q>, vel illum dolore eu feugiat nulla facilisis.</p>
-        </blockquote>
+        <h2>HR</h2>
+        <hr />
         <h2>Tables</h2>
         <table>
           <thead>
@@ -145,9 +147,9 @@
             </tr>
           </tfoot>			
         </table>
-        <h2>Other markup code</h2>
+        <h2>Other Markup</h2>
         <p>
-          <a href="">hyperlink</a>
+          <a href="#">hyperlink</a>
           <br/>
           <abbr title="title">abbreviation</abbr>
           <br/>
@@ -180,18 +182,16 @@
           <sup>superscript</sup> <sub>subscript</sub>
         </p>
         <address>
-          Contact Information<br/>
-          1234 Candyland Lane
+          Address<br/>
+          1234 Hello World Lane
         </address>
         <pre>preformatted text</pre>
       </section>
 
     </div>
 
-    <footer>
-    </footer><!-- footer -->
-
   </div><!-- #doc -->
 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </body>
 </html>
