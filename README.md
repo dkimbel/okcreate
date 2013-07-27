@@ -7,12 +7,15 @@ represents what we consider to be the ideal base for building websites.
 
 * Minimal - Including a couple thousand lines of CSS and then overriding them all is A Bad Idea.
 * Flexible - okcreate! is designed to be adapted to your particular situation and goes through great lengths to ensure that it can modified as needed.
+* Readble - The code is meant to be tinkered with, so being able to be read and understood by humans is a high priority
+
 
 
 # Usage
 
 Full site/docs coming soon. See each /demo for grid usage and each JavaScript
 plugin has it's own readme respectively.
+
 
 
 ## JavaScripts
@@ -29,12 +32,15 @@ scripts which are unnecessary for your particular application.  Too many
 scripts out there handle every edge-case inside the script leading to bloat and
 maintenance difficultly.
 
-## Styles
 
-okcreate! is different than other CSS frameworks - you don't <em>include
-it</em> you <em>edit it</em>. It's counterproductive, and inefficient to include a
-5,000 line stylesheet and then override every single style. To this end the basic 
-framework only sets up sane defaults which adhere to a philosophy typographical rhythm.
+
+## Stylesheets
+
+okcreate! is different than other CSS frameworks - you don't just <em>include it</em> you <em>edit it</em>. 
+It's counterproductive, and inefficient to include a 5,000 line stylesheet and
+then override every single style. To this end the basic framework only sets up
+sane defaults which adhere to a philosophy typographical rhythm.
+
 
 
 ## Bug tracker
