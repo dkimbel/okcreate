@@ -14,7 +14,6 @@
   <link href="../stylesheets/lib/grid_12_responsive.css" rel="stylesheet" type="text/css" media="all">
   <link href="../stylesheets/lib/normalize.css" rel="stylesheet" type="text/css" media="all">
   <link href="../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
-  <link href="demo.css" rel="stylesheet" type="text/css" media="screen">
   <!--[if lt IE 9]>
     <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -54,10 +53,20 @@
           volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation 
           ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
         </p>
+        <blockquote>
+          <p>
+            Here is a long quotation here is a long quotation.
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          </p>
+        </blockquote>
         <form action=''>
           <div class='input'>
             <label>Text Input</label>
             <input type='text' />
+          </div>
+          <div class='input'>
+            <label>Disabled Input</label>
+            <input type='text' disabled='disabled' />
           </div>
           <div class='input'>
             <label>Select</label>
@@ -120,9 +129,12 @@
           <dt>Definition list title</dt>
           <dd>Definition list data</dd>
         </dl>
-        <h2>HR</h2>
+        <h3>HR</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
         <hr />
-        <h2>Tables</h2>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+        <hr />
+        <h3>Table</h3>
         <table>
           <thead>
             <tr>
@@ -147,15 +159,13 @@
             </tr>
           </tfoot>			
         </table>
-        <h2>Other Markup</h2>
+        <h3>Other Markup</h3>
         <p>
           <a href="#">hyperlink</a>
           <br/>
           <abbr title="title">abbreviation</abbr>
           <br/>
-          <b>offset text typically styled in bold</b>
-          <br/>
-          <cite>cited title of a work</cite>
+          <cite>citation</cite>
           <br/>
           <code>code fragment</code>
           <br/>
@@ -163,9 +173,9 @@
           <br/>
           <dfn title="title">Definition</dfn>
           <br/>
-          <em>emphasized text</em>
+          <em>emphasis</em>
           <br/>
-          <i>italic text</i>
+          <i>italics</i>
           <br/>
           <ins>inserted text</ins>
           <br/>
@@ -173,17 +183,18 @@
           <br/>
           <mark>marked text</mark>
           <br/>
-          <samp>sample output</samp>
+          <samp>sample</samp>
           <br/>
-          <small>small text</small>
+          <small>small</small>
           <br/>
-          <strong>strong text</strong>
+          <strong>strong</strong>
+          <br/>
+          <b>bold</b>
           <br/>
           <sup>superscript</sup> <sub>subscript</sub>
         </p>
         <address>
-          Address<br/>
-          1234 Hello World Lane
+          Address
         </address>
         <pre>preformatted text</pre>
       </section>

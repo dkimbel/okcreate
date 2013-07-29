@@ -6,12 +6,21 @@
 02.CLEARING
 03.MISC
 ------------------------------------------------*/
-
 /* ........................................................... [01.BASE GRID] */
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 0;
+  width: 960px;
+}
 
-.container { position: relative; margin: 0 auto; padding: 0; width:960px; }
-.container.fluid { width: 92%; }
-.row { margin-bottom: 20px; }
+.container.fluid {
+  width: 92%;
+}
+
+.row {
+  margin-bottom: 20px;
+}
 
 .container .zero,
 .container .one,
@@ -25,37 +34,108 @@
 .container .nine,
 .container .ten,
 .container .eleven,
-.container .twelve { float: left; display: inline; margin-left:10px; margin-right:10px; position:relative; }
+.container .twelve {
+  float: left;
+  display: inline;
+  margin-left: 10px;
+  margin-right: 10px;
+  position: relative;
+}
 
-.container .one     { width: 60px;  }
-.container .two     { width: 140px; }
-.container .three   { width: 220px; }
-.container .four    { width: 300px; }
-.container .five    { width: 380px; }
-.container .six     { width: 460px; }
-.container .seven   { width: 540px; }
-.container .eight   { width: 620px; }
-.container .nine    { width: 700px; }
-.container .ten     { width: 780px; }
-.container .eleven  { width: 860px; }
-.container .twelve  { width: 940px; }
+.container .one {
+  width: 60px;
+}
+
+.container .two {
+  width: 140px;
+}
+
+.container .three {
+  width: 220px;
+}
+
+.container .four {
+  width: 300px;
+}
+
+.container .five {
+  width: 380px;
+}
+
+.container .six {
+  width: 460px;
+}
+
+.container .seven {
+  width: 540px;
+}
+
+.container .eight {
+  width: 620px;
+}
+
+.container .nine {
+  width: 700px;
+}
+
+.container .ten {
+  width: 780px;
+}
+
+.container .eleven {
+  width: 860px;
+}
+
+.container .twelve {
+  width: 940px;
+}
 
 /* Offsets */
+.container .offset-one {
+  margin-left: 80px;
+}
 
-.container .offset-one     { margin-left: 80px;  }
-.container .offset-two     { margin-left: 160px; }
-.container .offset-three   { margin-left: 240px; }
-.container .offset-four    { margin-left: 320px; }
-.container .offset-five    { margin-left: 400px; }
-.container .offset-six     { margin-left: 480px; }
-.container .offset-seven   { margin-left: 560px; }
-.container .offset-eight   { margin-left: 640px; }
-.container .offset-nine    { margin-left: 720px; }
-.container .offset-ten     { margin-left: 800px; }
-.container .offset-eleven  { margin-left: 880px; }
+.container .offset-two {
+  margin-left: 160px;
+}
+
+.container .offset-three {
+  margin-left: 240px;
+}
+
+.container .offset-four {
+  margin-left: 320px;
+}
+
+.container .offset-five {
+  margin-left: 400px;
+}
+
+.container .offset-six {
+  margin-left: 480px;
+}
+
+.container .offset-seven {
+  margin-left: 560px;
+}
+
+.container .offset-eight {
+  margin-left: 640px;
+}
+
+.container .offset-nine {
+  margin-left: 720px;
+}
+
+.container .offset-ten {
+  margin-left: 800px;
+}
+
+.container .offset-eleven {
+  margin-left: 880px;
+}
 
 /* Fluid Grid */
-
 .fluid.container .one,
 .fluid.container .two,
 .fluid.container .three,
@@ -68,67 +148,167 @@
 .fluid.container .ten,
 .fluid.container .eleven,
 .fluid.container .twelve {
-	margin-left: 1%;
-	margin-right: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
 }
 
-.fluid.container .one    { width: 6.333%; }
-.fluid.container .two    { width: 14.666%; }
-.fluid.container .three  { width: 23%; }
-.fluid.container .four   { width: 31.333%; }
-.fluid.container .five   { width: 39.666%; }
-.fluid.container .six    { width: 48%; }
-.fluid.container .seven  { width: 56.333%; }
-.fluid.container .eight  { width: 64.666%; }
-.fluid.container .nine   { width: 73%; }
-.fluid.container .ten    { width: 81.333%; }
-.fluid.container .eleven { width: 89.666%; }
-.fluid.container .twelve { width: 98%; }
+.fluid.container .one {
+  width: 6.333%;
+}
+
+.fluid.container .two {
+  width: 14.666%;
+}
+
+.fluid.container .three {
+  width: 23%;
+}
+
+.fluid.container .four {
+  width: 31.333%;
+}
+
+.fluid.container .five {
+  width: 39.666%;
+}
+
+.fluid.container .six {
+  width: 48%;
+}
+
+.fluid.container .seven {
+  width: 56.333%;
+}
+
+.fluid.container .eight {
+  width: 64.666%;
+}
+
+.fluid.container .nine {
+  width: 73%;
+}
+
+.fluid.container .ten {
+  width: 81.333%;
+}
+
+.fluid.container .eleven {
+  width: 89.666%;
+}
+
+.fluid.container .twelve {
+  width: 98%;
+}
 
 /* Offsets */
+.fluid.container .offset-one {
+  margin-left: 8.333%;
+}
 
-.fluid.container .offset-one    { margin-left: 8.333%; }
-.fluid.container .offset-two    { margin-left: 16.666%; }
-.fluid.container .offset-three  { margin-left: 25%; }
-.fluid.container .offset-four   { margin-left: 33.333%; }
-.fluid.container .offset-five   { margin-left: 41.666%; }
-.fluid.container .offset-six    { margin-left: 50%; }
-.fluid.container .offset-seven  { margin-left: 58.333%; }
-.fluid.container .offset-eight  { margin-left: 66.666%; }
-.fluid.container .offset-nine   { margin-left: 75%; }
-.fluid.container .offset-ten    { margin-left: 83.333%; }
-.fluid.container .offset-eleven { margin-left: 91.666%; }
+.fluid.container .offset-two {
+  margin-left: 16.666%;
+}
+
+.fluid.container .offset-three {
+  margin-left: 25%;
+}
+
+.fluid.container .offset-four {
+  margin-left: 33.333%;
+}
+
+.fluid.container .offset-five {
+  margin-left: 41.666%;
+}
+
+.fluid.container .offset-six {
+  margin-left: 50%;
+}
+
+.fluid.container .offset-seven {
+  margin-left: 58.333%;
+}
+
+.fluid.container .offset-eight {
+  margin-left: 66.666%;
+}
+
+.fluid.container .offset-nine {
+  margin-left: 75%;
+}
+
+.fluid.container .offset-ten {
+  margin-left: 83.333%;
+}
+
+.fluid.container .offset-eleven {
+  margin-left: 91.666%;
+}
 
 /* Remove margins */
+.fluid.container .alpha, .container .alpha {
+  margin-left: 0;
+}
 
-.fluid.container .alpha, .container .alpha  { margin-left:0; }
-.fluid.container .omega, .container .omega  { margin-right:0; }
+.fluid.container .omega, .container .omega {
+  margin-right: 0;
+}
 
 /* ........................................................... [02.CLEARING] */
-
 /* Self Clearing */
-.container:after { content: "\0020"; display: block; height: 0; clear: both; visibility: hidden; }
+.container:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
 
 /* Use clearfix class on parent to clear nested.container , or wrap each row of.container in a <div class="row"> */
 .clearfix:before,
 .clearfix:after,
 .row:before,
-.row:after { content: '\0020'; display: block; overflow: hidden; visibility: hidden; width: 0; height: 0; }
+.row:after {
+  content: '\0020';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
 
 .row:after,
-.clearfix:after { clear: both; }
+.clearfix:after {
+  clear: both;
+}
 
 .row,
-.clearfix { zoom: 1; }
+.clearfix {
+  zoom: 1;
+}
 
-.clear { clear: both; display: block; overflow: hidden; visibility: hidden; width: 0; height: 0; }
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
 
 /* ........................................................... [03.MISC] */
+.hidden {
+  display: none;
+}
 
-.hidden { display: none; }
+.visible-phone {
+  display: none;
+}
 
-.visible-phone { display: none; }
+.visible-tablet {
+  display: none;
+}
 
-.visible-tablet { display: none; }
-
-.hidden-desktop { display: none; }
+.hidden-desktop {
+  display: none;
+}

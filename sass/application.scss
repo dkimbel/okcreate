@@ -1,0 +1,372 @@
+@import "compass/typography/vertical_rhythm";
+@import "compass/css3/box-sizing";
+
+@mixin calc($property, $expression) { 
+  #{$property}: -moz-calc(#{$expression}); 
+  #{$property}: -o-calc(#{$expression}); 
+  #{$property}: -webkit-calc(#{$expression}); 
+  #{$property}: calc(#{$expression}); 
+} 
+
+$base-font-size: 14px;
+$base-line-height: 21px;
+$input-background: #fff;
+$input-border: #444;
+$disabled-input-background: #eee;
+$disabled-input-border: #ccc;
+$text-color: #222;
+$link-color: #129FEA;
+
+/* okcreate!
+------------------------------------------------
+[Table of contents]
+
+00.RESET
+01.BASE
+02.TYPOGRAPHY
+03.GENERAL
+04.FORMS
+05.HEADER
+06.CONTENT
+07.FOOTER
+08.MEDIA QUERIES
+------------------------------------------------*/
+/* ........................................................... [00.RESET] */
+
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+	margin:0;
+	padding:0;
+	border:0;
+	font-size:100%;
+	font:inherit;
+	vertical-align:baseline;
+}
+
+/* ........................................................... [01.BASE] */
+
+@include establish-baseline;
+
+body {
+	font-family: Helvetica, Arial, sans-serif;
+  color: $text-color;
+	-webkit-font-smoothing:antialiased;
+  /* Fix for webkit rendering */
+	-webkit-text-size-adjust:100%; 
+}
+
+/* ........................................................... [02.TYPOGRAPHY] */
+
+/* Links */
+
+a, a:visited, a:hover, a:active , a:focus { text-decoration:none; outline: 0; color: $link-color; }
+a:hover, a:active , a:focus {}
+p a, p a:visited { line-height: inherit; }
+
+/* Headings */
+
+h1, h2, h3, h4, h5, h6 { font-weight: normal; text-rendering:optimizelegibility; }
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
+
+h1 {
+  @include adjust-font-size-to(32px);
+  @include trailer(1,32px);
+}
+h2 {
+  @include adjust-font-size-to(28px);
+  @include trailer(1,28px);
+}
+h3 {
+  @include adjust-font-size-to(22px);
+  @include trailer(1,22px);
+}
+h4 {
+  @include adjust-font-size-to(20px);
+  @include trailer(1,20px);
+}
+h5 {
+  @include adjust-font-size-to(16px);
+  @include trailer(1,16px);
+}
+h6 {
+  @include adjust-font-size-to(14px);
+  @include trailer(1,14px);
+}
+
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img { margin: 0; }
+
+/* #Lists */
+
+dl, ul, ol { padding:0; margin: 0; @include trailer(1,$base-font-size); }
+ul { list-style: none outside; }
+ol { list-style: decimal; }
+li ul, li ol { margin: 0 0 0 1.5em; }
+ol,ul.square, ul.circle, ul.disc { margin-left: 1.5em; }
+ul.square { list-style: square outside; }
+ul.circle { list-style: circle outside; }
+ul.disc { list-style: disc outside; }
+ul.inline li, ol.inline li  { display: inline-block; }
+dt { font-weight: bold; }
+
+/* Images */
+
+a img { margin: 0 auto; }
+img{ margin:0; padding:0; border:0; display:block; }
+/* Scale images to fit container */
+img.scale { max-width: 100%; height: auto; }  
+/* Scale images to fit container - prioritize vertical */
+img.v-scale { height: 100%; max-width:100%; } 
+/* Scale images to fit container - prioritize horizontal */
+img.h-scale { width: 100%; max-height:100%; } 
+
+/* Tables */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+  border: none;
+  width:100%; 
+  @include trailer(1,$base-font-size);
+  border: 1px solid $text-color;
+}
+
+caption {
+  @include rhythm(0,1,1,0,$base-font-size);
+  text-align: center;
+}
+
+td, th {
+  border-left: none;
+  font-size: inherit;
+  margin: 0;
+  overflow: visible;
+  padding: 0.375em 0.5em;
+  text-align: left;
+  line-height: 1.44em;
+  border-left: 1px solid $text-color;
+}
+
+th:first-child, 
+td:first-child { 
+  border-left-width: 0; 
+}
+
+thead {
+  text-align: left;
+  vertical-align: bottom;
+}
+
+/* Everything Else */
+
+textarea, table, td, th, code, pre, samp, div, p {
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  -o-hyphens: auto;
+  hyphens: auto;
+}
+
+p { 
+  margin:0; 
+  @include trailer(1,$base-font-size); 
+  word-spacing:0.08em; 
+  letter-spacing:0.03em; 
+}
+
+small { font-size: 80%; }
+
+b,strong { font-style: inherit; font-weight: bold; }
+
+abbr:hover { cursor: help; }
+
+address { display: block; }
+
+blockquote { 
+  padding-left:1.5em; 
+  @include rhythm(1,0,0,1,$base-font-size);
+  font-family:georgia, serif; font-style:italic;  
+}
+
+blockquote:before { 
+  position:relative; 
+  top:0.5em; 
+  content:"\201C"; 
+  font-size:3em; 
+  margin-left:-.625em; 
+  font-family:georgia, serif; 
+  line-height:0; 
+}
+
+blockquote > p { 
+  padding:0; 
+  margin:0; 
+}
+
+i,em, dfn { font-style: italic; font-weight: inherit; line-height: inherit; }
+dfn { font-weight: bold; }
+
+pre code { word-wrap: normal; white-space: -moz-pre-wrap; white-space: pre-wrap; }
+pre { white-space: pre; }
+code { white-space: pre; font-family: monospace; }
+
+hr { 
+  border: none; 
+  background: $text-color; 
+  clear: both; 
+  margin: -1px 0 1.5em 0; 
+  height: 1px; 
+}
+
+sub,sup {position:relative;font-size:75%;line-height:0;vertical-align:baseline;}
+sup { top:-0.5em; }
+sub { bottom:-0.25em; }
+
+/* ........................................................... [03.FORMS] */
+
+form ,
+fieldset {
+  @include trailer(1,$base-font-size);
+}
+
+textarea {
+	min-height:10.5em;
+}
+
+label {
+  margin-bottom: 0.5em;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="week"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+input[type=submit],
+textarea,
+select {
+  background:$input-background;
+  border: 1px solid $input-border;
+  padding: .5em;
+  width: 100%;
+  @include box-sizing(border-box);
+  @include rhythm(0,0.5,0.5,0.875,$base-font-size);
+}
+
+input[type="checkbox"] {
+  margin-left: 0.5em;
+	display:inline;
+}
+
+input[type=submit] {
+  width: auto;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="email"]:hover,
+input[type="url"]:hover,
+input[type="date"]:hover,
+input[type="month"]:hover,
+input[type="time"]:hover,
+input[type="datetime"]:hover,
+input[type="datetime-local"]:hover,
+input[type="week"]:hover,
+input[type="number"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+input[type="color"]:hover,
+textarea:hover {
+  background:darken($input-background, 1.5%);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+textarea:focus {
+  background:darken($input-background, 3.5%);
+}
+
+input[type="text"][disabled],
+input[type="password"][disabled],
+input[type="email"][disabled],
+input[type="url"][disabled],
+input[type="date"][disabled],
+input[type="month"][disabled],
+input[type="time"][disabled],
+input[type="datetime"][disabled],
+input[type="datetime-local"][disabled],
+input[type="week"][disabled],
+input[type="number"][disabled],
+input[type="search"][disabled],
+input[type="tel"][disabled],
+input[type="color"][disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  background: $disabled-input-background;
+  border-color: $disabled-input-border;
+}
+
+legend {
+	display:block;
+	font-weight:700;
+	font-size: 0.9em;
+}
+
+label {
+  display: block;
+}
+
+/* ........................................................... [04.GENERAL] */
+/* ........................................................... [04.HEADER] */
+/* ........................................................... [06.CONTENT] */
+/* ........................................................... [07.FOOTER] */
+/* ........................................................... [08.MEDIA QUERIES] */
+
+/* Smaller than standard 960 (devices and browsers) */
+@media only screen and (max-width: 959px) {
+  body:after { content: 'mobile'; display: none; }
+}
+
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  body:after { content: 'tablet'; display: none; }
+}
+
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {
+  body:after { content: 'phone'; display: none; }
+}
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  body:after { content: 'phone-landscape'; display: none; }
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+  body:after { content: 'phone-portrait'; display: none; }
+}
