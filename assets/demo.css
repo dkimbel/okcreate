@@ -1,364 +1,21 @@
-#doc, header, footer {
-  position:relative;
-}
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-/* ........................................................... [05.SYNTAX] */
+/* okcreate! Demo Styles
+------------------------------------------------
+[Table of contents]
 
-/**
- * Tomorrow Night theme
- *
- * @author Chris Kempson
- * @author skim
- * @version 1.0.0
- */
-pre {
-    background-color: #1d1f21;
-    word-wrap: break-word;
-    margin: 0px;
-    padding: 0 10px;
-    color: #c5c8c6;
-    font-size: 12px;
-    margin-bottom: 20px;
-}
-
-pre, code {
-    font-family: 'Monaco', courier, monospace;
-}
-
-pre .comment {
-    color: #969896;
-}
-
-pre .variable.global, pre .variable.class, pre .variable.instance {
-    color: #cc6666; /* red */
-}
-
-pre .constant.numeric, pre .constant.language, pre .constant.hex-color, pre .keyword.unit {
-    color: #de935f; /* orange */
-}
-
-pre .constant, pre .entity, pre .entity.class, pre .support {
-    color: #f0c674; /* yellow */
-}
-
-pre .constant.symbol, pre .string {
-    color: #b5bd68; /* green */
-}
-
-pre .entity.function, pre .support.css-property, pre .selector {
-    color: #81a2be; /* blue */
-}
-
-pre .keyword, pre .storage {
-    color: #b294bb; /* purple */
-}
-
-/* ........................................................... [01.OKCYCLE] */
-
-/* Required for Responsive Images */
-
-.okCycle-ui,
-.okCycle,
-.okCycle li {
-  position: relative;
-  width:100%;
-}
-
-.okCycle li img {
-  max-width: 100%; 
-  height: auto; 
-}
-
-/* Visual Styles */
-
-.okCycle-ui li {
-  margin:0;
-  float:left;
-}
-
-.okCycle-ui ul {
-  padding:0;
-  margin:0;
-}
-
-.pagination {
-  float:right;
-}
-
-.navigation li,
-.pagination li {
-  margin:0 5px 5px 5px;
-}
-
-.navigation li a,
-.pagination li a{
-  padding:0 5px 5px 5px;
-}
-
-.pagination li.active a {
-  background:#222;
-  color:#fff;
-}
-
-.current-page .current:after {
-  content:'/';
-}
-
-.current-page {
-  float:left;
-  margin-left:20px;
-  font-size:1.2em;
-}
-
-.slideshow {
-  position: relative;
-  z-index:1;
-}
-
-.okCycle-ui {
-  margin-bottom:3em;
-}
-
-.okCycle-ui .caption{
-  position: absolute;
-  bottom:0;
-  left:0;
-  background: rgba(0,0,0,0.5);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#55000000, endColorstr=#55000000)"; /* ie8 */
-  color:#fff;
-  width:100%;
-  padding:10px 0;
-  z-index:2;
-  text-indent:10px;
-}
-
-#example_three li {
-  background: #fff url('images/spinner.gif') center center no-repeat;
-}
-
-.slideshow li {
-  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQYlWNgYGCQwoKxgqGgcJA5h3yFAAs8BRWVSwooAAAAAElFTkSuQmCC);
-}
-
-#progress {
-  border: 1px solid #999;
-  width: 100%;
-  height: 16px;
-  margin-bottom: 10px;
-}
-
-#progress div {
-  overflow: hidden;
-  background-color: #dd0;
-  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAADklEQVQIW2NgQAXGZHAAGioAza6+Hk0AAAAASUVORK5CYII=);
-  height: 100%;
-  width: 0%;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-  line-height: 16px;
-}
-
-/* ........................................................... [02.OKPOPUP] */
-
-/* Example Styles */
-
-#gallery-example {
-  width: 100%;
-}
-
-#gallery-example li {
-  display: inline-block;
-}
-
-/* General */
-
-.ui-popup {
-  z-index:1001;
-}
-
-.ui-overlay {
-  background: rgba(0,0,0,0.2);
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  right: 0;
-  bottom: 0;
-  z-index:1000;
-}
-
-/* Tooltips */
-
-.ui-popup.tooltip {
-  padding: 5px;
-  background: rgba(0,0,0,0.7);
-  position: relative;
-  display: inline;
-  border: 1px solid #fff;
-  color:#fff;
-  -moz-border-radius: 4px 4px 4px 4px;
-  -webkit-border-radius: 4px 4px 4px 4px;
-}
-
-.ui-popup.tooltip:after {
-  content:'\0020';
-  position: absolute;
-  width: 0;
-  height: 0;
-  bottom:-5px;
-  left: 50%;
-  margin-left: -5px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid rgba(0,0,0,0.7);
-}
-
-/* Notification Queue */
-
-.ui-popup.notification {
-  padding:10px;
-  width:300px;
-  text-align:left;
-  margin-bottom:10px;
-  -moz-border-radius: 8px 8px 8px 8px;
-  -webkit-border-radius: 8px 8px 8px 8px;
-  -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
-  -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
-  background:#E6EFC2;
-  color:#264409;
-  border-color:#C6D880;
-}
-
-#notification-queue {
-  position:fixed;
-  top:10px;
-  right:10px;
-}
-
-/* Modals */
-
-.ui-modal {
-  padding: 5px;
-  background: #fff url(../shared/spinner.gif) center center no-repeat;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border: 1px solid #aaa;
-  box-shadow: 0 0 5px #000;
-  width: 32px;
-  height: 32px;
-  color: #222;
-}
-
-.ui-modal ul {
-  margin-bottom: 0;
-}
-
-.ui-modal nav,
-.ui-modal header{
-  background: rgba(0,0,0,0.7);
-  position: absolute;
-}
-
-.ui-modal header{
-  top: 0;
-  right: 0;
-}
-
-.ui-modal nav {
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-
-.ui-modal nav a{
-  margin-right: 10px;
-}
-
-.ui-modal.loading nav,
-.ui-modal.loading header {
-  display: none;
-}
-
-/* ........................................................... [02.OKTABS] */
-
-ul.tabs {
-  border-bottom: 1px solid #DDDDDD;
-  display: block;
-  margin: 0 0 20px;
-  padding: 0;
-}
-
-ul.tabs li {
-  display: block;
-  float: left;
-  height: 30px;
-  margin-bottom: 0;
-  padding: 0;
-  width: auto;
-}
-
-ul.tabs li a {
-  background: none repeat scroll 0 0 #F5F5F5;
-  border-color: #DDDDDD;
-  border-style: solid;
-  border-width: 1px 1px 0 0;
-  display: block;
-  font-size: 13px;
-  height: 29px;
-  line-height: 30px;
-  margin: 0;
-  padding: 0 20px;
-  text-decoration: none;
-  width: auto;
-}
-
-ul.tabs li.active a {
-  background: none repeat scroll 0 0 #FFFFFF;
-  border-left-width: 1px;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  color: #111111;
-  height: 30px;
-  margin: 0 0 0 -1px;
-  padding-top: 4px;
-  position: relative;
-  top: -4px;
-}
-
-ul.tabs li.active:first-child a {
-  margin-left: 0;
-}
-
-ul.tabs li:first-child a {
-  border-top-left-radius: 2px;
-  border-width: 1px 1px 0;
-}
-
-ul.tabs li:last-child a {
-  border-top-right-radius: 2px;
-}
-
-ul.tabs:before, ul.tabs:after {
-  content: " ";
-  display: block;
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-  width: 0;
-}
-
-ul.tabs:after {
-  clear: both;
-}
-
-.content {
-  min-height: 20px;
-}
+01.DEMO THEME
+02.SYNTAX HIGHLIGHTING
+03.OKCYCLE
+04.OKPOPUP
+05.OKTABS
+06.OKSTYLYZE
+------------------------------------------------*/
 
 /* ........................................................... [01.DEMO THEME] */
 
 body {
+	font-family: 'Open Sans', sans-serif;
   background: #e8e8e8;
   background-image: linear-gradient(bottom, rgb(230,230,231) 0%, rgb(191,192,195) 100%);
   background-image: -o-linear-gradient(bottom, rgb(230,230,231) 0%, rgb(191,192,195) 100%);
@@ -374,6 +31,10 @@ body {
     color-stop(1, rgb(191,192,195))
   );
   color:#444;
+}
+
+#doc, header, footer {
+  position:relative;
 }
 
 #main {
@@ -604,3 +265,609 @@ button::-moz-focus-inner{
   border: 0;
 }
 
+/* ........................................................... [02.SYNTAX HIGHLIGHTING] */
+
+/**
+ * Tomorrow Night theme
+ *
+ * @author Chris Kempson
+ * @author skim
+ * @version 1.0.0
+ */
+pre {
+    background-color: #1d1f21;
+    word-wrap: break-word;
+    margin: 0px;
+    padding: 0 10px;
+    color: #c5c8c6;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+pre, code {
+    font-family: 'Monaco', courier, monospace;
+}
+
+pre .comment {
+    color: #969896;
+}
+
+pre .variable.global, pre .variable.class, pre .variable.instance {
+    color: #cc6666; /* red */
+}
+
+pre .constant.numeric, pre .constant.language, pre .constant.hex-color, pre .keyword.unit {
+    color: #de935f; /* orange */
+}
+
+pre .constant, pre .entity, pre .entity.class, pre .support {
+    color: #f0c674; /* yellow */
+}
+
+pre .constant.symbol, pre .string {
+    color: #b5bd68; /* green */
+}
+
+pre .entity.function, pre .support.css-property, pre .selector {
+    color: #81a2be; /* blue */
+}
+
+pre .keyword, pre .storage {
+    color: #b294bb; /* purple */
+}
+
+/* ........................................................... [03.OKCYCLE] */
+
+/* Required for Responsive Images */
+
+.okCycle-ui,
+.okCycle,
+.okCycle li {
+  position: relative;
+  width:100%;
+}
+
+.okCycle li img {
+  max-width: 100%; 
+  height: auto; 
+}
+
+/* Visual Styles */
+
+.okCycle-ui li {
+  margin:0;
+  float:left;
+}
+
+.okCycle-ui ul {
+  padding:0;
+  margin:0;
+}
+
+.pagination {
+  float:right;
+}
+
+.navigation li,
+.pagination li {
+  margin:0 5px 5px 5px;
+}
+
+.navigation li a,
+.pagination li a{
+  padding:0 5px 5px 5px;
+}
+
+.pagination li.active a {
+  background:#222;
+  color:#fff;
+}
+
+.current-page .current:after {
+  content:'/';
+}
+
+.current-page {
+  float:left;
+  margin-left:20px;
+  font-size:1.2em;
+}
+
+.slideshow {
+  position: relative;
+  z-index:1;
+}
+
+.okCycle-ui {
+  margin-bottom:3em;
+}
+
+.okCycle-ui .caption{
+  position: absolute;
+  bottom:0;
+  left:0;
+  background: rgba(0,0,0,0.5);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#55000000, endColorstr=#55000000)"; /* ie8 */
+  color:#fff;
+  width:100%;
+  padding:10px 0;
+  z-index:2;
+  text-indent:10px;
+}
+
+#example_three li {
+  background: #fff url('images/spinner.gif') center center no-repeat;
+}
+
+.slideshow li {
+  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQYlWNgYGCQwoKxgqGgcJA5h3yFAAs8BRWVSwooAAAAAElFTkSuQmCC);
+}
+
+#progress {
+  border: 1px solid #999;
+  width: 100%;
+  height: 16px;
+  margin-bottom: 10px;
+}
+
+#progress div {
+  overflow: hidden;
+  background-color: #dd0;
+  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAADklEQVQIW2NgQAXGZHAAGioAza6+Hk0AAAAASUVORK5CYII=);
+  height: 100%;
+  width: 0%;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  line-height: 16px;
+}
+
+/* ........................................................... [04.OKPOPUP] */
+
+/* Example Styles */
+
+#gallery-example {
+  width: 100%;
+}
+
+#gallery-example li {
+  display: inline-block;
+}
+
+/* General */
+
+.ui-popup {
+  z-index:1001;
+}
+
+.ui-overlay {
+  background: rgba(0,0,0,0.2);
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0;
+  bottom: 0;
+  z-index:1000;
+}
+
+/* Tooltips */
+
+.ui-popup.tooltip {
+  padding: 5px;
+  background: rgba(0,0,0,0.7);
+  position: relative;
+  display: inline;
+  border: 1px solid #fff;
+  color:#fff;
+  -moz-border-radius: 4px 4px 4px 4px;
+  -webkit-border-radius: 4px 4px 4px 4px;
+}
+
+.ui-popup.tooltip:after {
+  content:'\0020';
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom:-5px;
+  left: 50%;
+  margin-left: -5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0,0,0,0.7);
+}
+
+/* Notification Queue */
+
+.ui-popup.notification {
+  padding:10px;
+  width:300px;
+  text-align:left;
+  margin-bottom:10px;
+  -moz-border-radius: 8px 8px 8px 8px;
+  -webkit-border-radius: 8px 8px 8px 8px;
+  -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+  background:#E6EFC2;
+  color:#264409;
+  border-color:#C6D880;
+}
+
+#notification-queue {
+  position:fixed;
+  top:10px;
+  right:10px;
+}
+
+/* Modals */
+
+.ui-modal {
+  padding: 5px;
+  background: #fff url(../shared/spinner.gif) center center no-repeat;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #aaa;
+  box-shadow: 0 0 5px #000;
+  width: 32px;
+  height: 32px;
+  color: #222;
+}
+
+.ui-modal ul {
+  margin-bottom: 0;
+}
+
+.ui-modal nav,
+.ui-modal header{
+  background: rgba(0,0,0,0.7);
+  position: absolute;
+}
+
+.ui-modal header{
+  top: 0;
+  right: 0;
+}
+
+.ui-modal nav {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.ui-modal nav a{
+  margin-right: 10px;
+}
+
+.ui-modal.loading nav,
+.ui-modal.loading header {
+  display: none;
+}
+
+/* ........................................................... [05.OKTABS] */
+
+ul.tabs {
+  border-bottom: 1px solid #DDDDDD;
+  display: block;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+ul.tabs li {
+  display: block;
+  float: left;
+  height: 30px;
+  margin-bottom: 0;
+  padding: 0;
+  width: auto;
+}
+
+ul.tabs li a {
+  background: none repeat scroll 0 0 #F5F5F5;
+  border-color: #DDDDDD;
+  border-style: solid;
+  border-width: 1px 1px 0 0;
+  display: block;
+  font-size: 13px;
+  height: 29px;
+  line-height: 30px;
+  margin: 0;
+  padding: 0 20px;
+  text-decoration: none;
+  width: auto;
+}
+
+ul.tabs li.active a {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-left-width: 1px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  color: #111111;
+  height: 30px;
+  margin: 0 0 0 -1px;
+  padding-top: 4px;
+  position: relative;
+  top: -4px;
+}
+
+ul.tabs li.active:first-child a {
+  margin-left: 0;
+}
+
+ul.tabs li:first-child a {
+  border-top-left-radius: 2px;
+  border-width: 1px 1px 0;
+}
+
+ul.tabs li:last-child a {
+  border-top-right-radius: 2px;
+}
+
+ul.tabs:before, ul.tabs:after {
+  content: " ";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+}
+
+ul.tabs:after {
+  clear: both;
+}
+
+.tab-content {
+  min-height: 20px;
+}
+
+/* ........................................................... [06.OKSTYLIZE] */
+
+/* General */
+
+.styled {
+  margin-bottom: 1em;
+}
+
+.styled input ,
+.styled select {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  cursor: pointer;
+}
+
+.styled.disabled ,
+.styled.disabled.checked {
+  cursor: default;
+}
+
+.styled.select select:focus,
+.styled.radio input:focus,
+.styled.checkbox input:focus,
+.styled.file input:focus {
+  outline: 0; 
+}
+
+/* Remove default webkit and possible mozilla .search styles */
+.styled.checkbox input {
+  -moz-appearance: none;
+  -webkit-appearance: none; 
+}
+
+.styled.select, 
+.styled.checkbox span:before, 
+.styled.checkbox span, 
+.styled.radio span:before ,
+.styled.radio span {
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -ms-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+/* Checkboxes and radios */
+
+.styled.checkbox, 
+.styled.radio {
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.styled.checkbox span, 
+.styled.radio span {
+  position: relative;
+  background: #BDC3C7;
+  display: inline-block;
+  font-size: 20px;
+  height: 20px;
+  line-height: 20px;
+  width: 20px;
+  border-radius: 2px;
+  margin-right: 12px;
+  color: #fff;
+}
+
+.styled.checkbox.checked span, 
+.styled.radio.checked span {
+  background: #1ABC9C;
+}
+
+.styled.radio span:before ,
+.styled.checkbox span:before {
+  position: absolute;
+  display: block;
+  content:  " ";
+  opacity: 0;
+}
+
+.styled.radio.disabled,
+.styled.checkbox.disabled {
+  cursor: default;
+}
+
+.styled.radio.disabled span,
+.styled.checkbox.disabled span {
+  background: #E6E8EA;
+}
+
+.styled.radio.disabled:hover span:before,
+.styled.checkbox.disabled:hover span:before{
+  opacity: 0;
+}
+
+.styled.radio.disabled.checked:hover span:before,
+.styled.checkbox.disabled.checked:hover span:before,
+.styled.radio.checked span:before,
+.styled.checkbox.checked span:before,
+.styled.radio:hover span:before ,
+.styled.checkbox:hover span:before {
+  opacity:1;
+}
+
+/* Checkboxes */
+
+.styled.checkbox span:before {
+  content:"✔";
+  left: 2px;
+}
+
+/* Radios  */
+
+.styled.radio span:before {
+  background: #fff;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+}
+
+.styled.radio span {
+  border-radius: 10px;
+}
+
+/* Select */
+
+.styled.select {
+  line-height: 30px;
+  height: 30px;
+  padding: 0 0 0 10px;
+  position: relative;
+  overflow: hidden; 
+  background: #BDC3C7;
+  border-radius: 4px;
+}
+
+.styled.select:hover {
+  background: #d9dcde;
+}
+
+.styled.select span {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 30px;
+  line-height: 30px;
+  padding-right: 25px;
+  cursor: pointer;
+  width: 100%;
+  display: block; 
+}
+
+.styled.select:after{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  content: ' ';
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 10px 5px 0 5px;
+  border-color: #fff transparent transparent transparent;
+}
+
+.styled.select select {
+  border: none;
+  background: none;
+  position: absolute;
+  cursor: pointer;
+  height: 28px;
+  top: 2px;
+  left: 0px;
+  width: 100%; 
+}
+
+/* File */
+
+.styled.file {
+  height: 28px;
+  width: 190px;
+  background: #BDC3C7;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; 
+}
+
+.styled.file span.action {
+  height: 28px;
+  line-height: 28px;
+  width: 82px;
+  text-align: center;
+  float: left;
+  display: inline;
+  overflow: hidden;
+}
+
+.styled.file span.filename {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  float: left;
+  height: 24px;
+  margin: 2px 0 2px 2px;
+  line-height: 24px;
+  width: 85px;
+  padding: 0 10px; 
+}
+
+.styled.file input {
+  border: none;
+  background: none;
+  position: absolute;
+  cursor: pointer; 
+  top: 0;
+  right: 0;
+  float: right;
+  width: 100%;
+  height: 100%; 
+}
+
+.styled.file span.action {
+  color: #fff;
+  background: #1ABC9C;
+  font-size: 11px;
+  font-weight: bold; 
+}
+
+.styled.file span.filename {
+  color: #777;
+  border-right: 1px solid #bbb;
+  font-size: 11px; 
+}
+
+.styled.file.disabled span.action {
+  color: #aaa; 
+  background: #e6e9ea;
+}
+
+.styled.file.disabled span.filename {
+  border-color: #ddd;
+  color: #aaa; 
+}
+
+.styled.file.disabled input {
+  cursor: default;
+}
