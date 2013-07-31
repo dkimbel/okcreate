@@ -7,7 +7,9 @@ represents what we consider to be the ideal base for building websites.
 
 * Minimal - Including a couple thousand lines of CSS and then overriding them all is A Bad Idea.
 * Flexible - okcreate! is designed to be adapted to your particular situation and goes through great lengths to ensure that it can modified as needed.
-* Readble - The code is meant to be tinkered with, so being able to be read and understood by humans is a high priority
+* Readble - The code is meant to be tinkered with, so being able to be read and understood by humans is a high priority.
+* Markup Independence - Unless otherwise noted, plugins do not depend on specific markup - this gives you the flexibility to adapt okcreate to your situation, and not the other way around.
+* Modular - There are plenty of bandwidth limited devices out there - let's not be wasteful.
 
 
 
