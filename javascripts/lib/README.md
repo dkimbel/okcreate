@@ -1,1 +1,1 @@
-Third-Party libraries
+Third-Party dependencies
