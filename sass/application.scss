@@ -1,21 +1,41 @@
 @import "compass/typography/vertical_rhythm";
 @import "compass/css3/box-sizing";
 
-@mixin calc($property, $expression) { 
-  #{$property}: -moz-calc(#{$expression}); 
-  #{$property}: -o-calc(#{$expression}); 
-  #{$property}: -webkit-calc(#{$expression}); 
-  #{$property}: calc(#{$expression}); 
-} 
+@mixin optional($var, $property: 'color'){
+  @if $var {
+    #{$property}: $var;
+  }
+}
 
 $base-font-size: 14px;
 $base-line-height: 21px;
-$input-background: #fff;
-$input-border: #444;
-$disabled-input-background: #eee;
-$disabled-input-border: #ccc;
+
 $text-color: #222;
 $link-color: #129FEA;
+
+$h-color: $text-color;
+$h1-color: false;
+$h2-color: false;
+$h3-color: false;
+$h4-color: false;
+$h5-color: false;
+$h6-color: false;
+
+$hr-color: $text-color;
+
+$input-background: #fff;
+$input-background-hover: darken($input-background, 1.5%);
+$input-background-focus: darken($input-background, 3.5%);
+$input-background-disabled: #eee;
+
+$input-border: #444;
+$input-border-hover: $input-border;
+$input-border-focus: $input-border;
+$input-border-disabled: #ccc;
+
+$table-border-color: $text-color;
+$table-background: false;
+
 
 /* okcreate!
 ------------------------------------------------
@@ -64,37 +84,43 @@ p a, p a:visited { line-height: inherit; }
 
 /* Headings */
 
-h1, h2, h3, h4, h5, h6 { font-weight: normal; text-rendering:optimizelegibility; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; text-rendering:optimizelegibility; color: $h-color; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
 
 h1 {
   @include adjust-font-size-to(32px);
   @include trailer(1,32px);
+  @include optional($h1-color);
 }
 h2 {
   @include adjust-font-size-to(28px);
   @include trailer(1,28px);
+  @include optional($h2-color);
 }
 h3 {
   @include adjust-font-size-to(22px);
   @include trailer(1,22px);
+  @include optional($h3-color);
 }
 h4 {
   @include adjust-font-size-to(20px);
   @include trailer(1,20px);
+  @include optional($h4-color);
 }
 h5 {
   @include adjust-font-size-to(16px);
   @include trailer(1,16px);
+  @include optional($h5-color);
 }
 h6 {
   @include adjust-font-size-to(14px);
   @include trailer(1,14px);
+  @include optional($h6-color);
 }
 
 h1 img, h2 img, h3 img, h4 img, h5 img, h6 img { margin: 0; }
 
-/* #Lists */
+/* Lists */
 
 dl, ul, ol { padding:0; margin: 0; @include trailer(1,$base-font-size); }
 ul { list-style: none outside; }
@@ -127,7 +153,7 @@ table {
   border: none;
   width:100%; 
   @include trailer(1,$base-font-size);
-  border: 1px solid $text-color;
+  border: 1px solid $table-border-color;
 }
 
 caption {
@@ -143,7 +169,8 @@ td, th {
   padding: 0.375em 0.5em;
   text-align: left;
   line-height: 1.44em;
-  border-left: 1px solid $text-color;
+  border-left: 1px solid $table-border-color;
+  @include optional($table-background,'background');
 }
 
 th:first-child, 
@@ -212,13 +239,13 @@ code { white-space: pre; font-family: monospace; }
 
 hr { 
   border: none; 
-  background: $text-color; 
+  background: $hr-color; 
   clear: both; 
   margin: -1px 0 1.5em 0; 
   height: 1px; 
 }
 
-sub,sup {position:relative;font-size:75%;line-height:0;vertical-align:baseline;}
+sub,sup { position:relative; font-size:75%; line-height:0; vertical-align:baseline; }
 sup { top:-0.5em; }
 sub { bottom:-0.25em; }
 
@@ -286,7 +313,8 @@ input[type="search"]:hover,
 input[type="tel"]:hover,
 input[type="color"]:hover,
 textarea:hover {
-  background:darken($input-background, 1.5%);
+  background: $input-background-hover;
+  border: $input-border-hover;
 }
 
 input[type="text"]:focus,
@@ -304,7 +332,8 @@ input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
 textarea:focus {
-  background:darken($input-background, 3.5%);
+  background: $input-background-focus;
+  border: $input-border-focus;
 }
 
 input[type="text"][disabled],
@@ -326,8 +355,8 @@ textarea[disabled],
 input[readonly],
 select[readonly],
 textarea[readonly] {
-  background: $disabled-input-background;
-  border-color: $disabled-input-border;
+  background: $input-background-disabled;
+  border-color: $input-border-disabled;
 }
 
 legend {
@@ -345,6 +374,10 @@ label {
 /* ........................................................... [06.CONTENT] */
 /* ........................................................... [07.FOOTER] */
 /* ........................................................... [08.MEDIA QUERIES] */
+
+/* Larger than standard 960 (devices and browsers) */
+@media only screen and (min-width: 1200px) {
+}
 
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (max-width: 959px) {

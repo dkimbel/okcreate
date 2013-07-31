@@ -56,6 +56,7 @@ p a, p a:visited {
 h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
   text-rendering: optimizelegibility;
+  color: #222222;
 }
 
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
@@ -102,7 +103,7 @@ h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
   margin: 0;
 }
 
-/* #Lists */
+/* Lists */
 dl, ul, ol {
   padding: 0;
   margin: 0;
@@ -391,6 +392,7 @@ input[type="tel"]:hover,
 input[type="color"]:hover,
 textarea:hover {
   background: #fbfbfb;
+  border: #444444;
 }
 
 input[type="text"]:focus,
@@ -409,6 +411,7 @@ input[type="tel"]:focus,
 input[type="color"]:focus,
 textarea:focus {
   background: #f6f6f6;
+  border: #444444;
 }
 
 input[type="text"][disabled],
@@ -449,6 +452,7 @@ label {
 /* ........................................................... [06.CONTENT] */
 /* ........................................................... [07.FOOTER] */
 /* ........................................................... [08.MEDIA QUERIES] */
+/* Larger than standard 960 (devices and browsers) */
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (max-width: 959px) {
   body:after {
