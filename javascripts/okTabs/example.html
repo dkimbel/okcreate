@@ -7,13 +7,16 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>okTabs</title>
-  <meta name="description" content="okcycle - jquery slideshow plugin">
-  <meta name="author" content="okbreathe">
-  <link href="screen.css" rel="stylesheet" type="text/css" media="screen">
-  <link href="okTabs.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
   <!--[if lt IE 9]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../../assets/rainbow-custom.min.js"></script>
+  <script src="jquery.okTabs.js"></script>
 </head>
 <body>
 
@@ -24,7 +27,7 @@
 
     <article id="main" class='container'>
       <div class='twelve'>
-        <p class='box'>Simple Tabs</p>
+        <p class='box'>Simple Tab Interface</p>
         <h2>Demonstration</h2>
 
         <p>Tabs are dependent on very little markup. The minimum requirements are:</p>
@@ -34,7 +37,12 @@
           <li>The tabular content must be contained in a parent element. It doesn't matter the type</li>
         </ol>
 
-        <p>The styling of the tab is up to you. These are just demo styles</p>
+        <p>As with everything else, the styling of the tab is up to you.</p>
+
+        <pre>
+          <code data-language='javascript'>
+$(".tabs").okTabs({inEffect:'fadeIn'});</code>
+        </pre>
 
         <ul class="tabs">
           <!-- Give href a value corrsponding to a content ID -->
@@ -43,7 +51,7 @@
           <li><a href="#three">Three</a></li>
         </ul>
         <!-- It doesn't matter what the markup is, so long as it is contained by a parent element -->
-        <ul class='content'>
+        <ul class='tab-content'>
           <!-- IDs must match the HREF of above anchors -->
           <li id="one">
             'Twas brillig, and the slithy toves
@@ -64,10 +72,6 @@
             And stood awhile in thought.
           </li>
         </ul>
-        <pre>
-          <code>
-$(".tabs").okTabs({inEffect:'fadeIn'});</code>
-        </pre>
       </div>
     </article>
 
@@ -76,8 +80,6 @@ $(".tabs").okTabs({inEffect:'fadeIn'});</code>
     </footer>
   </div> <!-- #doc -->
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="jquery.okTabs.js"></script>
   <script>
     $(".tabs").okTabs({inEffect:'fadeIn'});
   </script>

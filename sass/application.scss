@@ -312,9 +312,10 @@ input[type="number"]:hover,
 input[type="search"]:hover,
 input[type="tel"]:hover,
 input[type="color"]:hover,
+select:hover,
 textarea:hover {
   background: $input-background-hover;
-  border: $input-border-hover;
+  border-color: $input-border-hover;
 }
 
 input[type="text"]:focus,
@@ -331,9 +332,10 @@ input[type="number"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
+select:hover,
 textarea:focus {
   background: $input-background-focus;
-  border: $input-border-focus;
+  border-color: $input-border-focus;
 }
 
 input[type="text"][disabled],
@@ -362,7 +364,7 @@ textarea[readonly] {
 legend {
 	display:block;
 	font-weight:700;
-	font-size: 0.9em;
+	font-size: 1.2em;
 }
 
 label {

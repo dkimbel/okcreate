@@ -70,7 +70,7 @@
           }
         },
         image: {
-          matcher: /.*\.(jpe?g|gif|png)$/,
+          matcher: /.*\.(jpe?g|gif|png)$/i,
           content: function(){
             var href   = this.attr('href'),
                 width  = this.data('width') || '',

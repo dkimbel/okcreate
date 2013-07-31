@@ -1,6 +1,6 @@
 /**
  *
- * jquery.basicPosition.js
+ * jquery.okPosition.js
  *
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -89,12 +89,12 @@
 
         if (width > (offsetElement.outerWidth() - margin.x * 2)) {
           adjusted = offsetElement.outerWidth() - margin.x * 2;
-          height	 = (adjusted / width) * height;
-          width	   = adjusted;
+          height   = (adjusted / width) * height;
+          width    = adjusted;
         }
         if (height > (offsetElement.outerHeight() - margin.y * 2)) {
           adjusted = offsetElement.outerHeight() - margin.y * 2;
-          width	   = (adjusted / height) * width;
+          width    = (adjusted / height) * width;
           height   = adjusted;
         }
 

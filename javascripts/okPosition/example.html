@@ -7,16 +7,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>basicPosition</title>
-  <meta name="description" content="okPopup - jquery content display plugin">
-  <meta name="author" content="okbreathe">
-  <link href="../shared/screen.css" rel="stylesheet" type="text/css" media="screen">
-  <link href="okPopup.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->  
+  <script src="../../assets/rainbow-custom.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="../lib/rainbow-custom.min.js"></script>
-  <script src="jquery.basicPosition.js"></script>
+  <script src="jquery.okPosition.js"></script>
   <style>
     #demo {
       position: relative;
@@ -27,6 +26,7 @@
       height: 250px;
       margin-bottom: 10px;
     }
+
     #positioned {
       width: 50px;
       height: 50px;
@@ -52,7 +52,7 @@
 
   <div id="doc">
     <header>
-      <h1>positionAt</h1>
+      <h1>okPosition</h1>
     </header>
 
     <article id="main" class='container'>
@@ -81,64 +81,86 @@ $.positionAt(element, { ...options...});</code>
           
         </div>
 
-        <div class='twelve'><h2>Demo</h2></div>
-        <div class='six offset-by-three'>
-          <div id='demo'>
-          </div>
+        <h2 class='twelve'>Demo</h2>
+
+        <div class='six'>
+          <div id='demo'></div>
           <div id='positioned'></div>
         </div>
         <form action=''>
-          <div class='field two'>
-            <strong>Positioning</strong>
+          <fieldset class='six'>
+            <legend>Positioning</legend>
+
             <label>Position Y</label>
             <select name='positionY'>
               <option value='center'>Center</option>
               <option value='top'>Top</option>
               <option value='bottom'>Bottom</option>
             </select>
+
             <label>Position X</label>
             <select name='positionX'> 
               <option value='center'>Center</option>
               <option value='left'>Left</option>
               <option value='right'>Right</option>
             </select>
-          </div>
-          <div class='field two'>
-            <strong>Registration Points</strong>
+          </fieldset>
+
+          <fieldset class='six'>
+            <legend>Registration Points</legend>
+
             <label>Registration Point Y</label>
             <select name='registrationY'>
               <option value='center'>Center</option>
               <option value='top'>Top</option>
               <option value='bottom'>Bottom</option>
             </select>
+
             <label>Registration Point X</label>
             <select name='registrationX'> 
               <option value='center'>Center</option>
               <option value='left'>Left</option>
               <option value='right'>Right</option>
             </select>
-          </div>
-          <div class='field four'>
-            <strong>Offsets</strong>
-            <p>Setting an elements offset adjusts the final position by the given amounts</p>
-            <label>Offset Left</label>
-            <input type='number' name='offsetLeft' />
-            <label>Offset Top</label>
-            <input type='number' name='offsetTop' />
-          </div>
-          <div class='field four'>
-            <strong>Constraining</strong>
-            <p>
-              Constraining ensures that the constrained element fits entirely within the the "relativeTo" element.
-              <br />
-              To play around with constaining options, first toggle Giant mode
-            </p>
-            <button class='giantize'>Toggle Giant mode!</button>
-            <label>Constrain<input type='checkbox' name='constrain' /></label>
-            <strong>Margin</strong>
-            <p>Applying a margin adds padding to the final constrained size</p>
-            <label>Margin Y</label><input type='number' name='marginY' />
-            <label>Margin X</label><input type='number' name='marginX' />
+          </fieldset>
+
+          <div class='row'>
+            <fieldset class='six'>
+              <legend>Offsets</legend>
+
+              <p>Setting an elements offset adjusts the final position by the given amounts</p>
+
+              <label>Offset Left</label>
+              <input type='number' name='offsetLeft' />
+
+              <label>Offset Top</label>
+              <input type='number' name='offsetTop' />
+            </fieldset>
+
+            <fieldset class='six'>
+              <legend>Constraining</legend>
+
+              <p>
+                Constraining ensures that the constrained element fits entirely
+                within the the "relativeTo" element.
+                <br />
+                To play around with constaining options, first toggle Giant mode
+              </p>
+
+              <button class='giantize'>Toggle Giant mode!</button>
+
+              <label>Constrain<input type='checkbox' name='constrain' /></label>
+
+              <legend>Margin</legend>
+
+              <p>Applying a margin adds padding to the final constrained size</p>
+
+              <label>Margin Y</label>
+              <input type='number' name='marginY' />
+
+              <label>Margin X</label>
+              <input type='number' name='marginX' />
+            </fieldset>
           </div>
         </form>
       </section>
@@ -168,9 +190,11 @@ $.positionAt(element, { ...options...});</code>
         };
         $("#positioned").positionAt(opts);
       }
+
       $("form").change(function(e){
         setPosition( $(this));
       });
+
       $(document).ready(function(e){
         setPosition( $("form"));
       });

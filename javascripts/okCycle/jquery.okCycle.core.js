@@ -9,7 +9,7 @@
  * @description Tiny, modular, flexible slideshow
  * @author Asher Van Brunt
  * @mailto asher@okbreathe.com
- * @version 1.3
+ * @version 1.5
  *
  */
 
@@ -18,6 +18,7 @@
   // Hold meta-plugin settings
   $.okCycle = {};
 
+  // Default options
   $.fn.okCycle = function(opts){
     opts = $.extend({
       effect        : 'scroll',              // Transition effect used to cycle elements
@@ -27,38 +28,53 @@
       speed         : 300,                   // Speed the slides are transitioned between
       preload       : 1,                     // Number of images to load (Use 0 for all, false for none) before the plugin is initialized
       loadOnShow    : false,                 // If true, successive images will not be loaded until they become visible
-      inGroupsOf    : 1,                     // How manu items should we page through at a time. Currently only applicable to the 'scroll' transition
       autoplay      : false,                 // Whether to start playing immediately. Provide a number (in seconds) to delay the inital start to the slideshow
       hoverBehavior : function(){            // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering 
         var slideshow = this;                // over the slideshow element or the ui container (".okCycle-ui") if it exists
-        (this.data('ui') || slideshow).hover(function(){ slideshow.pause(); }, function(){ slideshow.play(); });
+        (this.data('ui') || slideshow).hover(
+          function(){ slideshow.pause(); }, 
+          function(){ slideshow.play();  }
+        );
       },
+      // Events
       afterSetup    : function(){},          // Called with the slideshow as 'this' immediately after setup is performed
       beforeMove    : function(transition){},// Called before we move to another slide, with the slideshow as 'this'
-      afterMove     : function(transition){} // Called after we move to another slide, with the slideshow as 'this'
-    },opts);
+      afterMove     : function(transition){},// Called after we move to another slide, with the slideshow as 'this'
+      onDone        : function(){},          // Called when all items are loaded
+      onProgress    : function(data, image){ // Called when an item is loaded
+        $(image.img).fadeIn(); 
+      }
+    }, opts);
 
+    // Store keys as variables to improve minification
     var transition  = $.okCycle[opts.effect],
         animating   = 'animating',
         autoplaying = 'autoplaying',
         active      = 'activeSlide',
         interval    = 'interval',
+        images      = 'images',
         unloaded    = 'unloaded';
 
     if (!transition) throw("No such transition '"+opts.effect+"'"); // Fail early since we don't know what to do
 
-    // Load an image if it has been previously unloaded
-    function loadImage(img){ 
-      var idx = $.inArray(img[0], this.data(unloaded));
+    // Load image if it has been previously unloaded
+    function loadItem(self,img){ 
+      var idx  = $.inArray(img[0], self.data(unloaded)),
+          data = self.data(images),
+          image;
 
       if (idx > -1) {
-        img.imagesLoaded(function(){
-          $(this).fadeIn(); 
-        });
-
         img[0].src = img[0]._src; 
 
-        delete this.data(unloaded)[idx];
+        // This will only ever load one image at a time
+        img.imagesLoaded()
+          .progress(function(instance,image) { 
+            self.data(unloaded).splice(idx,1);
+            data.loaded++;
+            if (!image.isLoaded) data.broken++;
+            opts.onProgress.call(self, data, image); 
+            if (data.loaded === data.total) opts.onDone.call(self, data);
+          });
       }
     }
 
@@ -142,7 +158,7 @@
         // order, so load whatever the transition returns as the active items
         if (opts.preload > 0 && opts.loadOnShow) {
           (activeItems || transition.to).find("img").each(function(){
-            loadImage.call(self, $(this)); // Load the next image
+            loadItem(self, $(this)); // Load the next image
           });
         }
 
@@ -159,22 +175,28 @@
     }
 
     return this.each(function(){
-      var self      = $(this),
-          imgs      = opts.preload === false ? $('') : $('img', self),
-          loaded    = 0,
+      var self = $(this),
+          imgs = opts.preload === false ? $('') : $('img', self),
+          data,  
           initFn;
+
+      self.data(images, { loaded: 0, broken: 0, total : imgs.length });
+
+      data = self.data(images);
 
       // If we've elected to load on show we need to clear the src attribute to
       // prevent the browser from loading the image
       if (opts.preload && opts.preload > 0) {
         if (opts.loadOnShow) {
-          self.data(unloaded,[]);
+          self.data(unloaded, []);
+
           imgs.slice(opts.preload).each(function(){
             this._src = this.src;
             this.src = '';
             self.data(unloaded).push($(this).hide()[0]);
           });
         }
+
         // Store the images we need to preload
         imgs = imgs.slice(0, opts.preload);
       }
@@ -186,7 +208,7 @@
       // Initialize UI
       if (opts.ui.length){
         // Ensure that the UI is contained in a parent element
-        self.data('ui',self.wrap("<div class='okCycle-ui'/>").parent());
+        self.data('ui',self.addClass('okCycle').wrap("<div class='okCycle-ui'/>").parent());
 
         $.each(opts.ui, function(i,v){ 
           if ((initFn = $.okCycle.ui[v].init)) {
@@ -196,15 +218,24 @@
       }
 
       // Initialize transition effect after all images have loaded
-      imgs.imagesLoaded(function(){
-        transition.init.call(self,opts);
-      });
+      imgs.imagesLoaded()
+        .done(function(instance) { 
+          // We may or may not have actually loaded all images here depending
+          // on whether or not the user has elected to loadOnShow
+          if (data.loaded == data.total) opts.onDone.call(self, data); 
+          transition.init.call(self, opts); 
+        })
+        .progress(function(instance,image) { 
+          data.loaded++;
+          if (!image.isLoaded) data.broken++;
+          opts.onProgress.call(self, data, image); 
+        });
 
       // Expose API for each element in the set
       self.extend({ pause: pause, play: play, next: next, prev: prev, moveTo: moveTo });
 
       // Start autoplaying if enabled
-      if ( opts.autoplay === true || typeof(opts.autoPlay) == 'number' ){ 
+      if ( opts.autoplay === true || typeof(opts.autoplay) == 'number' ){ 
         setTimeout(function(){
           play.call(self); 
         },(isNaN(opts.autoplay) ? 0 : opts.autoplay));
