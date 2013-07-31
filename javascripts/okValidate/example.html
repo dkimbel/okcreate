@@ -1,0 +1,348 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>okValidate</title>
+  <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../../assets/rainbow-custom.min.js"></script>
+  <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->  
+
+  <!-- Plugin -->
+  <script type="text/javascript" src="jquery.okValidate.core.js"></script>
+  <script type="text/javascript" src="jquery.okValidate.ui.js"></script>
+  <script type="text/javascript" src="jquery.okValidate.rules.js"></script>
+</head>
+<body>
+
+  <div id="doc">
+    <header>
+      <h1>okValidate</h1>
+    </header>
+
+    <article id="main" class='container'>
+      <div class='twelve'>
+        <p class='box'>Flexible Form and Object Validation</p>
+        <form accept-charset='utf-8' action='' id='demo' method='post' class='eight offset-two'>
+          <h2>Form Validation Demo</h2>
+          <p>
+            okValidate uses HTML5 semantics and data attributes to ensure that
+            valdiation is data-driven, with ONE canonical ruleset. For example,
+            adding the html5 attribute <code>required</code> will cause the
+            field to be required, setting the input type to <code>email</code>
+            will cause the field to be validated as an email address etc.
+          </p>
+          <pre>
+            <code data-language='javascript'>
+$("form").okValidate();
+            </code>
+          </pre>
+          <fieldset>
+            <em>All fields are required</em>
+            <div class='field'>
+              <label for='name'>Name</label>
+              <input required name='person[first_name]' type='text' />
+            </div>
+            <div class='field'>
+              <label for='email'>Email</label>
+              <input required name='person[email]' type='email' />
+            </div>
+            <div class='field'>
+              <label for='phone'>Phone</label>
+              <input required name='person[phone]' type='tel' pattern='\d{3}\-\d{3}\-\d{4}'/>
+              xxx-xxx-xxxx
+            </div>
+            <div class='field'>
+              <label for='zip'>Zip</label>
+              <input required name='person[zip]' type='number' data-rangelength='5' />
+            </div>
+            <div class='field'>
+              <label>Favorite color</label>
+              <select name="person[favorite_color]" required pattern='(red|blue|green|yellow)'>
+                <option value="">select colour</option>
+                <option value="red">red</option>
+                <option value="blue">blue</option>
+                <option value="green">green</option>
+                <option value="yellow">yellow</option>
+                <option value="Not a Color">Not a Color</option>
+              </select>
+            </div>
+            <div class='field'>
+              <label>Favorite Programming Languages (pick between 2-4:)</label>
+              <label><input type='checkbox' name='person[language][]' value="Clojure" />Clojure</label>
+              <label><input type='checkbox' name='person[language][]' value="Haskell" />Haskell</label> 
+              <label><input type='checkbox' name='person[language][]' value="Ruby" />Ruby</label>
+              <label><input type='checkbox' name='person[language][]' value="Python" />Python</label>
+              <label><input type='checkbox' name='person[language][]' value="F#" />F#</label>
+              <label><input type='checkbox' name='person[language][]' value="JavaScript" required data-range="2,4"/>JavaScript</label>
+            </div>
+            <div class='field'>
+              <label>OS of Choice</label>
+              <label><input type="radio" name="person[os][]" required value="Linux" />Linux</label> 
+              <label><input type="radio" name="person[os][]" value="OSX" />OSX</label> 
+              <label><input type="radio" name="person[os][]" value="FreeBSD" />FreeBSD</label> 
+              <label><input type="radio" name="person[os][]" value="Windows" />Windows</label> 
+              <label><input type="radio" name="person[os][]" value="GladOS" pattern='[^GladOS]' />GladOS</label> 
+            </div>
+          </fieldset>
+          <div class='field submit'>
+            <input type='submit' class='button' value='Submit' />
+          </div>
+        </form>
+      </div>
+      <div class='twelve'>
+        <h2>Message Lookup</h2>
+        <p>
+          okValidate will attempt to look up messages in two locations: the
+          full path derived from the input name, or the error message at the
+          top level of the <code>$.okValidate.messages</code> object. Failing
+          this it will fallback to the default message.
+        </p>
+        <p>
+          Given the 'Favorite Color' select box above, which has a name of
+          <code>person[favorite_color]</code> and a <code>pattern</code> rule,
+          okValidate will try
+          <code>$.okValidate.messages.person.favorite_color.pattern</code>, and
+          then simply <code>$.okValidate.messages.pattern</code>. As you can
+          see, we've supplied a custom error message by extending the
+          <code>$.okValidate.messages object</code>:
+        </p>
+        <pre>
+            <code data-language='javascript'>
+$.extend($.okValidate.messages, {
+  person: {
+    favorite_color: {
+      pattern: "That's not a color"
+    }
+  }
+});</code>
+        </pre>
+      </div>
+      <div class='twelve'>
+        <h2>Custom Rules</h2>
+        <p>Let's define a custom validation rule. You'll need to define two things: 1) The rule itself, 2) The selector that decides when to apply the rule and optionally a failure message.</p>
+        <pre>
+            <code data-language='javascript'>
+// If a rule returns false, the field fails validation, if it returns true, it passes validation
+$.extend($.okValidate.rules,{
+  custom: function(value, params){
+    return value == $(params[0]).val();
+  }
+});
+
+// Any field with a 'data-custom' attribute will now use our custom validation
+$.extend($.okValidate.selectors,{
+  '[data-custom]' : { rule: 'custom' }
+});
+
+// Our error message - if omitted will use the default error message
+$.extend($.okValidate.messages,{
+  custom: 'My custom error message'
+});
+          </code>
+        </pre>
+        <p>
+          So our little custom rule is pretty simple: The data-custom attribute will specify an input.
+          If the value of the data-custom attribute is not the same as the value of the specified input, then it fails validation.
+        </p>
+        <pre>
+          <code data-language='html'>
+&lt;input id='custom-field' name='custom' type='text' data-custom='#custom-value' /&gt;
+          </code>
+        </pre>
+        <p>
+          Let's test it out. Unless these two fields match - validation will fail
+        </p>
+      </div>
+      <div class='six'>
+        <h4><code>#custom-value</code></h4>
+        <input id='custom-value' type='text' />
+      </div>
+      <div class='six'>
+        <form id='custom' action=''>
+          <h4><code>#custom-field</code></h4>
+          <input id='custom-field' name='custom' type='text' data-custom='#custom-value' />
+          <input type='submit' class='button' value='Validate' />
+        </form>
+      </div>
+      <div class='twelve'>
+        <h2>Object Validation</h2>
+        <p>
+          Under the hood okValidate serializes the form, validates the
+          resulting object and then applies the errors to the form fields.  In
+          general you probably won't need to actually validate plain objects -
+          but it can be done easily.
+        </p>
+      </div>
+      <div class='six'>
+        <p>Given an object:</p>
+        <pre>
+            <code data-language='javascript'>
+var object = { 
+    user: {
+        first_name: "",
+        last_name:  "Doe",
+        pets: ['Dog','Cat'],
+        address: {
+          street: null,
+          city:   "",
+          state:  "CAL",
+          zip:    "Not a Zip"
+        },
+        books: [
+          {
+            name: "The Algorithm Design Manual", 
+            authors: [ { name: "Steve S. Skiena" } ]
+          },
+          {
+            name: "The Joy of Clojure", 
+            authors: [
+              {name: "Michael Fogus" } , {name: "Chris Houser" }
+            ] 
+          },
+          {
+            name: "Purely Functional Data Structures", 
+            authors: [{name:''}]
+          }
+        ]
+    }
+};
+          </code>
+        </pre>
+
+      </div>
+      <div class='six'>
+        <p>And these validation rules:</p>
+        <pre>
+            <code data-language='javascript'>
+var rules = { 
+   user: {
+     first_name: {
+       required:true, 
+       minlength:10 
+     },
+     last_name:  {
+       required: true, 
+       minlength:3
+     },
+     email: { email:true },
+     pets: { min: 3 },
+     address: {
+       city: { required: true },
+       state: { range: 2 },
+       zip: { number:true }
+     },
+     books: { 
+       name: { required:true },
+       authors: { 
+         name: { required:true } 
+       }
+     }
+  }
+};
+          </code>
+        </pre>
+      </div>
+      <div class='twelve'>
+        <p>You can validate this object by running</p>
+        <pre>
+          <code data-language='javascript'>
+$.okValidate(object, rules)
+  .progress(function(error){}) // Called whenever a property is validated
+  .done(function(){})          // Object passed validation
+  .fail(function(errors){});   // Object did not pass validation
+          </code>
+        </pre>
+        <p>
+          <code>$.okValidate</code> returns a deferred object -
+          You can tie into the validation process by attaching
+          <code>progress</code>, <code>done</code> and <code>fail</code>
+          callbacks when a field is validated, validation is complete without
+          errors, and when validation is complete <strong>with</strong> errors,
+          respectively.
+        </p>
+        <p>In the <code>failure</code> callback you'd receive the following error object. Note that valid fields are still present, but their errors are simply left empty.</p>
+        <pre>
+          <code data-language='javascript'>
+{
+    user: {
+        first_name: {
+          minlength: "Please enter at least 10 characters.",
+          required: "This field is required."
+        },
+        last_name: {},
+        email: {
+          email: "Please enter a valid email address."
+        },
+        pets: {
+          min:"Please enter a value greater than or equal to 3."
+        }
+        address: {
+          city : { required: "This field is required." },
+          state: { range: "Please enter a value between 2 and {1}." },
+          zip  : { number: "Please enter a number" }
+        },
+        books: [
+          {
+            "authors": [ { "name": {} } ],
+            "name": {}
+          }, {
+            "authors": [ { "name": {} }, { "name": {} } ],
+            "name": {}
+          }, { 
+            "name": {  required: "This field is required." } 
+          }
+        ]
+    }
+}
+          </code>
+        </pre>
+        <p>In the <code>progress</code> callback, the full path of each field will be given</p>
+        <pre>
+          <code data-language='javascript'>
+{ user: { address: { city: { required: "This field is required." } } } }
+          </code>
+        </pre>
+      </div>
+    </article>
+
+    <footer>
+      <h1><a href='http://okbreathe.com'>okbreathe</a></h1>
+    </footer>
+  </div> <!-- #doc -->
+
+  <script type="text/javascript">
+
+    $.extend($.okValidate.rules,{ custom: function(value, params){ 
+      return value == $(params[0]).val();
+    } });
+    $.extend($.okValidate.selectors,{ '[data-custom]' : { rule: 'custom' } });
+    $.extend($.okValidate.messages, {
+      custom: 'My custom error message',
+      person: {
+        favorite_color: {
+          pattern: "That's not a color"
+        },
+        os: {
+          pattern: "That's not a real OS!"
+        }
+      }
+    });
+
+    $("form").okValidate({
+      events: {
+        focusout: true,
+        keyup: true
+      }
+    });
+
+  </script>
+
+</body>
+</html>
