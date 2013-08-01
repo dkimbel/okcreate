@@ -1,4 +1,4 @@
-# okcreate
+# okcreate!
 
 *Sleek, minimal, and flexible front-end framework for developers*
 
@@ -10,6 +10,8 @@ represents what we consider to be the ideal base for building websites.
 * Readble - The code is meant to be tinkered with, so being able to be read and understood by humans is a high priority.
 * Markup Independence - Unless otherwise noted, plugins do not depend on specific markup - this gives you the flexibility to adapt okcreate to your situation, and not the other way around.
 * Modular - There are plenty of bandwidth limited devices out there - let's not be wasteful.
+
+*okcreate! supports IE8 and higher, and will be dropping IE8 support when IE11 arrives*
 
 
 
