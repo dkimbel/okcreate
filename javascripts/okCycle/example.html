@@ -124,14 +124,14 @@ $("#example-3").okCycle({
   effect:'slide', 
   loadOnShow: true, 
   ui: ['caption','navigation','pagination','currentPage'],
-  onProgress: function(data, image){
+  onProgress: function(self,data, image){
     var width = (data.loaded / data.total) * 100;
 
-    $(image.img).fadeIn();
+    $(image).fadeIn();
 
     $("#progress &gt; div").css({width: width + '%'});
   },
-  onDone: function(options){
+  onDone: function(self,options){
     setTimeout(function(){
       $("#progress &gt; div").css({
         backgroundColor: '#fff'
@@ -168,14 +168,14 @@ $("#example-3").okCycle({
       effect:'slide', 
       loadOnShow: true, 
       ui: ['caption','navigation','pagination','currentPage'],
-      onProgress: function(data, image){
+      onProgress: function(self,data, image){
         var width = (data.loaded / data.total) * 100;
 
-        $(image.img).fadeIn();
+        $(image).fadeIn();
 
         $("#progress > div").css({width: width + '%'});
       },
-      onDone: function(){
+      onDone: function(self,options){
         setTimeout(function(){
           $("#progress > div").css({backgroundColor: '#fff'}).html("All loaded");
         },500);

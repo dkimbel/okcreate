@@ -4,16 +4,17 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 06/08/13
+ * Date: 08/05/13
  *
  * @description Provides transitions for okCycle
  * @author Asher Van Brunt
  * @mail asher@okbreathe.com
- * @version 1.5
+ * @version 2.0 BETA
  *
  */
 
 (function($){
+  'use strict';
 
   /**
    * Effects are objects that implement two methods: 'init' and 'move'.
@@ -55,13 +56,13 @@
    // Fade and Slide transitions are identical except the property that is animated
    function standardTransition(fn) {
      return {
-       init: function(options){
-         this.children().css({ position:"absolute" }).eq(this.data('activeSlide')).css({ zIndex:3, 'float': 'left', position: 'relative' });
+       init: function(slideshow,options){
+         slideshow.children().css({ position:"absolute" }).eq(slideshow.data('active')).css({ zIndex:3, 'float': 'left', position: 'relative' });
 
-         this.css({ position:'relative', overflow: 'hidden' });
+         slideshow.css({ position:'relative', overflow: 'hidden' });
        },
        move: function(transition){
-         var opts = fn.call(this,transition);
+         var opts = fn(slideshow,transition);
 
          transition.from.css({ zIndex : 2, position: 'absolute', 'float': 'none' }).removeClass('active');    
 
@@ -78,31 +79,31 @@
 
   $.extend($.okCycle, {
     // Standard Fade Transition
-    fade: standardTransition(function(t){ return [{ opacity: 0  }, {  opacity: 1 }]; }),
+    fade: standardTransition(function(s,t){ return [{ opacity: 0  }, {  opacity: 1 }]; }),
     // Slide one slide on top of the other when transitioning
-    slide: standardTransition(function(t){ return [{ left: t.forward ? this.width() : -this.width() }, { left: 0  } ]; }),
+    slide: standardTransition(function(s,t){ return [{ left: t.forward ? s.width() : -s.width() }, { left: 0  } ]; }),
     // All children are shifted when transitioning
     scroll: {
-      init: function(options){
-        this.wrap("<div class='okCycle-transition-container' />")
+      init: function(slideshow,options){
+        slideshow.wrap("<div class='okCycle-transition-container' />")
           .css({position:'relative','width':'200%',left:0})
           .parent()
             .css({position:'relative',width: '100%', 'minHeight': '100%', overflow: 'hidden'});
 
-        this.children().each(function(i,v){
-          $(this).addClass("item-"+i);
+        slideshow.children().each(function(i,v){
+          $(slideshow).addClass("item-"+i);
         });
 
-        this.children().first().addClass('active');
+        slideshow.children().first().addClass('active');
 
-        this.children()
+        slideshow.children()
           .css({ position: 'relative', 'float': 'left', width: '50%' }).slice(1).hide();
       },
-      move: function(transition) {
-        var self   = this,
+      move: function(slideshow,transition) {
+        var self   = slideshow,
             diff   = transition.toIndex - transition.fromIndex, 
-            prev   = this.children('.active').removeClass('active'),
-            active = this.children().eq(diff).addClass('active').show();
+            prev   = slideshow.children('.active').removeClass('active'),
+            active = slideshow.children().eq(diff).addClass('active').show();
 
         // If we're going backwards we need to set the initial offset
         if (!transition.forward ) {

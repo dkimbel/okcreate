@@ -14,6 +14,9 @@ This is that.
 
     $("#my_slideshow").okCycle();
 
+As of 2.0 BETA, in order to get lazyloading of images to work, you must set the data-src attribute to the src
+of the image you want to load.
+
 ### okCycle is made up of three components:
 
 * *core* - Supplies the core functionality of the plugin. This is all you really need, but it doesn't do anything by itself.
