@@ -60,8 +60,8 @@
       init: function(slideshow,ui,opts){
         var nav = $("<ul class='navigation'><li class='prev'><a href='#'>Previous</a></li><li class='next'><a href='#'>Next</a></li></ul>").appendTo(ui);
 
-        nav.find(".prev a").click(function(e){ e.preventDefault(); slideshow.prev(); });
-        nav.find(".next a").click(function(e){ e.preventDefault(); slideshow.next(); });
+        nav.find(".prev a").click(function(e){ e.preventDefault(); $(slideshow).okCycle().prev(); });
+        nav.find(".next a").click(function(e){ e.preventDefault(); $(slideshow).okCycle().next(); });
       }
     },
     // Pagination for jumping to specific slides
@@ -77,8 +77,8 @@
 
         pagination.on('click', 'a', function(e){
           e.preventDefault();
-          var li = $(slideshow).parent();
-          slideshow.moveTo(li.siblings().andSelf().index(li));
+          var li = $(this).parent();
+          $(slideshow).okCycle().moveTo(li.siblings().andSelf().index(li));
         });
       },
       move: function(slideshow,ui,transition){
@@ -93,12 +93,6 @@
       },
       move: function(slideshow,ui,transition){
         $("li.current", ui).html(transition.toIndex+1);
-      }
-    },
-    // Add a progress bar to show load
-    progress: {
-      init: function(slideshow,ui,opts){
-
       }
     },
 		// Enable mousewheel support
@@ -147,7 +141,7 @@
 
             if (op) { 
               e.preventDefault(); 
-              slideshow[op](); 
+              $(slideshow).okCycle()[op](); 
             }
           }
         };
