@@ -37,13 +37,12 @@
         (slideshow.data('ui') || slideshow).hover(api.pause, api.play);
       },
       // Events
-      afterSetup    : function(slideshow){},          // Called immediately after setup is performed
-      beforeMove    : function(slideshow, trans){},   // Called before we move to another slide
-      afterMove     : function(slideshow, trans){},   // Called after we move to another slide
-      onDone        : function(slideshow, data){},    // Called when all items are loaded
-      onProgress    : function(slideshow, data, img){ // Called when an item is loaded
-        $(img).fadeIn(); 
-      }
+      afterSetup    : function(slideshow){},        // Called immediately after setup is performed
+      beforeMove    : function(slideshow, trans){}, // Called before we move to another slide
+      afterMove     : function(slideshow, trans){}, // Called after we move to another slide
+      onPreload     : function(slideshow, img){ $(img).hide(); }, // Called when an loadOnShow is enabled and preload < the total number of images
+      onProgress    : function(slideshow, data, img){ $(img).fadeIn(); }, // Called when an item is loaded
+      onDone        : function(slideshow, data){}   // Called when all items are loaded
     }, opts);
 
     if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
@@ -222,9 +221,7 @@
     // attribute instead - otherwise this basically does nothing
     if (opts.preload && opts.preload > 0) {
       if (opts.loadOnShow) {
-        imgs.slice(opts.preload).each(function(){
-          $(this).hide();
-        });
+        imgs.slice(opts.preload).each(function(){ opts.onPreload(self, this); });
       }
 
       // Store the images we need to preload
