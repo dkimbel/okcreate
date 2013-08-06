@@ -92,13 +92,15 @@ $("#example-2").okCycle({
             an octothorpe (#), it will be treated as a selector and the
             innerHTML for the corresponding element will be used.
           </p>
-          <div id='html-caption-1'>HTML Caption for Slide One <a href='#'>Link to Nowhere</a></div>
-          <div id='html-caption-2'>HTML Caption for Slide Two </div>
-          <div id='html-caption-3'>HTML Caption for Slide Three</div>
-          <div id='html-caption-4'>HTML Caption for Slide Four <a href='#'>Link to Nowhere</a></div>
-          <div id='html-caption-5'>HTML Caption for Slide Five</div>
-          <div id='html-caption-6'>HTML Caption for Slide Six</div>
-          <div id='html-caption-7'>HTML Caption for Slide Seven <a href='#'>Link to Nowhere</a></div>
+          <ol>
+            <li id='html-caption-1'>HTML Caption for Slide One <a href='#'>Link to Nowhere</a></li>
+            <li id='html-caption-2'>HTML Caption for Slide Two </li>
+            <li id='html-caption-3'>HTML Caption for Slide Three</li>
+            <li id='html-caption-4'>HTML Caption for Slide Four <a href='#'>Link to Nowhere</a></li>
+            <li id='html-caption-5'>HTML Caption for Slide Five</li>
+            <li id='html-caption-6'>HTML Caption for Slide Six</li>
+            <li id='html-caption-7'>HTML Caption for Slide Seven <a href='#'>Link to Nowhere</a></li>
+          </ol>
         </div>
       </section>
 
@@ -106,13 +108,25 @@ $("#example-2").okCycle({
         <h3>Sliding Transition with Deferred Loading</h3>
         <div id='progress'><div></div></div>
         <ul id='example-3' class='slideshow'>
-          <li data-caption='eight'><img src='../../assets/images/eight.png' alt='' /></li>
-          <li data-caption='nine'><img src='../../assets/images/nine.png' alt='' /></li>
-          <li data-caption='ten'><img src='../../assets/images/ten.png' alt='' /></li>
+          <li data-caption='eight'><img src='../../assets/images/nothing.png' data-src='../../assets/images/eight.png' alt='' width='620' height='400'/></li>
+          <li data-caption='nine'><img src='../../assets/images/nothing.png' data-src='../../assets/images/nine.png' alt='' width='620' height='400'/></li>
+          <li data-caption='ten'><img src='../../assets/images/nothing.png' data-src='../../assets/images/ten.png' alt='' width='620' height='400'/></li>
         </ul>
         <p>
-          Image loading can be deferred until a given item becomes visible by using this <code>loadOnShow</code> option.
+          Image loading can be deferred until a given item becomes visible by
+          using this <code>loadOnShow</code> option.
+          <strong>Important</strong> - you must use a data property to set the
+          image source to prevent the browser from automatically downloading
+          the image. This is defined by the <code>dataAttribute</code> option
+          and be default is <code>src</code>. If you forget to do this, nothing
+          <em>bad</em> will happen, you simply won't get the benefit of
+          deferred loading.
         </p>
+        <pre>
+          <code data-language='html'>
+// Where 'W' and 'H' are the width and height of your image
+&ltimg src='placeholder.png' data-src='/path/to/image' alt='' width='W' height='H' /&gt;</code>
+        </pre>
         <p>
           Additionally we are making use of image loading callbacks,
           <code>onProgress</code> and <code>onDone</code>, in order to show

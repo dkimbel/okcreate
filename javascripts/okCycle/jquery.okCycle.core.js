@@ -19,6 +19,64 @@
   // Hold meta-plugin settings
   $.okCycle = {};
 
+  $.fn.okCycle = function(opts){
+    var set = this, api;
+
+    opts = $.extend({
+      transition    : 'scroll',            // Transition used to cycle elements
+      easing        : 'swing',             // Easing used by the transition
+      ui            : [],                  // Any UI elements that we should build. Appended in source order
+      duration      : 2000,                // Time between animations
+      speed         : 300,                 // Speed the slides are transitioned between
+      preload       : 1,                   // Number of images to load (Use 0 for all, false for none) before the plugin is initialized. Note that the image must not have the src attribute set, use data-src instead
+      dataAttribute : "src",               // In order to get deferred image loading set the dataAttribute attribute rather than src attribute.
+      loadOnShow    : false,               // If true, successive images will not be loaded until they become active
+      autoplay      : false,               // Whether to start playing immediately. Provide a number (in seconds) to delay the inital start to the slideshow
+      hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
+        var api = $(slideshow).okCycle();
+        (slideshow.data('ui') || slideshow).hover(api.pause, api.play);
+      },
+      // Events
+      afterSetup    : function(slideshow){},          // Called immediately after setup is performed
+      beforeMove    : function(slideshow, trans){},   // Called before we move to another slide
+      afterMove     : function(slideshow, trans){},   // Called after we move to another slide
+      onDone        : function(slideshow, data){},    // Called when all items are loaded
+      onProgress    : function(slideshow, data, img){ // Called when an item is loaded
+        $(img).fadeIn(); 
+      }
+    }, opts);
+
+    if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
+
+    set.each(function(){
+      var self = $(this);
+
+      if (!self.data(cycle)) initialize(self.data(cycle, opts), opts);
+    });
+
+    function e(fn){
+      set.each(function(){ 
+        var s = $(this);
+
+        if (s.data(cycle)) fn(s); 
+      }); 
+
+      return api;
+    }
+
+    // Control slideshow manually
+    // $(element).okCycle().play()
+    api = {
+      pause    : function(){ return e(pause);}, 
+      play     : function(){ return e(play); }, 
+      next     : function(){ return e(next); }, 
+      prev     : function(){ return e(prev); }, 
+      moveTo   : function(idx){ return e(function(s){ moveTo(s,idx); });} 
+    };
+
+    return api;
+  };
+
   // Store keys as variables to improve minification, catch typos
   var cycle       = 'okcycle',
       animating   = 'animating',
@@ -27,6 +85,7 @@
       interval    = 'interval',
       images      = 'images',
       unloaded    = 'unloaded';
+
 
   // Load image if it has been previously unloaded
   function loadItem(self, img){ 
@@ -188,7 +247,15 @@
     }
 
     // Initialize transition after all images have loaded
-    imgs.imagesLoaded()
+    imgs
+    .each(function(){
+      var img = $(this),
+          src  = img.data(opts.dataAttribute);
+
+      if (src) img[0].src = src; 
+    })
+    // Can this be combined with loadImage
+    .imagesLoaded()
       .done(function(instance) { 
         // We may or may not have actually loaded all images here depending
         // on whether or not the user has elected to loadOnShow
@@ -217,63 +284,5 @@
     // Call after setup hook
     opts.afterSetup(self);
   }
-
-  // Default options
-  $.fn.okCycle = function(opts){
-    var set = this, api;
-
-    opts = $.extend({
-      transition    : 'scroll',            // Transition used to cycle elements
-      easing        : 'swing',             // Easing used by the transition
-      ui            : [],                  // Any UI elements that we should build. Appended in source order
-      duration      : 2000,                // Time between animations
-      speed         : 300,                 // Speed the slides are transitioned between
-      preload       : 1,                   // Number of images to load (Use 0 for all, false for none) before the plugin is initialized. Note that the image must not have the src attribute set, use data-src instead
-      dataAttribute : "src",               // In order to get deferred image loading to work you can't set the src attribute (compatible with http://www.appelsiini.net/projects/lazyload)
-      loadOnShow    : false,               // If true, successive images will not be loaded until they become active
-      autoplay      : false,               // Whether to start playing immediately. Provide a number (in seconds) to delay the inital start to the slideshow
-      hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
-        (slideshow.data('ui') || slideshow).hover(slideshow.pause, slideshow.play);
-      },
-      // Events
-      afterSetup    : function(slideshow){},          // Called immediately after setup is performed
-      beforeMove    : function(slideshow, trans){},   // Called before we move to another slide
-      afterMove     : function(slideshow, trans){},   // Called after we move to another slide
-      onDone        : function(slideshow, data){},    // Called when all items are loaded
-      onProgress    : function(slideshow, data, img){ // Called when an item is loaded
-        $(img).fadeIn(); 
-      }
-    }, opts);
-
-    if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
-
-    set.each(function(){
-      var self = $(this);
-
-      if (!self.data(cycle)) initialize(self.data(cycle, opts), opts);
-    });
-
-    function e(fn){
-      set.each(function(){ 
-        var s = $(this);
-
-        if (s.data(cycle)) fn(s); 
-      }); 
-
-      return api;
-    }
-
-    // Control slideshow manually
-    // $(element).okCycle().play()
-    api = {
-      pause    : function(){ return e(pause);}, 
-      play     : function(){ return e(play); }, 
-      next     : function(){ return e(next); }, 
-      prev     : function(){ return e(prev); }, 
-      moveTo   : function(idx){ return e(function(s){ moveTo(s,idx); });} 
-    };
-
-    return api;
-  };
 
 })(jQuery);
