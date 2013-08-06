@@ -33,11 +33,10 @@
     var idx  = $.inArray(img[0], self.data(unloaded)),
         opts = self.data(cycle),
         data = self.data(images),
-        src,
-        image;
+        src  = img.data(opts.dataAttribute);
 
     if (idx > -1) {
-      if ((src = img.data(opts.dataAttribute))) img[0].src = src; 
+      if (src) img[0].src = src; 
 
       // This will only ever load one image at a time
       img.imagesLoaded()
@@ -264,8 +263,8 @@
       return api;
     }
 
-    // We'd like to return a function which operates over all the items in the set
-    // So if you call $(this).cyucle
+    // Control slideshow manually
+    // $(element).okCycle().play()
     api = {
       pause    : function(){ return e(pause);}, 
       play     : function(){ return e(play); }, 

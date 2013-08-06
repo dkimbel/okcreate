@@ -36,7 +36,7 @@
     // it is referring to the id of another element somewhere on page,
     // otherwise we'll use the content directly
     caption: {
-      init: function(slideshow,ui,opts){
+      init: function(slideshow, ui, opts){
         $.okCycle.ui.caption.setCaption(slideshow.children().eq(slideshow.data('active')),$("<div class='caption' style='z-index:4' />").appendTo(ui).hide());
       },
       // If a caption begins with a octothorpe we'll consider it an id attribute of an element containing the caption
@@ -57,7 +57,7 @@
     },
     // Forward/back buttons
     navigation: {
-      init: function(slideshow,ui,opts){
+      init: function(slideshow, ui, opts){
         var nav = $("<ul class='navigation'><li class='prev'><a href='#'>Previous</a></li><li class='next'><a href='#'>Next</a></li></ul>").appendTo(ui);
 
         nav.find(".prev a").click(function(e){ e.preventDefault(); $(slideshow).okCycle().prev(); });
@@ -68,27 +68,28 @@
     pagination: {
       init: function(slideshow,ui,opts){
         var html = "<ul class='pagination'>";
+
         for(var i=0; i< slideshow.children().length; i++) {
           html += '<li><a href="#">'+(i+1)+'</a></li>';
         }
-        var pagination = $(html+"</ul>").appendTo(ui);
 
-        pagination.children().eq(slideshow.data('active')).addClass('active');
-
-        pagination.on('click', 'a', function(e){
-          e.preventDefault();
-          var li = $(this).parent();
-          $(slideshow).okCycle().moveTo(li.siblings().andSelf().index(li));
-        });
+        // Create pagination
+        $(html+"</ul>").appendTo(ui)
+          .on('click', 'a', function(e){
+            e.preventDefault();
+            var li = $(this).parent();
+            $(slideshow).okCycle().moveTo(li.siblings().andSelf().index(li));
+          })
+          .children().eq(slideshow.data('active')).addClass('active');
       },
-      move: function(slideshow,ui,transition){
+      move: function(slideshow, ui, transition){
         // Just set the active class
         $(".pagination", ui).children().removeClass('active').eq(transition.toIndex).addClass('active');
       }
     },
     // Display current and total pages
     currentPage: {
-      init: function(slideshow,ui,opts){
+      init: function(slideshow, ui, opts){
         ui.append('<ul class="current-page"><li class="current">'+(slideshow.data('active')+1)+'</li><li class="total">'+slideshow.children().length+'</li></ul>');
       },
       move: function(slideshow,ui,transition){
@@ -97,7 +98,7 @@
     },
 		// Enable mousewheel support
     mouseWheel: {
-      init: function(slideshow,ui,opts) {
+      init: function(slideshow, ui, opts) {
         ui.mousewheel(function(e, delta)  {
           slideshow[delta < 0 ? 'next' : 'prev'](); 
           return false;

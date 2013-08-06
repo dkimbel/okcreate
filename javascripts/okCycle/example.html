@@ -124,7 +124,7 @@ $("#example-3").okCycle({
   effect:'slide', 
   loadOnShow: true, 
   ui: ['caption','navigation','pagination','currentPage'],
-  onProgress: function(self,data, image){
+  onProgress: function(self, data, image){
     var width = (data.loaded / data.total) * 100;
 
     $(image).fadeIn();
