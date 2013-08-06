@@ -67,11 +67,11 @@
     // Control slideshow manually
     // $(element).okCycle().play()
     api = {
-      pause    : function(){ return e(pause);}, 
-      play     : function(){ return e(play); }, 
-      next     : function(){ return e(next); }, 
-      prev     : function(){ return e(prev); }, 
-      moveTo   : function(idx){ return e(function(s){ moveTo(s,idx); });} 
+      pause  : function(){ return e(pause);}, 
+      play   : function(){ return e(play); }, 
+      next   : function(){ return e(next); }, 
+      prev   : function(){ return e(prev); }, 
+      moveTo : function(i){ return e(function(s){ moveTo(s, i); });} 
     };
 
     return api;
@@ -83,39 +83,39 @@
       autoplaying = 'autoplaying',
       active      = 'active',
       interval    = 'interval',
-      images      = 'images',
-      unloaded    = 'unloaded';
+      images      = 'images';
 
+  // Load previously deferred images
+  function load(self, imgs){ 
+    var opts = self.data(cycle),
+        data = self.data(images);
 
-  // Load image if it has been previously unloaded
-  function loadItem(self, img){ 
-    var idx  = $.inArray(img[0], self.data(unloaded)),
-        opts = self.data(cycle),
-        data = self.data(images),
-        src  = img.data(opts.dataAttribute);
+    return imgs
+      .each(function(){
+        var self = $(this), 
+            src  = self.data(opts.dataAttribute);
 
-    if (idx > -1) {
-      if (src) img[0].src = src; 
-
-      // This will only ever load one image at a time
-      img.imagesLoaded()
-        .progress(function(instance, image) {
-          self.data(unloaded).splice(idx, 1);
-
+        if (src) {
+          this.src = src; 
+          self.removeAttr('data-'+opts.dataAttribute);
+        }
+      })
+      .imagesLoaded()
+        .progress(function(instance, image) { 
           data.loaded++;
 
           if (!image.isLoaded) data.broken++;
 
           opts.onProgress(self, data, image.img); 
 
-          if (data.loaded === data.total) opts.onDone(self, data);
+          if (data.loaded >= data.total) opts.onDone(self, data);
         });
-    }
   }
 
   // Disable autoplay
   function pause(self){
     if (self.data(interval)) {
+      // Store it so we can cancel it
       self.data(interval, clearTimeout(self.data(interval)));
     }
 
@@ -190,7 +190,9 @@
       if (opts.preload > 0 && opts.loadOnShow) {
         (activeItems || transition.to)
           .find("img")
-          .each(function(){ loadItem(self, $(this)); }); // Load the next image 
+          .each(function(){ 
+            if ($(this).attr('data-'+opts.dataAttribute)) load(self, $(this)); // Load the next image if it hasn't already been loaded
+          }); 
       }
 
       // Tell the UI we've moved
@@ -205,9 +207,9 @@
     return self;
   }
 
-  // Initialize
+  // Setup our instance
   function initialize(self, opts){
-    var imgs  = opts.preload === false ? $('') : $('img', self),
+    var imgs = opts.preload === false ? $('') : $('img', self),
         data,  
         initFn;
 
@@ -220,10 +222,8 @@
     // attribute instead - otherwise this basically does nothing
     if (opts.preload && opts.preload > 0) {
       if (opts.loadOnShow) {
-        self.data(unloaded, []);
-
         imgs.slice(opts.preload).each(function(){
-          self.data(unloaded).push($(this).hide()[0]);
+          $(this).hide();
         });
       }
 
@@ -247,29 +247,9 @@
     }
 
     // Initialize transition after all images have loaded
-    imgs
-    .each(function(){
-      var img = $(this),
-          src  = img.data(opts.dataAttribute);
-
-      if (src) img[0].src = src; 
-    })
-    // Can this be combined with loadImage
-    .imagesLoaded()
-      .done(function(instance) { 
-        // We may or may not have actually loaded all images here depending
-        // on whether or not the user has elected to loadOnShow
-        if (data.loaded == data.total) opts.onDone(self, data); 
-
-        $.okCycle[opts.transition].init(self, opts); 
-      })
-      .progress(function(instance, image) { 
-        data.loaded++;
-
-        if (!image.isLoaded) data.broken++;
-
-        opts.onProgress(self, data, image.img); 
-      });
+    load(self,imgs).done(function(instance) { 
+      $.okCycle[opts.transition].init(self, opts); 
+    });
 
     // Start autoplaying if enabled
     if ( opts.autoplay === true || typeof(opts.autoplay) == 'number' ){ 
