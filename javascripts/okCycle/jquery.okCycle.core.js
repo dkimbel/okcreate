@@ -23,24 +23,25 @@
     var set = this, api;
 
     opts = $.extend({
-      transition    : 'scroll',            // Transition used to cycle elements
+      transition    : 'scroll',            // Transition used to cycle between children
       easing        : 'swing',             // Easing used by the transition
-      ui            : [],                  // Any UI elements that we should build. Appended in source order
+      ui            : [],                  // Any UI elements that we should build. Appended to the UI container source order
       duration      : 2000,                // Time between animations
-      speed         : 300,                 // Speed the slides are transitioned between
-      preload       : 1,                   // Number of images to load (Use 0 for all, false for none) before the plugin is initialized. Note that the image must not have the src attribute set, use data-src instead
-      dataAttribute : "src",               // In order to get deferred image loading set the dataAttribute attribute rather than src attribute.
-      loadOnShow    : false,               // If true, successive images will not be loaded until they become active
-      autoplay      : false,               // Whether to start playing immediately. Provide a number (in seconds) to delay the inital start to the slideshow
+      speed         : 300,                 // Speed the children are transitioned between
+      dataAttribute : "src",               // Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
+      eagerLoad     : 1,                   // During setup, force okCycle to N images when using the data-src attribute to lazy load
+      autoplay      : false,               // Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
       hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
         var api = $(slideshow).okCycle();
         (slideshow.data('ui') || slideshow).hover(api.pause, api.play);
       },
-      // Events
+      // Callbacks
       afterSetup    : function(slideshow){},        // Called immediately after setup is performed
       beforeMove    : function(slideshow, trans){}, // Called before we move to another slide
       afterMove     : function(slideshow, trans){}, // Called after we move to another slide
+      // This isn't named right - this is basically what we do any images we've deferred loading
       onPreload     : function(slideshow, img){ $(img).hide(); }, // Called when an loadOnShow is enabled and preload < the total number of images
+      // If these don't behave like deferreds, name them more explicitly "onLoad", on "onLoaded"
       onProgress    : function(slideshow, data, img){ $(img).fadeIn(); }, // Called when an item is loaded
       onDone        : function(slideshow, data){}   // Called when all items are loaded
     }, opts);
@@ -113,15 +114,12 @@
 
   // Disable autoplay
   function pause(self){
-    if (self.data(interval)) {
-      // Store it so we can cancel it
-      self.data(interval, clearTimeout(self.data(interval)));
-    }
+    if (self.data(interval)) self.data(interval, clearTimeout(self.data(interval))); // Store it so we can cancel it
 
     return self.data(autoplaying, false);
   }
 
-  // Autoplay
+  // Enable Autoplay
   function play(self){
     self.data(autoplaying, true);
 
@@ -151,7 +149,7 @@
     return transitionTo(self, activeIdx , idx, idx > activeIdx); 
   }
 
-  // Transition to another slide using the chosen transition
+  // Show another slide using the selected transition
   function transitionTo(self, prev, cur, forward){
     var data, activeItems, fn, opts = self.data(cycle);
 
@@ -186,7 +184,7 @@
 
       // We can't depend on the transition returning items in same same
       // order, so load whatever the transition returns as the active items
-      if (opts.preload > 0 && opts.loadOnShow) {
+      if (opts.eagerLoad > 0) {
         (activeItems || transition.to)
           .find("img")
           .each(function(){ 
@@ -196,10 +194,8 @@
 
       // Tell the UI we've moved
       $.each(opts.ui, function(){
-        fn = $.okCycle.ui[this];
-        if (fn && fn.move) { 
+        if ((fn = $.okCycle.ui[this]) && fn.move) 
           fn.move(self, self.data('ui'), data); 
-        }
       });
     }
 
@@ -208,28 +204,14 @@
 
   // Setup our instance
   function initialize(self, opts){
-    var imgs = opts.preload === false ? $('') : $('img', self),
-        data,  
+    var imgs = $('img', self).slice(0, opts.eagerLoad), // Store the images we're going to eagerLoad
+        data = { loaded: 0, broken: 0, total : imgs.length }, // Information about the images
         initFn;
 
-    self.data(images, { loaded: 0, broken: 0, total : imgs.length });
+    // Store img info
+    self.data(images, data);
 
-    data = self.data(images);
-
-    // If you've elected to load on show you need to omit the src attribute
-    // to prevent the browser from loading the image and set the data-src
-    // attribute instead - otherwise this basically does nothing
-    if (opts.preload && opts.preload > 0) {
-      if (opts.loadOnShow) {
-        imgs.slice(opts.preload).each(function(){ opts.onPreload(self, this); });
-      }
-
-      // Store the images we need to preload
-      imgs = imgs.slice(0, opts.preload);
-    }
-
-    // Store the index of current slide rather than the element as the UI can
-    // shuffle the content around
+    // Stores the index of current slide 
     self.data(active, 0);
 
     // Initialize UI
@@ -243,12 +225,15 @@
       });
     }
 
-    // Initialize transition after all images have loaded
-    load(self,imgs).done(function(instance) { 
+    // Prepare eager loaded images
+    imgs.each(function(){ opts.onPreload(self, this); });
+
+    // Initialize transition after all eager loaded images have loaded
+    load(self, imgs).done(function(instance) { 
       $.okCycle[opts.transition].init(self, opts); 
     });
 
-    // Start autoplaying if enabled
+    // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
     if ( opts.autoplay === true || typeof(opts.autoplay) == 'number' ){ 
       setTimeout(function(){ 
         play(self); 

@@ -113,16 +113,16 @@ $("#example-2").okCycle({
           <li data-caption='ten'><img src='../../assets/images/nothing.png' data-src='../../assets/images/ten.png' alt='' width='620' height='400'/></li>
         </ul>
         <p>
-          Image loading can be deferred until a given item becomes visible by
-          using this <code>loadOnShow</code> option.
+          This example lazy loads images by setting the <code>data-src</code>
+          attribute rather than the <code>src</code> attribute Image loading
+          will be deferred until a given item is made active.
         </p>
         <p>
           <strong>Important</strong> - you must use a data property to set the
           image source to prevent the browser from automatically downloading
           the image. This is defined by the <code>dataAttribute</code> option
           and be default is <code>src</code>. If you forget to do this, nothing
-          <em>bad</em> will happen, you simply won't get the benefit of
-          deferred loading.
+          <em>bad</em> will happen, it just won't be lazy loaded.
         </p>
         <pre>
           <code data-language='html'>
@@ -138,7 +138,6 @@ $("#example-2").okCycle({
           <code data-language='javascript'>
 $("#example-3").okCycle({
   effect:'slide', 
-  loadOnShow: true, 
   ui: ['caption','navigation','pagination','currentPage'],
   onProgress: function(self, data, image){
     var width = (data.loaded / data.total) * 100;
@@ -182,7 +181,6 @@ $("#example-3").okCycle({
 
     $("#example-3").okCycle({
       effect:'slide', 
-      loadOnShow: true, 
       ui: ['caption','navigation','pagination','currentPage'],
       onProgress: function(self,data, image){
         var width = (data.loaded / data.total) * 100;
