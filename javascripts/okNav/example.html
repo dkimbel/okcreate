@@ -1,0 +1,217 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>okNav</title>
+  <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
+  <script src="../../assets/rainbow-custom.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->  
+
+  <!-- Plugin -->
+  <script src="jquery.okNav.js"></script>
+  <script src="jquery.okNav.ui.js"></script>
+</head>
+<body>
+
+  <div id="doc">
+    <header>
+      <h1>okNav</h1>
+    </header>
+
+    <article id="main" class='container'>
+      <div class='twelve'>
+        <h2>Demonstration</h2>
+        <p>
+          okNav provides abstractions over several different types of in-page
+          navigation. The basic requirements are that: 
+        </p>
+        <ol>
+          <li>The navigation interface must be made up of links contained within an element. By default, it expects a list of links.</li>
+          <li>The anchors of the links must match the id of the content element that they correspond to.</li> 
+        </ol>
+        <p>
+          While the example markup works, you're not purely limited to any
+          particular arrangement and the content can exist anywhere in page.
+          okNav does no styling for you, so don't be surprised if the tabs
+          don't look like they do in the demo.
+        </p>
+        <section>
+          <h4 class='box'>Tabs</h4>
+          <p>This is the default user interface - if the ui option is omitted this is what will be used</p>
+
+          <pre>
+            <code data-language='javascript'>
+$("#tabs").okNav(); // Called on the navigation</code>
+          </pre>
+          <ul id='tabs' class="tabs">
+            <!-- Give href a value corresponding to a content ID -->
+            <li><a href="#one">One</a></li>
+            <li class='active'><a href="#two">Two</a></li>
+            <li><a href="#three">Three</a></li>
+          </ul>
+          <!-- It doesn't matter what the markup is, so long as it is contained by a parent element -->
+          <ul class='tab-content'>
+            <!-- IDs must match the HREF of above anchors -->
+            <li id="one">
+              'Twas brillig, and the slithy toves
+              Did gyre and gimble in the wabe;
+              All mimsy were the borogoves,
+              And the mome raths outgrabe.
+            </li>
+            <li id="two">
+              "Beware the Jabberwock, my son!
+              The jaws that bite, the claws that catch!
+              Beware the Jubjub bird, and shun
+              The frumious Bandersnatch!"
+            </li>
+            <li id="three">
+              He took his vorpal sword in hand:
+              Long time the manxome foe he sought—
+              So rested he by the Tumtum tree,
+              And stood awhile in thought.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h4 class='box'>ScrollSpy</h4>
+          <p>
+            The ScrollSpy ui is for automatically updating nav targets based on
+            scroll position. Scroll the area below the navbar and watch the
+            active class change. 
+            If differs from tabs as the siblings aren't hidden, and the tab
+            active class is updated on scroll, rather than click
+          </p>
+          <p>If you want to target an element other than the body, you can supply a <code>element</code> which will be used as the scrollspy target</p>
+          <pre>
+            <code data-language='javascript'>
+$("#scrollspy").okNav({ui: 'scrollSpy', element: '#scrollspy-content'});</code>
+          </pre>
+          <ul id='scrollspy' class="tabs">
+            <!-- Give href a value corresponding to a content ID -->
+            <li><a href="#s-one">One</a></li>
+            <li><a href="#s-two">Two</a></li>
+            <li><a href="#s-three">Three</a></li>
+            <li><a href="#s-four">Four</a></li>
+          </ul>
+          <div id='scrollspy-content' class="scrollspy-content">
+            <h4 id='s-one'>One</h4>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in quam
+              sollicitudin, venenatis magna vitae, lacinia sem. Praesent facilisis erat ut
+              eros pretium, a egestas dui convallis. Quisque pellentesque ipsum justo, sit
+              amet accumsan est pellentesque quis. Ut feugiat, felis at adipiscing aliquet,
+              sapien lectus scelerisque tortor, vel rutrum velit urna non libero.
+              Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
+              turpis egestas. Sed a nisi vehicula, convallis turpis a, bibendum dolor.
+              Maecenas eleifend bibendum pretium. Curabitur at tincidunt metus, iaculis
+              laoreet neque. Aliquam vitae vestibulum eros, vel semper purus. Sed eros enim,
+              sollicitudin quis quam sit amet, dictum pellentesque neque. Maecenas vel nulla
+              quam.
+            </p>
+            <h4 id='s-two'>Two</h4>
+            <p>
+              Integer gravida, velit in egestas consectetur, sem erat posuere tortor, aliquet
+              tincidunt massa ante vel sapien. Ut sagittis nisl a magna venenatis pharetra.
+              Quisque in tortor sit amet sapien feugiat rhoncus. Donec dolor risus, vehicula
+              vitae lacus non, eleifend feugiat augue. Donec diam sem, tempor nec mi sed,
+              cursus congue dolor. In sagittis luctus erat non malesuada. Nulla porttitor leo
+              ut purus pretium, in egestas est consequat. Vestibulum venenatis odio ut
+              laoreet vehicula. Duis cursus elementum imperdiet. Donec venenatis scelerisque
+              vehicula.
+            </p>
+            <h4 id='s-three'>Three</h4>
+            <p>
+              Nam vel mollis lorem. Mauris eu egestas tortor. Aenean ac porta felis.
+              Curabitur elementum luctus sem quis posuere. Proin hendrerit mi dui, ut feugiat
+              magna convallis sit amet. Etiam a tincidunt lectus. Sed eget risus a sapien
+              imperdiet laoreet eu eu ipsum. Curabitur in lacus mollis, venenatis urna ac,
+              elementum odio. Nunc sed lacus libero. Nullam et odio massa. Vestibulum nibh
+              felis, vestibulum non mauris at, bibendum sagittis nunc. Vestibulum vitae
+              lobortis leo. Aenean sollicitudin at magna quis rutrum. Etiam eget ligula
+              condimentum, pulvinar massa a, sodales nunc. Vestibulum ante ipsum primis in
+              faucibus orci luctus et ultrices posuere cubilia Curae;
+            </p>
+            <h4 id='s-four'>Four</h4>
+            <p>
+              Nullam tincidunt libero id leo semper, id venenatis dolor ullamcorper. Morbi
+              semper orci aliquam velit sagittis, quis consectetur nibh varius. Nam convallis
+              posuere ipsum, bibendum convallis enim consequat a. Duis nulla odio, mattis
+              eget urna in, facilisis adipiscing sapien. Proin tempus lacus vel auctor
+              dictum. Duis eu eros vitae eros rhoncus ultrices quis id justo. In porttitor
+              lectus nec turpis porttitor, et sagittis nibh facilisis. Nulla fringilla nulla
+              vel lobortis commodo. Nulla id euismod metus. Praesent id vehicula tortor, sit
+              amet porta ante.
+              Mauris rutrum ipsum non pharetra egestas. Donec id eros ligula. In sit amet
+              libero venenatis, tempor neque sit amet, ornare nisi. Donec malesuada eleifend
+              mollis. Integer condimentum rutrum nulla tincidunt gravida. Maecenas tincidunt
+              non elit quis ornare. Integer mattis nisi erat, eu aliquam justo bibendum
+              consectetur. Fusce vel tristique purus. Praesent mollis ligula risus, ac
+              porttitor libero faucibus euismod. Cras placerat augue id nibh lobortis
+              feugiat. Nulla lacinia, felis vitae fringilla lacinia, nunc arcu rhoncus ipsum,
+              sed faucibus nisi quam eget urna. Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit. Vivamus tempor lobortis enim, at venenatis neque. 
+            </p>
+          </div>
+        </section>
+        <section>
+          <h4 class='box'>Accordian</h4>
+          <p>The markup demands of the accordian are also simple, yet fundamentally different than the tab interface. The plugin assumes that the navigation and content are interleaved together</p>
+          <pre>
+            <code data-language='javascript'>
+$("#accordian").okNav({ui: 'accordian'});</code>
+          </pre>
+          <ul id='accordian' class='accordian'>
+            <li class='heading'><a href="#a-one">One</a></li>
+            <li class='content' id='a-one'>
+              And as in uffish thought he stood,
+              The Jabberwock, with eyes of flame,
+              Came whiffling through the tulgey wood,
+              And burbled as it came!
+            </li>
+            <li class='heading'><a href="#a-two">Two</a></li>
+            <li id='a-two' class='content'>
+              One, two! One, two! and through and through
+              The vorpal blade went snicker-snack!
+              He left it dead, and with its head
+              He went galumphing back.
+            </li>
+            <li class='heading'><a href="#a-three">Three</a></li>
+            <li id='a-three' class='content'>
+              "And hast thou slain the Jabberwock?
+              Come to my arms, my beamish boy!
+              O frabjous day! Callooh! Callay!"
+              He chortled in his joy.
+            </li>
+            <li class='heading'><a href="#a-four">Four</a></li>
+            <li id='a-four' class='content'>
+              'Twas brillig, and the slithy toves
+              Did gyre and gimble in the wabe;
+              All mimsy were the borogoves,
+              And the mome raths outgrabe.
+            </li>
+          </ul>
+        </section>
+      </div>
+    </article>
+
+    <footer>
+      <h1><a href='http://okbreathe.com'>okbreathe</a></h1>
+    </footer>
+  </div> <!-- #doc -->
+
+  <script>
+    $("#tabs").okNav();
+    var tabs = $("#scrollspy").okNav({ ui: 'scrollspy', element: '#scrollspy-content' });
+    $("#accordian").okNav({ui: 'accordian'});
+  </script>
+
+</body>
+</html>

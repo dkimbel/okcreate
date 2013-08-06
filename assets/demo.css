@@ -10,6 +10,7 @@
 04.OKPOPUP
 05.OKTABS
 06.OKSTYLYZE
+07.OKNAV
 ------------------------------------------------*/
 
 /* ........................................................... [01.DEMO THEME] */
@@ -871,3 +872,122 @@ ul.tabs:after {
 .styled.file.disabled input {
   cursor: default;
 }
+
+/* ........................................................... [07.OKNAV] */
+
+ul.tabs {
+  border-bottom: 1px solid #DDDDDD;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+ul.tabs li {
+  display: block;
+  float: left;
+  height: 30px;
+  margin-bottom: 0;
+  padding: 0;
+  width: auto;
+}
+
+ul.tabs li a {
+  background: none repeat scroll 0 0 #F5F5F5;
+  border-color: #DDDDDD;
+  border-style: solid;
+  border-width: 1px 1px 0 0;
+  display: block;
+  font-size: 13px;
+  height: 29px;
+  line-height: 30px;
+  margin: 0;
+  padding: 0 20px;
+  text-decoration: none;
+  width: auto;
+}
+
+ul.tabs li.active a {
+  background: none repeat scroll 0 0 #FFF;
+  border-left-width: 1px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  color: #111111;
+  height: 30px;
+  margin: 0 0 0 -1px;
+  padding-top: 4px;
+  position: relative;
+  top: -4px;
+}
+
+ul.tabs li.active:first-child a {
+  margin-left: 0;
+}
+
+ul.tabs li:first-child a {
+  border-top-left-radius: 2px;
+  border-width: 1px 1px 0;
+}
+
+ul.tabs li:last-child a {
+  border-top-right-radius: 2px;
+}
+
+ul.tabs:before, ul.tabs:after {
+  content: " ";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+}
+
+ul.tabs:after {
+  clear: both;
+}
+
+.tab-content ,
+.scrollspy-content {
+  padding: 10px;
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #ddd;
+  border-top: none;
+  margin-bottom: 1em;
+}
+
+.tab-content {
+  min-height: 100px;
+}
+
+.scrollspy-content {
+  height: 200px;
+  overflow: auto;
+  position: relative;
+}
+
+.accordian .heading ,
+.accordian .content {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.accordian .heading.active {
+  border-radius: 4px 4px 0 0;
+}
+
+.accordian .heading {
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
+.accordian .heading a{
+  padding: 5px;
+  display: block;
+}
+.accordian .content {
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 5px;
+  margin-bottom: 0;
+  height: 100px;
+}
+
