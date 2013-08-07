@@ -105,6 +105,24 @@
         });			
       }
     },
+    // Show pecentage of loaded images
+    progress: {
+      init: function(slideshow,ui,opts) {
+        var api = $(slideshow).okCycle();
+
+        ui.append("<div class='progress'><div></div></div>");
+
+        api.progress(function(data, image){
+          var width = (data.loaded / data.total) * 100;
+
+          $(".progress > div",ui).css({width: width + '%'});
+        });
+
+        api.done(function(options){
+          $(".progress", ui).fadeOut();
+        });
+      }
+    },
     // Enable touch support
     touch: {
       init: function(slideshow,ui,opts) {

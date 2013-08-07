@@ -42,7 +42,6 @@
       onLazyLoad  : function(slideshow, imageData){  // Control how lazy loaded images are shown
         $(imageData.img)[imageData.isLoaded ? 'fadeIn' : 'hide']();
       }
-
     }, opts);
 
     if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
@@ -53,8 +52,7 @@
     });
 
     function e(fn){
-      set.each(function(){ if ((cs = $(this)) && cs.data(cycle)) fn(cs); }); 
-      return api;
+      set.each(function(){ fn($(this)); }); return api;
     }
 
     // Control slideshow manually - note that this will operate on every
@@ -62,12 +60,15 @@
     //
     // e.g. $(element).okCycle().play()
     api = {
-      element : set,
-      pause   : function(){ return e(pause); }, 
-      play    : function(){ return e(play); }, 
-      next    : function(){ return e(next); }, 
-      prev    : function(){ return e(prev); }, 
-      moveTo  : function(i){ return e(function(s){ moveTo(s, i); });} 
+      element  : set,
+      pause    : function(){ return e(pause); }, 
+      play     : function(){ return e(play);  }, 
+      next     : function(){ return e(next);  }, 
+      prev     : function(){ return e(prev);  }, 
+      moveTo   : function(i){ return e(function(s){ moveTo(s, i); });},
+      // Hook into the image loading process
+      progress : function(f){ return e(function(s) { s.data(imageData).progress(f); }); },
+      done     : function(f){ return e(function(s) { s.data(imageData).done(f); }); }
     };
 
     return api;
@@ -94,7 +95,7 @@
       fn(self, { img: img });
 
       img.imagesLoaded().progress(function(inst,img){ 
-        notify(data,img); 
+        notify(self,data,img); 
         fn(self, img); 
       });
 
@@ -105,9 +106,11 @@
     });
   }
 
-  function notify(data, image){
+  function notify(self, data, image){
     if (!image.isLoaded) data.broken++;
-    ++data.loaded;
+    data.loaded++;
+    data.notifyWith(self,[data,image]);
+    if (data.loaded >= data.total) data.resolveWith(self,[data,image]);
   }
 
   // Disable autoplay
@@ -224,10 +227,7 @@
     }
 
     // Initialize transition after all eager loaded images have loaded
-    eagerImgs
-    .imagesLoaded()
-      .progress(function(inst,img){ notify(data,img); })
-      .always(function(){ $.okCycle[opts.transition].init(self, opts); });
+    eagerImgs.imagesLoaded().always(function(){ $.okCycle[opts.transition].init(self, opts); });
 
     load(self, eagerImgs);
 

@@ -33,6 +33,7 @@
         <p class='box'>Tiny, modular, flexible slideshow</p>
         <h2>Demonstration</h2>
       </div>
+
       <section class='eight'>
         <h3>Fading Transition with Autoplay UI</h3>
         <ul id='example-1' class='slideshow'>
@@ -52,7 +53,7 @@
           <code data-language='javascript'>
 $("#example-1").okCycle({
   autoplay: true,
-  effect:'fade', 
+  transition:'fade', 
   ui: ['caption','navigation','pagination','currentPage']
 });
           </code>
@@ -75,7 +76,7 @@ $("#example-1").okCycle({
           <pre>
             <code data-language='javascript'>
 $("#example-2").okCycle({
-  effect:'scroll',
+  transition:'scroll',
   ui: [
     'caption',
     'navigation',
@@ -107,13 +108,20 @@ $("#example-2").okCycle({
       </section>
 
       <section class='eight'>
-        <h3>Sliding Transition with Deferred Loading</h3>
-        <div id='progress'><div></div></div>
+        <h3>Sliding Transition with Deferred Loading and Progress</h3>
         <ul id='example-3' class='slideshow'>
           <li data-caption='eight'><img src='../../assets/images/nothing.png' data-src='../../assets/images/eight.png' alt='' width='620' height='400'/></li>
           <li data-caption='nine'><img src='../../assets/images/nothing.png' data-src='../../assets/images/nine.png' alt='' width='620' height='400'/></li>
           <li data-caption='ten'><img src='../../assets/images/nothing.png' data-src='../../assets/images/ten.png' alt='' width='620' height='400'/></li>
         </ul>
+        <pre>
+          <code data-language='javascript'>
+$("#example-3").okCycle({
+  transition:'slide', 
+  ui: ['navigation','pagination','currentPage','progress'],
+});
+          </code>
+        </pre>
         <p>
           This example lazy loads images by setting the <code>data-src</code>
           attribute rather than the <code>src</code> attribute Image loading
@@ -133,30 +141,37 @@ $("#example-2").okCycle({
           </code>
         </pre>
         <p>
-          Additionally we are making use of image loading callbacks,
-          <code>onProgress</code> and <code>onDone</code>, in order to show
-          loading progress
+          The progress UI makes use of image loading api function,
+          <code>progress</code> and <code>done</code>, which wraps a jquery deferred.
+          You can hook into them in the following manner
         </p>
         <pre>
           <code data-language='javascript'>
-$("#example-3").okCycle({
-  effect:'slide', 
-  ui: ['caption','navigation','pagination','currentPage'],
-  onProgress: function(self, data, image){
-    var width = (data.loaded / data.total) * 100;
+var api = $(selector).okCycle();
 
-    $(image).fadeIn();
-
-    $("#progress &gt; div").css({width: width + '%'});
-  },
-  onDone: function(self,options){
-    setTimeout(function(){
-      $("#progress &gt; div").css({
-        backgroundColor: '#fff'
-      }).html("All loaded");
-    },500);
-  }
+// Callbacks are applied across the entire matched set, so you can't chain.
+// Inside the callback 'this' is set to the slideshow
+api.progress(function(data, image){
+  // ... Do stuff
 });
+
+api.done(function(options){
+  // ... Do stuff
+});
+          </code>
+        </pre>
+        <p>
+          Additionally it's possible to manually control the slideshow with the api
+        </p>
+        <pre>
+          <code data-language='javascript'>
+var api = $(selector).okCycle();
+
+api.pause(); // Stop autoplay
+api.play();  // Resume autoplay
+api.next();  // Move to the next slides
+api.prev();  // Move to the previous slides
+api.moveTo(index); // Move to a specific slide
           </code>
         </pre>
       </section>
@@ -174,31 +189,19 @@ $("#example-3").okCycle({
   <script>
     $("#example-1").okCycle({
       autoplay: true,
-      effect:'fade', 
+      transition:'fade', 
       ui: ['caption','navigation','pagination','currentPage']
-    });
+    })
 
     $("#example-2").okCycle({
-      effect:'scroll', 
+      transition:'scroll', 
       ui: ['caption','navigation','pagination','currentPage', 'mouseWheel']
     });
 
     $("#example-3").okCycle({
-      effect:'slide', 
-      ui: ['caption','navigation','pagination','currentPage'],
-      onProgress: function(self,data, image){
-        var width = (data.loaded / data.total) * 100;
-
-        $(image).fadeIn();
-
-        $("#progress > div").css({width: width + '%'});
-      },
-      onDone: function(self,options){
-        setTimeout(function(){
-          $("#progress > div").css({backgroundColor: '#fff'}).html("All loaded");
-        },500);
-      }
-    });
+      transition:'slide', 
+      ui: ['navigation','pagination','currentPage', 'progress'],
+    })
   </script>
 
 </body>

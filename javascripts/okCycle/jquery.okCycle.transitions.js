@@ -61,7 +61,7 @@
 
          slideshow.css({ position:'relative', overflow: 'hidden' });
        },
-       move: function(transition){
+       move: function(slideshow,transition){
          var opts = fn(slideshow,transition);
 
          transition.from.css({ zIndex : 2, position: 'absolute', 'float': 'none' }).removeClass('active');    
@@ -86,9 +86,9 @@
     scroll: {
       init: function(slideshow,options){
         slideshow.wrap("<div class='okCycle-transition-container' />")
-          .css({position:'relative','width':'200%',left:0})
+          .css({position:'relative',width:'200%',left:0})
           .parent()
-            .css({position:'relative',width: '100%', 'minHeight': '100%', overflow: 'hidden'});
+            .css({position:'relative',width: '100%', minHeight: '100%', overflow: 'hidden'});
 
         slideshow.children().each(function(i,v){
           $(slideshow).addClass("item-"+i);
@@ -97,7 +97,7 @@
         slideshow.children().first().addClass('active');
 
         slideshow.children()
-          .css({ position: 'relative', 'float': 'left', width: '50%' }).slice(1).hide();
+          .css({ position: 'relative', float: 'left', width: '50%' }).slice(1).hide();
       },
       move: function(slideshow,transition) {
         var self   = slideshow,
