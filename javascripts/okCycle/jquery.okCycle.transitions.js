@@ -82,52 +82,46 @@
     fade: standardTransition(function(s,t){ return [{ opacity: 0  }, {  opacity: 1 }]; }),
     // Slide one slide on top of the other when transitioning
     slide: standardTransition(function(s,t){ return [{ left: t.forward ? s.width() : -s.width() }, { left: 0  } ]; }),
-    // All children are shifted when transitioning
+    // Children are shifted when transitioning
     scroll: {
       init: function(slideshow,options){
         slideshow.wrap("<div class='okCycle-transition-container' />")
-          .css({position:'relative',width:'200%',left:0})
+          .css({position:'relative','width':'200%',left:0}) // Couldn't we just do 100% * number of children?
           .parent()
-            .css({position:'relative',width: '100%', minHeight: '100%', overflow: 'hidden'});
+            .css({position:'relative',width: '100%', 'minHeight': '100%', overflow: 'hidden'});
 
-        slideshow.children().each(function(i,v){
-          $(slideshow).addClass("item-"+i);
-        });
-
-        slideshow.children().first().addClass('active');
-
-        slideshow.children()
-          .css({ position: 'relative', float: 'left', width: '50%' }).slice(1).hide();
+        slideshow.children().first().addClass('active').end().css({ position: 'relative', 'float': 'left', width: '50%' }).slice(1).hide();
       },
       move: function(slideshow,transition) {
-        var self   = slideshow,
-            diff   = transition.toIndex - transition.fromIndex, 
+        var diff   = transition.toIndex - transition.fromIndex, 
+            offset = (( transition.forward && diff < 0) || ( !transition.forward && diff > 0)) ? 1 : Math.abs(diff),
+            child  = transition.forward ? slideshow.children().slice(0,offset) : slideshow.children().slice(-offset),
             prev   = slideshow.children('.active').removeClass('active'),
+            pos    = '-100%',
             active = slideshow.children().eq(diff).addClass('active').show();
 
-        // If we're going backwards we need to set the initial offset
-        if (!transition.forward ) {
-          self.css({left: "-100%"});
-          active.prependTo(self);
-        }
+        child.slice(1).hide();
 
-        self.animate({
-          left: transition.forward ? '-100%' : '0%' }, 
-          transition.speed, 
-          transition.easing, 
-          function(){
-            self.css({left: 0}); 
-
-            prev.hide();
-
-            if (transition.forward) prev.appendTo(self); 
-
-            transition.resolve();
+        if (transition.forward) {
+          slideshow.animate({ left: pos }, function(){ 
+            slideshow.append(child).css({ left:0 }); 
+            child.hide();
+            transition.resolve(); 
           });
+        } else {
+          slideshow
+            .prepend(child)
+            .css({ left: pos })
+            .animate({left: 0}, function(){
+              prev.hide();
+              transition.resolve(); 
+            });
+        }
 
         return active;
       }
     }
+
   });
 
 })(jQuery);
