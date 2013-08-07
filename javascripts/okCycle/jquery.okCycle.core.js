@@ -20,7 +20,7 @@
   $.okCycle = {};
 
   $.fn.okCycle = function(opts){
-    var set = this, api;
+    var set = this, cs, api;
 
     opts = $.extend({
       transition    : 'scroll',            // Transition used to cycle between children
@@ -29,49 +29,45 @@
       duration      : 2000,                // Time between animations
       speed         : 300,                 // Speed the children are transitioned between
       dataAttribute : "src",               // Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
-      eagerLoad     : 1,                   // During setup, force okCycle to N images when using the data-src attribute to lazy load
+      eagerLoad     : 1,                   // During setup, force okCycle to N images when using the data-src attribute to lazy load. Set to 0 to load all images
       autoplay      : false,               // Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
       hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
         var api = $(slideshow).okCycle();
         (slideshow.data('ui') || slideshow).hover(api.pause, api.play);
       },
       // Callbacks
-      afterSetup    : function(slideshow){},        // Called immediately after setup is performed
-      beforeMove    : function(slideshow, trans){}, // Called before we move to another slide
-      afterMove     : function(slideshow, trans){}, // Called after we move to another slide
-      // This isn't named right - this is basically what we do any images we've deferred loading
-      onPreload     : function(slideshow, img){ $(img).hide(); }, // Called when an loadOnShow is enabled and preload < the total number of images
-      // If these don't behave like deferreds, name them more explicitly "onLoad", on "onLoaded"
-      onProgress    : function(slideshow, data, img){ $(img).fadeIn(); }, // Called when an item is loaded
-      onDone        : function(slideshow, data){}   // Called when all items are loaded
+      afterSetup  : function(slideshow){},           // Called immediately after setup is performed
+      beforeMove  : function(slideshow, trans){},    // Called before we move to another slide
+      afterMove   : function(slideshow, trans){},    // Called after we move to another slide
+      onLazyLoad  : function(slideshow, imageData){  // Control how lazy loaded images are shown
+        $(imageData.img)[imageData.isLoaded ? 'fadeIn' : 'hide']();
+      }
+
     }, opts);
 
     if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
 
     set.each(function(){
       var self = $(this);
-
       if (!self.data(cycle)) initialize(self.data(cycle, opts), opts);
     });
 
     function e(fn){
-      set.each(function(){ 
-        var s = $(this);
-
-        if (s.data(cycle)) fn(s); 
-      }); 
-
+      set.each(function(){ if ((cs = $(this)) && cs.data(cycle)) fn(cs); }); 
       return api;
     }
 
-    // Control slideshow manually
-    // $(element).okCycle().play()
+    // Control slideshow manually - note that this will operate on every
+    // element in the set, so only select the slideshow you want to operate on
+    //
+    // e.g. $(element).okCycle().play()
     api = {
-      pause  : function(){ return e(pause);}, 
-      play   : function(){ return e(play); }, 
-      next   : function(){ return e(next); }, 
-      prev   : function(){ return e(prev); }, 
-      moveTo : function(i){ return e(function(s){ moveTo(s, i); });} 
+      element : set,
+      pause   : function(){ return e(pause); }, 
+      play    : function(){ return e(play); }, 
+      next    : function(){ return e(next); }, 
+      prev    : function(){ return e(prev); }, 
+      moveTo  : function(i){ return e(function(s){ moveTo(s, i); });} 
     };
 
     return api;
@@ -83,38 +79,41 @@
       autoplaying = 'autoplaying',
       active      = 'active',
       interval    = 'interval',
-      images      = 'images';
+      imageData   = 'imageData';
 
-  // Load previously deferred images
+  // Lazy Load images
   function load(self, imgs){ 
     var opts = self.data(cycle),
-        data = self.data(images);
+        data = self.data(imageData),
+        fn   = opts.onLazyLoad;
 
-    return imgs
-      .each(function(){
-        var self = $(this), 
-            src  = self.data(opts.dataAttribute);
+    return imgs.each(function(){
+      var img = $(this), 
+          src = img.data(opts.dataAttribute);
 
-        if (src) {
-          this.src = src; 
-          self.removeAttr('data-'+opts.dataAttribute);
-        }
-      })
-      .imagesLoaded()
-        .progress(function(instance, image) { 
-          data.loaded++;
+      fn(self, { img: img });
 
-          if (!image.isLoaded) data.broken++;
+      img.imagesLoaded().progress(function(inst,img){ 
+        notify(data,img); 
+        fn(self, img); 
+      });
 
-          opts.onProgress(self, data, image.img); 
+      if (src) {
+        this.src = src; 
+        img.removeAttr('data-'+opts.dataAttribute);
+      }
+    });
+  }
 
-          if (data.loaded >= data.total) opts.onDone(self, data);
-        });
+  function notify(data, image){
+    if (!image.isLoaded) data.broken++;
+    ++data.loaded;
   }
 
   // Disable autoplay
   function pause(self){
-    if (self.data(interval)) self.data(interval, clearTimeout(self.data(interval))); // Store it so we can cancel it
+    if (self.data(interval)) 
+      self.data(interval, clearTimeout(self.data(interval))); // Store it so we can cancel it
 
     return self.data(autoplaying, false);
   }
@@ -184,15 +183,13 @@
 
       // We can't depend on the transition returning items in same same
       // order, so load whatever the transition returns as the active items
-      if (opts.eagerLoad > 0) {
-        (activeItems || transition.to)
-          .find("img")
-          .each(function(){ 
-            if ($(this).attr('data-'+opts.dataAttribute)) load(self, $(this)); // Load the next image if it hasn't already been loaded
-          }); 
-      }
+      (activeItems || transition.to)
+        .find("img")
+        .each(function(){ 
+          if ($(this).attr('data-'+opts.dataAttribute)) load(self, $(this)); // Load the next image if it hasn't already been loaded
+        }); 
 
-      // Tell the UI we've moved
+      // Update the UI
       $.each(opts.ui, function(){
         if ((fn = $.okCycle.ui[this]) && fn.move) 
           fn.move(self, self.data('ui'), data); 
@@ -204,14 +201,15 @@
 
   // Setup our instance
   function initialize(self, opts){
-    var imgs = $('img', self).slice(0, opts.eagerLoad), // Store the images we're going to eagerLoad
-        data = { loaded: 0, broken: 0, total : imgs.length }, // Information about the images
+    var imgs      = $('img', self), 
+        data      = $.extend($.Deferred(),{ loaded: 0, broken: 0, total : imgs.length }),
+        eagerImgs = opts.eagerLoad ? imgs.slice(0, opts.eagerLoad) : $(''), // Store the images we're going to eagerLoad
         initFn;
 
-    // Store img info
-    self.data(images, data);
+    // Store image data
+    self.data(imageData, data);
 
-    // Stores the index of current slide 
+    // Store the index of current slide 
     self.data(active, 0);
 
     // Initialize UI
@@ -225,16 +223,16 @@
       });
     }
 
-    // Prepare eager loaded images
-    imgs.each(function(){ opts.onPreload(self, this); });
-
     // Initialize transition after all eager loaded images have loaded
-    load(self, imgs).done(function(instance) { 
-      $.okCycle[opts.transition].init(self, opts); 
-    });
+    eagerImgs
+    .imagesLoaded()
+      .progress(function(inst,img){ notify(data,img); })
+      .always(function(){ $.okCycle[opts.transition].init(self, opts); });
+
+    load(self, eagerImgs);
 
     // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
-    if ( opts.autoplay === true || typeof(opts.autoplay) == 'number' ){ 
+    if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){ 
       setTimeout(function(){ 
         play(self); 
       }, isNaN(opts.autoplay) ? 0 : opts.autoplay);
