@@ -33,6 +33,7 @@
         <p class='box'>Tiny, modular, flexible slideshow</p>
         <h2>Demonstration</h2>
       </div>
+
       <section class='eight'>
         <h3>Fading Transition with Autoplay UI</h3>
         <ul id='example-1' class='slideshow'>
@@ -52,14 +53,15 @@
           <code data-language='javascript'>
 $("#example-1").okCycle({
   autoplay: true,
-  effect:'fade', 
+  transition:'fade', 
   ui: ['caption','navigation','pagination','currentPage']
-});</code>
+});
+          </code>
         </pre>
       </section>
 
       <section class='twelve'>
-        <h3>Scrolling Transition with Caption UI</h3>
+        <h3>Scrolling Transition with MouseWheel UI</h3>
         <div class='eight alpha'>
           <ul id='example-2' class='slideshow'>
             <li data-caption='#html-caption-1'><img src='../../assets/images/one.png' alt='' /></li>
@@ -74,7 +76,7 @@ $("#example-1").okCycle({
           <pre>
             <code data-language='javascript'>
 $("#example-2").okCycle({
-  effect:'scroll',
+  transition:'scroll',
   ui: [
     'caption',
     'navigation',
@@ -82,7 +84,8 @@ $("#example-2").okCycle({
     'currentPage', 
     'mouseWheel'
   ]
-});</code>
+});
+            </code>
           </pre>
         </div>
         <div class='four omega'>
@@ -92,53 +95,86 @@ $("#example-2").okCycle({
             an octothorpe (#), it will be treated as a selector and the
             innerHTML for the corresponding element will be used.
           </p>
-          <div id='html-caption-1'>HTML Caption for Slide One <a href='#'>Link to Nowhere</a></div>
-          <div id='html-caption-2'>HTML Caption for Slide Two </div>
-          <div id='html-caption-3'>HTML Caption for Slide Three</div>
-          <div id='html-caption-4'>HTML Caption for Slide Four <a href='#'>Link to Nowhere</a></div>
-          <div id='html-caption-5'>HTML Caption for Slide Five</div>
-          <div id='html-caption-6'>HTML Caption for Slide Six</div>
-          <div id='html-caption-7'>HTML Caption for Slide Seven <a href='#'>Link to Nowhere</a></div>
+          <ol>
+            <li id='html-caption-1'>HTML Caption for Slide One</li>
+            <li id='html-caption-2'>HTML Caption for Slide Two</li>
+            <li id='html-caption-3'>HTML Caption for Slide Three</li>
+            <li id='html-caption-4'>HTML Caption for Slide Four</li>
+            <li id='html-caption-5'>HTML Caption for Slide Five</li>
+            <li id='html-caption-6'>HTML Caption for Slide Six</li>
+            <li id='html-caption-7'>HTML Caption for Slide Seven</li>
+          </ol>
         </div>
       </section>
 
       <section class='eight'>
-        <h3>Sliding Transition with Deferred Loading</h3>
-        <div id='progress'><div></div></div>
+        <h3>Sliding Transition with Deferred Loading and Progress</h3>
         <ul id='example-3' class='slideshow'>
-          <li data-caption='eight'><img src='../../assets/images/eight.png' alt='' /></li>
-          <li data-caption='nine'><img src='../../assets/images/nine.png' alt='' /></li>
-          <li data-caption='ten'><img src='../../assets/images/ten.png' alt='' /></li>
+          <li data-caption='eight'><img src='../../assets/images/nothing.png' data-src='../../assets/images/eight.png' alt='' width='620' height='400'/></li>
+          <li data-caption='nine'><img src='../../assets/images/nothing.png' data-src='../../assets/images/nine.png' alt='' width='620' height='400'/></li>
+          <li data-caption='ten'><img src='../../assets/images/nothing.png' data-src='../../assets/images/ten.png' alt='' width='620' height='400'/></li>
         </ul>
-        <p>
-          Image loading can be deferred until a given item becomes visible by using this <code>loadOnShow</code> option.
-        </p>
-        <p>
-          Additionally we are making use of image loading callbacks,
-          <code>onProgress</code> and <code>onDone</code>, in order to show
-          loading progress
-        </p>
         <pre>
           <code data-language='javascript'>
 $("#example-3").okCycle({
-  effect:'slide', 
-  loadOnShow: true, 
-  ui: ['caption','navigation','pagination','currentPage'],
-  onProgress: function(data, image){
-    var width = (data.loaded / data.total) * 100;
+  transition:'slide', 
+  ui: ['navigation','pagination','currentPage','progress'],
+});
+          </code>
+        </pre>
+        <p>
+          This example lazy loads images by setting the <code>data-src</code>
+          attribute rather than the <code>src</code> attribute Image loading
+          will be deferred until a given item is made active.
+        </p>
+        <p>
+          <strong>Important</strong> - you must use a data property to set the
+          image source to prevent the browser from automatically downloading
+          the image. This is defined by the <code>dataAttribute</code> option
+          and be default is <code>src</code>. If you forget to do this, nothing
+          <em>bad</em> will happen, it just won't be lazy loaded.
+        </p>
+        <pre>
+          <code data-language='html'>
+// Where 'W' and 'H' are the width and height of your image
+&ltimg src='placeholder.png' data-src='/path/to/image' alt='' width='W' height='H' /&gt;
+          </code>
+        </pre>
+        <p>
+          The progress UI makes use of image loading api function,
+          <code>progress</code> and <code>done</code>, which wraps a jquery
+          deferred.  Note that callbacks are applied across the entire matched
+          set, calling <code>.progress</code> or <code>.done</code> returns the
+          API object, not a deferred, as you would normally expect.
+          You can hook into them in the following manner:
+        </p>
+        <pre>
+          <code data-language='javascript'>
+var api = $(selector).okCycle();
 
-    $(image.img).fadeIn();
+// Inside the callback 'this' is set to the slideshow
+api.progress(function(data, image){
+  // ... Do stuff
+});
 
-    $("#progress &gt; div").css({width: width + '%'});
-  },
-  onDone: function(options){
-    setTimeout(function(){
-      $("#progress &gt; div").css({
-        backgroundColor: '#fff'
-      }).html("All loaded");
-    },500);
-  }
-});</code>
+api.done(function(options){
+  // ... Do stuff
+});
+          </code>
+        </pre>
+        <p>
+          Additionally it's possible to manually control the slideshow with the api
+        </p>
+        <pre>
+          <code data-language='javascript'>
+var api = $(selector).okCycle();
+
+api.pause(); // Stop autoplay
+api.play();  // Resume autoplay
+api.next();  // Move to the next slides
+api.prev();  // Move to the previous slides
+api.moveTo(index); // Move to a specific slide
+          </code>
         </pre>
       </section>
 
@@ -155,32 +191,19 @@ $("#example-3").okCycle({
   <script>
     $("#example-1").okCycle({
       autoplay: true,
-      effect:'fade', 
+      transition:'fade', 
       ui: ['caption','navigation','pagination','currentPage']
-    });
+    })
 
     $("#example-2").okCycle({
-      effect:'scroll', 
+      transition:'scroll', 
       ui: ['caption','navigation','pagination','currentPage', 'mouseWheel']
     });
 
     $("#example-3").okCycle({
-      effect:'slide', 
-      loadOnShow: true, 
-      ui: ['caption','navigation','pagination','currentPage'],
-      onProgress: function(data, image){
-        var width = (data.loaded / data.total) * 100;
-
-        $(image.img).fadeIn();
-
-        $("#progress > div").css({width: width + '%'});
-      },
-      onDone: function(){
-        setTimeout(function(){
-          $("#progress > div").css({backgroundColor: '#fff'}).html("All loaded");
-        },500);
-      }
-    });
+      transition:'slide', 
+      ui: ['navigation','pagination','currentPage', 'progress'],
+    })
   </script>
 
 </body>

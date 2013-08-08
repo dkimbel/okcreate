@@ -14,6 +14,7 @@ This is that.
 
     $("#my_slideshow").okCycle();
 
+
 ### okCycle is made up of three components:
 
 * *core* - Supplies the core functionality of the plugin. This is all you really need, but it doesn't do anything by itself.
@@ -23,6 +24,16 @@ This is that.
 * *ui* - Add useful things like, you know, user controls.
 
 See each file for information on how to extend and write your own transitions/user interface elements.
+
+### Lazy Loading
+
+okCycle supports lazy loading of images. To enable this feature set the `data-src` (name is configurable) attribute
+to the image src.
+
+### Eager Loading
+
+If you've elected to lazy load images, you can force okCycle to eager load additional images by 
+
 
 ## Dependencies
 

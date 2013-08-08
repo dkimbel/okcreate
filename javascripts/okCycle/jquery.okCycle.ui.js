@@ -4,16 +4,17 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 02/23/13
+ * Date: 08/05/13
  *
  * @description Provides UI elements for okCycle
  * @author Asher Van Brunt
  * @mailto asher@okbreathe.com
- * @version 1.5
+ * @version 2.0 BETA
  *
  */
 
 (function($){
+  'use strict';
 
   /**
    * This follows the basic pattern set forth by the transitions package. `init` is
@@ -22,11 +23,10 @@
    * The only difference is that the first argument to UI functions is the UI
    * container element itself.  
    *
-   * `this` is still set to the slideshow itself. See okCycle.transitions for
-   * an explanation of the transition object.
+   * See okCycle.transitions for an explanation of the transition object.
    *
-   * Note that both `init` and `move` are optional, you only need to specify
-   * them if you actually need to use them
+   * Note that both `init` and `move` are optional, you only need to define
+   * them if you actually need to use them.
    *
    */
 
@@ -36,12 +36,12 @@
     // it is referring to the id of another element somewhere on page,
     // otherwise we'll use the content directly
     caption: {
-      init: function(ui,opts){
-        $.okCycle.ui.caption.setCaption(this.children().eq(this.data('activeSlide')),$("<div class='caption' style='z-index:4' />").appendTo(ui).hide());
+      init: function(slideshow, ui, opts){
+        $.okCycle.ui.caption.setCaption(slideshow.children().eq(slideshow.data('active')),$("<div class='caption' style='z-index:4' />").appendTo(ui).hide());
       },
       // If a caption begins with a octothorpe we'll consider it an id attribute of an element containing the caption
-      move: function(ui,transition){
-        $.okCycle.ui.caption.setCaption(this.children('.active'), $(".caption", ui));
+      move: function(slideshow,ui,transition){
+        $.okCycle.ui.caption.setCaption(slideshow.children('.active'), $(".caption", ui));
       },
       setCaption: function(el,container){
         var caption = el.data('caption') || ''; 
@@ -57,57 +57,75 @@
     },
     // Forward/back buttons
     navigation: {
-      init: function(ui,opts){
-        var self = this,
-            nav  = $("<ul class='navigation'><li class='prev'><a href='#'>Previous</a></li><li class='next'><a href='#'>Next</a></li></ul>").appendTo(ui);
-        nav.find(".prev a").click(function(e){ e.preventDefault(); self.prev(); });
-        nav.find(".next a").click(function(e){ e.preventDefault(); self.next(); });
+      init: function(slideshow, ui, opts){
+        var nav = $("<ul class='navigation'><li class='prev'><a href='#'>Previous</a></li><li class='next'><a href='#'>Next</a></li></ul>").appendTo(ui);
+
+        nav.find(".prev a").click(function(e){ e.preventDefault(); $(slideshow).okCycle().prev(); });
+        nav.find(".next a").click(function(e){ e.preventDefault(); $(slideshow).okCycle().next(); });
       }
     },
     // Pagination for jumping to specific slides
     pagination: {
-      init: function(ui,opts){
-        var self = this, html = "<ul class='pagination'>";
-        for(var i=0; i< this.children().length; i++) {
+      init: function(slideshow,ui,opts){
+        var html = "<ul class='pagination'>";
+
+        for(var i=0; i< slideshow.children().length; i++) {
           html += '<li><a href="#">'+(i+1)+'</a></li>';
         }
-        var pagination = $(html+"</ul>").appendTo(ui);
 
-        pagination.children().eq(this.data('activeSlide')).addClass('active');
-
-        pagination.on('click', 'a', function(e){
-          e.preventDefault();
-          var li = $(this).parent();
-          self.moveTo(li.siblings().andSelf().index(li));
-        });
+        // Create pagination
+        $(html+"</ul>").appendTo(ui)
+          .on('click', 'a', function(e){
+            e.preventDefault();
+            var li = $(this).parent();
+            $(slideshow).okCycle().moveTo(li.siblings().andSelf().index(li));
+          })
+          .children().eq(slideshow.data('active')).addClass('active');
       },
-      move: function(ui,transition){
+      move: function(slideshow, ui, transition){
         // Just set the active class
         $(".pagination", ui).children().removeClass('active').eq(transition.toIndex).addClass('active');
       }
     },
     // Display current and total pages
     currentPage: {
-      init: function(ui,opts){
-        ui.append('<ul class="current-page"><li class="current">'+(this.data('activeSlide')+1)+'</li><li class="total">'+this.children().length+'</li></ul>');
+      init: function(slideshow, ui, opts){
+        ui.append('<ul class="current-page"><li class="current">'+(slideshow.data('active')+1)+'</li><li class="total">'+slideshow.children().length+'</li></ul>');
       },
-      move: function(ui,transition){
+      move: function(slideshow,ui,transition){
         $("li.current", ui).html(transition.toIndex+1);
       }
     },
 		// Enable mousewheel support
     mouseWheel: {
-      init: function(ui,opts) {
-        var self = this;
+      init: function(slideshow, ui, opts) {
         ui.mousewheel(function(e, delta)  {
-          self[delta < 0 ? 'next' : 'prev'](); 
+          slideshow[delta < 0 ? 'next' : 'prev'](); 
           return false;
         });			
       }
     },
+    // Show pecentage of loaded images
+    progress: {
+      init: function(slideshow,ui,opts) {
+        var api = $(slideshow).okCycle();
+
+        ui.append("<div class='progress'><div></div></div>");
+
+        api.progress(function(data, image){
+          var width = (data.loaded / data.total) * 100;
+
+          $(".progress > div",ui).css({width: width + '%'});
+        });
+
+        api.done(function(options){
+          $(".progress", ui).fadeOut();
+        });
+      }
+    },
     // Enable touch support
     touch: {
-      init: function(ui,opts) {
+      init: function(slideshow,ui,opts) {
         opts = $.extend({
           vertical: false,
           threshold:  {
@@ -116,14 +134,14 @@
           }
         },opts);
 
-        var self = this, touch = {};
+        var touch = {};
         
-        self[0].ontouchstart = function(e) {
+        slideshow[0].ontouchstart = function(e) {
           touch.x = e.touches[0].clientX;
           touch.y = e.touches[0].clientY;
         };
         
-        self[0].ontouchmove = function(e) {
+        slideshow[0].ontouchmove = function(e) {
           
           // only deal with one finger
           if (e.touches.length == 1) {			
@@ -142,7 +160,7 @@
 
             if (op) { 
               e.preventDefault(); 
-              self[op](); 
+              $(slideshow).okCycle()[op](); 
             }
           }
         };

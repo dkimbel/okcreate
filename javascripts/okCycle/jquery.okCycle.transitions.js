@@ -4,16 +4,17 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 06/08/13
+ * Date: 08/05/13
  *
  * @description Provides transitions for okCycle
  * @author Asher Van Brunt
  * @mail asher@okbreathe.com
- * @version 1.5
+ * @version 2.0 BETA
  *
  */
 
 (function($){
+  'use strict';
 
   /**
    * Effects are objects that implement two methods: 'init' and 'move'.
@@ -55,13 +56,13 @@
    // Fade and Slide transitions are identical except the property that is animated
    function standardTransition(fn) {
      return {
-       init: function(options){
-         this.children().css({ position:"absolute" }).eq(this.data('activeSlide')).css({ zIndex:3, 'float': 'left', position: 'relative' });
+       init: function(slideshow,options){
+         slideshow.children().css({ position:"absolute" }).eq(slideshow.data('active')).css({ zIndex:3, 'float': 'left', position: 'relative' });
 
-         this.css({ position:'relative', overflow: 'hidden' });
+         slideshow.css({ position:'relative', overflow: 'hidden' });
        },
-       move: function(transition){
-         var opts = fn.call(this,transition);
+       move: function(slideshow,transition){
+         var opts = fn(slideshow,transition);
 
          transition.from.css({ zIndex : 2, position: 'absolute', 'float': 'none' }).removeClass('active');    
 
@@ -78,55 +79,49 @@
 
   $.extend($.okCycle, {
     // Standard Fade Transition
-    fade: standardTransition(function(t){ return [{ opacity: 0  }, {  opacity: 1 }]; }),
+    fade: standardTransition(function(s,t){ return [{ opacity: 0  }, {  opacity: 1 }]; }),
     // Slide one slide on top of the other when transitioning
-    slide: standardTransition(function(t){ return [{ left: t.forward ? this.width() : -this.width() }, { left: 0  } ]; }),
-    // All children are shifted when transitioning
+    slide: standardTransition(function(s,t){ return [{ left: t.forward ? s.width() : -s.width() }, { left: 0  } ]; }),
+    // Children are shifted when transitioning
     scroll: {
-      init: function(options){
-        this.wrap("<div class='okCycle-transition-container' />")
-          .css({position:'relative','width':'200%',left:0})
+      init: function(slideshow,options){
+        slideshow.wrap("<div class='okCycle-transition-container' />")
+          .css({position:'relative','width':'200%',left:0}) // Couldn't we just do 100% * number of children?
           .parent()
             .css({position:'relative',width: '100%', 'minHeight': '100%', overflow: 'hidden'});
 
-        this.children().each(function(i,v){
-          $(this).addClass("item-"+i);
-        });
-
-        this.children().first().addClass('active');
-
-        this.children()
-          .css({ position: 'relative', 'float': 'left', width: '50%' }).slice(1).hide();
+        slideshow.children().first().addClass('active').end().css({ position: 'relative', 'float': 'left', width: '50%' }).slice(1).hide();
       },
-      move: function(transition) {
-        var self   = this,
-            diff   = transition.toIndex - transition.fromIndex, 
-            prev   = this.children('.active').removeClass('active'),
-            active = this.children().eq(diff).addClass('active').show();
+      move: function(slideshow,transition) {
+        var diff   = transition.toIndex - transition.fromIndex, 
+            offset = (( transition.forward && diff < 0) || ( !transition.forward && diff > 0)) ? 1 : Math.abs(diff),
+            child  = transition.forward ? slideshow.children().slice(0,offset) : slideshow.children().slice(-offset),
+            prev   = slideshow.children('.active').removeClass('active'),
+            pos    = '-100%',
+            active = slideshow.children().eq(diff).addClass('active').show();
 
-        // If we're going backwards we need to set the initial offset
-        if (!transition.forward ) {
-          self.css({left: "-100%"});
-          active.prependTo(self);
-        }
+        child.slice(1).hide();
 
-        self.animate({
-          left: transition.forward ? '-100%' : '0%' }, 
-          transition.speed, 
-          transition.easing, 
-          function(){
-            self.css({left: 0}); 
-
-            prev.hide();
-
-            if (transition.forward) prev.appendTo(self); 
-
-            transition.resolve();
+        if (transition.forward) {
+          slideshow.animate({ left: pos }, function(){ 
+            slideshow.append(child).css({ left:0 }); 
+            child.hide();
+            transition.resolve(); 
           });
+        } else {
+          slideshow
+            .prepend(child)
+            .css({ left: pos })
+            .animate({left: 0}, function(){
+              prev.hide();
+              transition.resolve(); 
+            });
+        }
 
         return active;
       }
     }
+
   });
 
 })(jQuery);
