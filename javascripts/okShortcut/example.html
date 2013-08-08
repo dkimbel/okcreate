@@ -31,7 +31,17 @@
 
         <h4 id='result-0'>Press 'enter' without any input focused to update this text</h4>
 
-        <p class='box'>
+        <pre>
+          <code data-language='javascript'>
+var i=0;
+$.shortcut.add("enter", function(){ 
+  i++; 
+  $("#result-0").html("Pressed enter without focusing an input <span style='color:#f00'>" + i + "</span> times."); 
+});
+          </code>
+        </pre>
+
+        <p>
           Events can also be bound to specific elements. Remember to pass the
           <code>'propagate:false'</code> option otherwise the event will bubble to
           any shortcut bound to containing elements.
@@ -41,11 +51,25 @@
           <h4 id='result-1'>Type in the text the input and press 'enter' to replace this text</h4>
           <fieldset><input id='input-1' type='text'/></fieldset>
         </div>
+        <pre>
+          <code data-language='javascript'>
+$.shortcut.add("enter", function(){ 
+  $("#result-1").html("Typed '" + $("#input-1").val() + "' in input 1"); 
+}, { target: $("#group-1"), propagate: false});
+          </code>
+        </pre>
 
         <div id='group-2'>
           <h4 id='result-2'>Type in the text the input and press 'enter' to replace this text</h4>
           <fieldset><input id='input-2' type='text'/></fieldset>
         </div>
+        <pre>
+          <code data-language='javascript'>
+$.shortcut.add("enter", function(){ 
+  $("#result-2").html("Typed '" + $("#input-2").val() + "' in input 2"); 
+}, { target: $("#group-2"), propagate: false});
+          </code>
+        </pre>
       </div>
     </article>
 

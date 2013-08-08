@@ -27,12 +27,15 @@ See each file for information on how to extend and write your own transitions/us
 
 ### Lazy Loading
 
-okCycle supports lazy loading of images. To enable this feature set the `data-src` (name is configurable) attribute
-to the image src.
+okCycle supports lazy loading of images. To enable this feature set the
+`data-src` (name is configurable) attribute to the image src.
 
 ### Eager Loading
 
-If you've elected to lazy load images, you can force okCycle to eager load additional images by 
+If you've elected to lazy load images, you can force okCycle to eager load
+additional images by changing the eagerLoad option. The default forces the
+plugin to wait until the first image has loaded before initialization will be
+completed.
 
 
 ## Dependencies
@@ -43,22 +46,21 @@ The image load event is an unreliable, and tricky beast. imagesLoaded paves over
 
 ## Options
 
-option           | default                | description
----------------- | ---------------------- | -------------
-effect           | 'scroll',              | Transition effect used to cycle elements
-easing           | 'swing',               | Easing used by the effect
-ui               | [],                    | Any UI elements that we should build
-duration         | 2000,                  | Time between animations
-speed            | 500,                   | Speed the slides are transitioned between
-preload          | 1                      | Number of images to load (Use 0 for all) before the plugin is initialized
-loadOnShow       | false                  | If true, successive images will not be loaded until they become visible
-autoplay         | false,                 | Whether to start cycling immediately
-hoverBehavior    | Function               | During autoplay, we'll generally want to pause the slideshow. Default behavior is to pause when hovering over the slideshow element or the ui container (".okCycle-ui") if it exists
-afterSetup       | Function               | Called with the slideshow as 'this' immediately after setup is performed
-beforeMove       | Function(transition)   | Called before moving to another slide, with the slideshow as 'this'
-afterMove        | Function(transition)   | Called after moving to another slide, with the slideshow as 'this'
-onDone           | Function               | Called when all items are loaded
-onProgress       | Function(data, image){ | Called when an item is loaded
+option           | default                            | description
+---------------- | -----------------------------------|--------------
+transition       | 'scroll',                          | Transition used to cycle between children
+easing           | 'swing',                           | Easing used by the transition
+ui               | [],                                | Any UI elements that we should build. Appended to the UI container source order
+duration         | 2000,                              | Time between animations
+speed            | 300,                               | Speed the children are transitioned between
+dataAttribute    | "src",                             | Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
+eagerLoad        | 1,                                 | During setup, force okCycle to N images before the slideshow is initialized. Set to 0 to load all images
+autoplay         | false,                             | Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
+hoverBehavior    | function(slideshow){}              | During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
+afterSetup       | function(slideshow){},             | Called immediately after setup is performed
+beforeMove       | function(slideshow, transition){}, | Called before moving to another slide
+afterMove        | function(slideshow, transition){}, | Called after moving to another slide
+onLoad           | function(slideshow, imageData){}   | Control how images are shown when loaded. Default is to hide the image until it is loaded and then fade in
 
 ## FAQ
 
@@ -69,13 +71,15 @@ onProgress       | Function(data, image){ | Called when an item is loaded
 
 * I want to control slideshows manually
 
-  Since okCycle can potentially be bound to multiple DOM elements, you need to pass in the
-  jQuery extended DOM element that you want to control. If the element is omitted it
-  will default to the first bound element (which may suffice if one only exists).
+  okCycle can control any number of slideshows simultaneously or independently:
 
-      var slideshows = $(".slideshows").okCycle();
+      var slideshows = $(".slideshow").okCycle();
 
-      slideshow.next(slideshows.eq(0));
+      slideshow.next(); // Every .slideshow element will move to the next slides
+
+      var slideshows = $(".slideshow:first").okCycle();
+
+      slideshow.next(); // Only the first .slideshow element will move to the next slides
 
 ## Notes
 
