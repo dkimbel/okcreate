@@ -6,6 +6,10 @@
 
 See example.html
 
+okStylize does not generate CSS. If you use the plugin and it looks like "nothing happened",
+it's because you need to style the results. okStylize essentially wraps inputs in markup
+and binds events, and leaves the styling to you.
+
 ## Options
 
 option           | default                | description
@@ -27,3 +31,4 @@ selectAutoGrow   | !!$.textMetrics        | Autogrow the select if the textMetri
 
 * Don't set the input to 'display:none' otherwise some browsers (IE) will ignore
   bound events
+
