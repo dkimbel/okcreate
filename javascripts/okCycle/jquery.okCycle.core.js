@@ -29,27 +29,22 @@
       duration      : 2000,                // Time between animations
       speed         : 300,                 // Speed the children are transitioned between
       dataAttribute : "src",               // Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
-      eagerLoad     : 1,                   // During setup, force okCycle to N images when using the data-src attribute to lazy load. Set to 0 to load all images
+      eagerLoad     : 1,                   // During setup, force okCycle to N images before the slideshow is initialized. Set to 0 to load all images
       autoplay      : false,               // Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
       hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
         var api = $(slideshow).okCycle();
         (slideshow.data('ui') || slideshow).hover(api.pause, api.play);
       },
       // Callbacks
-      afterSetup  : function(slideshow){},           // Called immediately after setup is performed
-      beforeMove  : function(slideshow, trans){},    // Called before we move to another slide
-      afterMove   : function(slideshow, trans){},    // Called after we move to another slide
-      onLazyLoad  : function(slideshow, imageData){  // Control how lazy loaded images are shown
-        $(imageData.img)[imageData.isLoaded ? 'fadeIn' : 'hide']();
+      afterSetup  : function(slideshow){},            // Called immediately after setup is performed
+      beforeMove  : function(slideshow, transition){},// Called before moving to another slide
+      afterMove   : function(slideshow, transition){},// Called after moving to another slide
+      onLoad      : function(slideshow, imageData){   // Control how images are shown when loaded. Default is to hide the image until it is loaded and then fade in
+        imageData.img.fadeTo.apply(imageData.img, imageData.isLoaded ? ['fast',1] : [0,0]);
       }
     }, opts);
 
     if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
-
-    set.each(function(){
-      var self = $(this);
-      if (!self.data(cycle)) initialize(self.data(cycle, opts), opts);
-    });
 
     function e(fn){
       set.each(function(){ fn($(this)); }); return api;
@@ -71,7 +66,7 @@
       done     : function(f){ return e(function(s) { s.data(imageData).done(f); }); }
     };
 
-    return api;
+    return e(function(s){ if (!s.data(cycle)) initialize(s.data(cycle, opts), opts); });
   };
 
   // Store keys as variables to improve minification, catch typos
@@ -86,31 +81,32 @@
   function load(self, imgs){ 
     var opts = self.data(cycle),
         data = self.data(imageData),
-        fn   = opts.onLazyLoad;
+        fn   = opts.onLoad;
 
-    return imgs.each(function(){
-      var img = $(this), 
-          src = img.data(opts.dataAttribute);
+    return imgs.each(function(i){
+      var img = $(this).addClass('loading'), 
+          src = img.data(opts.dataAttribute) || this.src;
+
+      img.removeAttr('data-'+opts.dataAttribute);
 
       fn(self, { img: img });
 
-      img.imagesLoaded().progress(function(inst,img){ 
-        notify(self,data,img); 
-        fn(self, img); 
-      });
-
-      if (src) {
-        this.src = src; 
-        img.removeAttr('data-'+opts.dataAttribute);
-      }
+      $("<img />")
+        .attr("src", src)
+        .imagesLoaded()
+        .progress(function(inst, imageData){
+          img.attr("src", src)[0].loaded = true;
+          notify(self, data, imageData); 
+          fn(self, { isLoaded: imageData.isLoaded, img: img });
+        });
     });
   }
 
   function notify(self, data, image){
     if (!image.isLoaded) data.broken++;
     data.loaded++;
-    data.notifyWith(self,[data,image]);
-    if (data.loaded >= data.total) data.resolveWith(self,[data,image]);
+    data.notifyWith(self, [data, image]);
+    if (data.loaded >= data.total) data.resolveWith(self, [data, image]);
   }
 
   // Disable autoplay
@@ -204,9 +200,10 @@
 
   // Setup our instance
   function initialize(self, opts){
-    var imgs      = $('img', self), 
-        data      = $.extend($.Deferred(),{ loaded: 0, broken: 0, total : imgs.length }),
-        eagerImgs = opts.eagerLoad ? imgs.slice(0, opts.eagerLoad) : $(''), // Store the images we're going to eagerLoad
+    var imgs    = $('img', self), 
+        normal  = imgs.filter(":not([data-"+opts.dataAttribute+"])"),     // Non lazy images
+        eager   = opts.eagerLoad ? imgs.slice(0, opts.eagerLoad) : $(''), // Store the images we're going to eagerLoad
+        data    = $.extend($.Deferred(),{ loaded: 0, broken: 0, total : imgs.length }),
         initFn;
 
     // Store image data
@@ -227,19 +224,22 @@
     }
 
     // Initialize transition after all eager loaded images have loaded
-    eagerImgs.imagesLoaded().always(function(){ $.okCycle[opts.transition].init(self, opts); });
+    eager.imagesLoaded().always(function(){ 
+      $.okCycle[opts.transition].init(self, opts); 
 
-    load(self, eagerImgs);
+      // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
+      if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){ 
+        setTimeout(function(){ 
+          play(self); 
+        }, isNaN(opts.autoplay) ? 0 : opts.autoplay);
 
-    // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
-    if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){ 
-      setTimeout(function(){ 
-        play(self); 
-      }, isNaN(opts.autoplay) ? 0 : opts.autoplay);
-
-      // Setup hover behavior
-      if ($.isFunction(opts.hoverBehavior)) opts.hoverBehavior(self);
-    }
+        // Setup hover behavior
+        if ($.isFunction(opts.hoverBehavior)) opts.hoverBehavior(self);
+      }
+    });
+    
+    // Load all eager and normal images
+    load(self, eager.add(normal));
 
     // Call after setup hook
     opts.afterSetup(self);

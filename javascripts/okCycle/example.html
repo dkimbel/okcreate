@@ -61,7 +61,7 @@ $("#example-1").okCycle({
       </section>
 
       <section class='twelve'>
-        <h3>Scrolling Transition with Caption UI</h3>
+        <h3>Scrolling Transition with MouseWheel UI</h3>
         <div class='eight alpha'>
           <ul id='example-2' class='slideshow'>
             <li data-caption='#html-caption-1'><img src='../../assets/images/one.png' alt='' /></li>
@@ -96,13 +96,13 @@ $("#example-2").okCycle({
             innerHTML for the corresponding element will be used.
           </p>
           <ol>
-            <li id='html-caption-1'>HTML Caption for Slide One <a href='#'>Link to Nowhere</a></li>
-            <li id='html-caption-2'>HTML Caption for Slide Two </li>
+            <li id='html-caption-1'>HTML Caption for Slide One</li>
+            <li id='html-caption-2'>HTML Caption for Slide Two</li>
             <li id='html-caption-3'>HTML Caption for Slide Three</li>
-            <li id='html-caption-4'>HTML Caption for Slide Four <a href='#'>Link to Nowhere</a></li>
+            <li id='html-caption-4'>HTML Caption for Slide Four</li>
             <li id='html-caption-5'>HTML Caption for Slide Five</li>
             <li id='html-caption-6'>HTML Caption for Slide Six</li>
-            <li id='html-caption-7'>HTML Caption for Slide Seven <a href='#'>Link to Nowhere</a></li>
+            <li id='html-caption-7'>HTML Caption for Slide Seven</li>
           </ol>
         </div>
       </section>
@@ -142,14 +142,16 @@ $("#example-3").okCycle({
         </pre>
         <p>
           The progress UI makes use of image loading api function,
-          <code>progress</code> and <code>done</code>, which wraps a jquery deferred.
-          You can hook into them in the following manner
+          <code>progress</code> and <code>done</code>, which wraps a jquery
+          deferred.  Note that callbacks are applied across the entire matched
+          set, calling <code>.progress</code> or <code>.done</code> returns the
+          API object, not a deferred, as you would normally expect.
+          You can hook into them in the following manner:
         </p>
         <pre>
           <code data-language='javascript'>
 var api = $(selector).okCycle();
 
-// Callbacks are applied across the entire matched set, so you can't chain.
 // Inside the callback 'this' is set to the slideshow
 api.progress(function(data, image){
   // ... Do stuff
