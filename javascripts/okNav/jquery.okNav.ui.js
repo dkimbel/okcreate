@@ -98,7 +98,7 @@
       select: function(target, links, targets, opts){
         var vis = target.is(":visible");
 
-        targets.not(target).slideUp(opts).removeClass(opts.activeClass);
+        targets.not(target).slideUp(opts).add(links.closest(opts.activeElementSelector)).removeClass(opts.activeClass);
 
         target[vis ? (opts.out.effect || 'slideUp') : (opts.in.effect || 'slideDown') ](opts.vis ? opts.out : opts.in)
           .add($("a[href=#"+target.attr('id')+"]")
