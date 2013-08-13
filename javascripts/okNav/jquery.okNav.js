@@ -43,6 +43,8 @@
       var href    = self.attr('href'),
           hash    = href.replace(/^#/, ''),
           target  = $(href);
+
+      if (hash === '') return;
   
       if (ui(opts).select) ui(opts).select(target, links, targets, opts);
 

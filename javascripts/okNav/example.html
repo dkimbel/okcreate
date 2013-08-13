@@ -30,8 +30,8 @@
       <div class='twelve'>
         <h2>Demonstration</h2>
         <p>
-          okNav provides abstractions over several different types of in-page
-          navigation. The basic requirements are that: 
+          okNav provides abstractions over several different types of
+          navigation interfaces. The basic requirements are that: 
         </p>
         <ol>
           <li>The navigation interface must be made up of links contained within an element. By default, it expects a list of links.</li>
@@ -86,19 +86,19 @@ $("#tabs").okNav(); // Called on the navigation
           <h4 class='box'>ScrollSpy</h4>
           <p>
             The ScrollSpy UI is for automatically updating nav targets based on
-            scroll position. Scroll the area below the navbar and watch the
-            active class change. If differs from tabs as the siblings aren't
-            hidden, and the tab active class is updated on scroll, rather than
-            click
+            scroll position. Scroll the area below the navbar and the menu will
+            be updated based on your location. If differs from tabs as the
+            siblings aren't hidden, and the tab active class is updated on
+            scroll, rather than click.
           </p>
           <p>
             If you want to target an element other than the body, you can
             supply a <code>element</code> which will be used as the scrollspy
-            target
+            target.
           </p>
           <p>
             Optionally, if you include <a href='http://balupton.github.io/jquery-scrollto/'>jquery-scrollto</a>,
-            you can achieve a smooth scrolling effect by passing an options object for <code>preventScroll</code>
+            you can achieve a smooth scrolling effect by passing an options object for <code>preventScroll</code>.
           </p>
           <pre>
             <code data-language='javascript'>
@@ -217,6 +217,72 @@ $("#accordian").okNav({ui: 'accordian'});
             </li>
           </ul>
         </section>
+        <section>
+          <h4 class='box'>SelectNav</h4>
+          <p>
+            This one is a bit different than the others and has its own set of
+            options (see the UI script).  It converts list navigation into a
+            select dropdown for better navigation on mobile devices.  It can be
+            used to intra-page or regular navigation.  Navigation can be
+            arbitrarily nested as well.
+          </p>
+          <pre>
+            <code data-language='javascript'>
+$("#selectNav").okNav({ui: 'selectNav'});
+            </code>
+          </pre>
+          <p>
+            Called on the following list, it will produce the following select:
+          </p>
+          <ul id='selectNav'>
+            <li>
+              <a href='#one'>One</a>
+              <ul>
+                <li><a href='#one-two'>One-One</a></li>
+                <li><a href='#one-two'>One-Two</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href='#two'>Two</a>
+              <ul>
+                <li>
+                  <a href='#two-one'>Two-One</a>
+                  <ul>
+                    <li><a href='#two-one-one'>Two-One-One</a></li>
+                    <li><a href='#two-one-two'>Two-One-Two</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href='#two-two'>Two-Two</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href='http://google.com'>External Page (Google)</a>
+            </li>
+          </ul>
+          <p>
+            In real world usage you would use media queries to selectively show/hide the mobile UI. Something like the following:
+          </p>
+          <pre>
+            <code data-language='css'>
+select.selectNav { 
+  display: none; 
+}
+
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {
+  html.js-enabled ul#selectNav { 
+    display: none; 
+  }
+
+  html.js-enabled select.selectNav { 
+    display: block; 
+  }
+}
+            </code>
+          </pre>
+        </section>
       </div>
     </article>
 
@@ -227,7 +293,7 @@ $("#accordian").okNav({ui: 'accordian'});
 
   <script>
     $("#tabs").okNav();
-    var tabs = $("#scrollspy").okNav({ 
+    $("#scrollspy").okNav({ 
       ui: 'scrollspy', 
       element: '#scrollspy-content',
       preventScroll: {
@@ -235,6 +301,7 @@ $("#accordian").okNav({ui: 'accordian'});
       }
     });
     $("#accordian").okNav({ui: 'accordian'});
+    $("#selectNav").okNav({ui: 'selectNav'});
   </script>
 
 </body>
