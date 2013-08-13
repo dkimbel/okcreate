@@ -17,6 +17,7 @@
   <!-- Plugin -->
   <script src="jquery.okNav.js"></script>
   <script src="jquery.okNav.ui.js"></script>
+  <script src="../lib/jquery-scrollto.js"></script>
 </head>
 <body>
 
@@ -84,16 +85,30 @@ $("#tabs").okNav(); // Called on the navigation
         <section>
           <h4 class='box'>ScrollSpy</h4>
           <p>
-            The ScrollSpy ui is for automatically updating nav targets based on
+            The ScrollSpy UI is for automatically updating nav targets based on
             scroll position. Scroll the area below the navbar and watch the
-            active class change. 
-            If differs from tabs as the siblings aren't hidden, and the tab
-            active class is updated on scroll, rather than click
+            active class change. If differs from tabs as the siblings aren't
+            hidden, and the tab active class is updated on scroll, rather than
+            click
           </p>
-          <p>If you want to target an element other than the body, you can supply a <code>element</code> which will be used as the scrollspy target</p>
+          <p>
+            If you want to target an element other than the body, you can
+            supply a <code>element</code> which will be used as the scrollspy
+            target
+          </p>
+          <p>
+            Optionally, if you include <a href='http://balupton.github.io/jquery-scrollto/'>jquery-scrollto</a>,
+            you can achieve a smooth scrolling effect by passing an options object for <code>preventScroll</code>
+          </p>
           <pre>
             <code data-language='javascript'>
-$("#scrollspy").okNav({ui: 'scrollSpy', element: '#scrollspy-content'});
+$("#scrollspy").okNav({
+  ui: 'scrollSpy', 
+  element: '#scrollspy-content',
+  preventScroll: {
+    duration: 2000
+  }
+});
             </code>
           </pre>
           <ul id='scrollspy' class="tabs">
@@ -212,7 +227,13 @@ $("#accordian").okNav({ui: 'accordian'});
 
   <script>
     $("#tabs").okNav();
-    var tabs = $("#scrollspy").okNav({ ui: 'scrollspy', element: '#scrollspy-content' });
+    var tabs = $("#scrollspy").okNav({ 
+      ui: 'scrollspy', 
+      element: '#scrollspy-content',
+      preventScroll: {
+        duration: 600
+      }
+    });
     $("#accordian").okNav({ui: 'accordian'});
   </script>
 

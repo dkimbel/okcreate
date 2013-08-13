@@ -30,7 +30,7 @@ event                 | 'click'                | Which event will trigger a tab 
 in                    | { effect: null }       | Defines the in transition. Takes standard options (e.g. duration, easing) in addition to an 'effect' which the other options will be applied to in order to create the desired effect.
 out                   | { effect: null }       | Defines the out transition. Takes standard options (e.g. duration, easing) in addition to an 'effect' which the other options will be applied to in order to create the desired effect.
 replaceHistory        | true,                  | If false, selecting will add hashchanges to the history
-preventScroll         | true                   | Prevent scrolling with the hash changes
+preventScroll         | true                   | True to disable, false to get jumping or an object of options to pass the scrollto plugin (https://github.com/balupton/jquery-scrollto) to smoothly scroll to the target element
 activeClass           | 'active'               | className given to the currently selected tab
 activeElementSelector | 'li'                   | Which element receives the active class
 afterSetup            | function(){}           | Called after the plugin has bound to each tabbed interface

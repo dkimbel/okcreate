@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 07/31/13
+ * Date: 08/12/13
  *
  * @description Customizable in-page navigation
  * @author Asher Van Brunt
@@ -19,21 +19,19 @@
   $.fn.okNav = function(opts){
 
     opts = $.extend({
-      ui                    : 'tabs',       // Which navigation UI to use
-      event                 : 'click',      // Which event will trigger a tab change
-      // Options used to define the in/out transitions. Takes standard options
-      // (e.g. duration, easing) in addition to an 'effect' which the other
-      // options will be applied to in order to create the desired effect. The
-      // default the effect is determined by the UI used.
-      // http://api.jquery.com/category/effects/
-      in                    : { effect: null },
-      out                   : { effect: null },
-      replaceHistory        : true,         // If false, selecting will add hashchanges to the history
-      preventScroll         : true,         // Prevent scrolling with the hash changes
-      activeClass           : 'active',     // className given to the currently selected tab
-      activeElementSelector : 'li',         // Which element receives the active class
-      afterSetup            : function(){}, // Called after the plugin has bound to each tabbed interface
-      afterSelect           : function(){}  // Called whenever a tab change occurs
+      ui                    : 'tabs',           // Which navigation UI to use
+      event                 : 'click',          // Which event will trigger a tab change
+      in                    : { effect: null }, // Options used to define the in/out transitions. Takes standard options
+      out                   : { effect: null }, // (e.g. duration, easing) in addition to an 'effect' which the other
+                                                // options will be applied to in order to create the desired effect. The
+                                                // default the effect is determined by the UI used. http://api.jquery.com/category/effects/
+      replaceHistory        : true,             // If false, selecting will add hashchanges to the history
+      preventScroll         : true,             // True to disable, false to get jumping or an object of options to pass the scrollto 
+                                                // plugin (https://github.com/balupton/jquery-scrollto) to smoothly scroll to the target element
+      activeClass           : 'active',         // className given to the currently selected tab
+      activeElementSelector : 'li',             // Which element receives the active class
+      afterSetup            : function(){},     // Called after the plugin has bound to each tabbed interface
+      afterSelect           : function(){}      // Called whenever a tab change occurs
     }, opts);
 
     function ui(opts){ 
@@ -50,6 +48,9 @@
 
       // Remove the target id so the page doesn't scroll
       if (opts.preventScroll) target.attr('id', '');
+
+      // Smoothly scroll to the target element when passed an object. Requires https://github.com/balupton/jquery-scrollto
+      if ($.isPlainObject(opts.preventScroll)) target.ScrollTo(opts.preventScroll);
 
       if (opts.replaceHistory) {
         w.location.replace(('' + w.location).split('#')[0] + href);

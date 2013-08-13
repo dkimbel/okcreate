@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 07/31/13
+ * Date: 08/12/13
  *
  * @description Customizable in-page navigation
  * @author Asher Van Brunt
@@ -50,7 +50,7 @@
     },
     scrollspy: {
       setup: function(active, links, targets, opts){
-        opts.preventScroll = false;
+        if (opts.preventScroll === undefined) opts.preventScroll = false;
 
         opts = $.extend({
           element: w,
