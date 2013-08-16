@@ -48,26 +48,26 @@ The image load event is an unreliable, and tricky beast. imagesLoaded paves over
 
 option           | default                            | description
 ---------------- | -----------------------------------|--------------
-transition       | 'scroll',                          | Transition used to cycle between children
-easing           | 'swing',                           | Easing used by the transition
-ui               | [],                                | Any UI elements that we should build. Appended to the UI container source order
-duration         | 2000,                              | Time between animations
-speed            | 300,                               | Speed the children are transitioned between
-dataAttribute    | "src",                             | Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
-eagerLoad        | 1,                                 | During setup, force okCycle to N images before the slideshow is initialized. Set to 0 to load all images
-autoplay         | false,                             | Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
-hoverBehavior    | function(slideshow){}              | During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
-afterSetup       | function(slideshow){},             | Called immediately after setup is performed
-beforeMove       | function(slideshow, transition){}, | Called before moving to another slide
-afterMove        | function(slideshow, transition){}, | Called after moving to another slide
-onLoad           | function(slideshow, imageData){}   | Control how images are shown when loaded. Default is to hide the image until it is loaded and then fade in
+transition       | 'scroll'                           | Transition used to cycle between children
+easing           | undefined                          | Easing used by the transition
+ui               | []                                 | Any UI elements that we should build. Appended to the UI container source order
+duration         | 2000                               | Time between animations
+speed            | 300                                | Speed the children are transitioned between
+dataAttribute    | "src"                              | Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
+eagerLoad        | 1                                  | During setup, force okCycle to N images before the slideshow is initialized. Set to 0 to load all images
+autoplay         | false                              | Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
+hoverBehavior    | Function(slideshow)                | During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
+afterSetup       | Function(slideshow)                | Called immediately after setup is performed
+beforeMove       | Function(slideshow, transition)    | Called before moving to another slide
+afterMove        | Function(slideshow, transition)    | Called after moving to another slide
+onLoad           | Function(slideshow, imageData)     | Control how images are shown when loaded. Default is to hide the image until it is loaded and then fade in
 
 ## FAQ
 
-* I want to use native CSS3 transitions rather than animation. 
+* I want to use native CSS3 transitions rather than $.fn.animate. 
 
-  I suggest using the [jquery.transit plugin](https://github.com/rstacruz/jquery.transit). 
-  In the okCycle.transitions file, replace the calls to animate with transit.
+  Include [jquery.transit plugin](https://github.com/rstacruz/jquery.transit), 
+  and okCycle will automatically take advantage of it.
 
 * I want to control slideshows manually
 

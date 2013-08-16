@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/05/13
+ * Date: 08/15/13
  *
  * @description Provides transitions for okCycle
  * @author Asher Van Brunt
@@ -15,6 +15,11 @@
 
 (function($){
   'use strict';
+
+  // Delegate .transition() calls to .animate()
+  // if the browser can't do CSS transitions.
+  if (!$.support.transition)
+    $.fn.transition = $.fn.animate;
 
   /**
    * Effects are objects that implement two methods: 'init' and 'move'.
@@ -69,7 +74,7 @@
          return transition.to
           .addClass('active')
           .css($.extend({ zIndex : 3, 'float': 'left', position: 'relative' }, opts[0]))
-          .animate(opts[1], transition.speed, transition.easing, function(){
+          .transition(opts[1], transition.speed, transition.easing, function(){
             transition.from.css({ zIndex:1 }); 
             transition.resolve();
           });
@@ -103,7 +108,7 @@
         child.slice(1).hide();
 
         if (transition.forward) {
-          slideshow.animate({ left: pos }, function(){ 
+          slideshow.transition({ left: pos }, function(){ 
             slideshow.append(child).css({ left:0 }); 
             child.hide();
             transition.resolve(); 
@@ -112,7 +117,7 @@
           slideshow
             .prepend(child)
             .css({ left: pos })
-            .animate({left: 0}, function(){
+            .transition({left: 0}, function(){
               prev.hide();
               transition.resolve(); 
             });

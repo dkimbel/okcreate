@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/05/13
+ * Date: 08/15/13
  *
  * @description Tiny, modular, flexible slideshow
  * @author Asher Van Brunt
@@ -24,7 +24,7 @@
 
     opts = $.extend({
       transition    : 'scroll',            // Transition used to cycle between children
-      easing        : 'swing',             // Easing used by the transition
+      easing        : undefined,           // Easing used by the transition
       ui            : [],                  // Any UI elements that we should build. Appended to the UI container source order
       duration      : 2000,                // Time between animations
       speed         : 300,                 // Speed the children are transitioned between
