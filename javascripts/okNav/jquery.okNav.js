@@ -26,7 +26,7 @@
                                                 // options will be applied to in order to create the desired effect. The
                                                 // default the effect is determined by the UI used. http://api.jquery.com/category/effects/
       replaceHistory        : true,             // If false, selecting will add hashchanges to the history
-      preventScroll         : true,             // True to disable, false to get jumping or an object of options to pass the scrollto 
+      scroll                : false,            // False to disable, true to get the default (jumping) or an object of options to pass to the scrollto plugin
                                                 // plugin (https://github.com/balupton/jquery-scrollto) to smoothly scroll to the target element
       activeClass           : 'active',         // className given to the currently selected tab
       activeElementSelector : 'li',             // Which element receives the active class
@@ -39,20 +39,25 @@
       return $.fn.okNav.ui[opts.ui];
     }
 
-    function select(self, links, targets, opts) {
-      var href    = self.attr('href'),
-          hash    = href.replace(/^#/, ''),
-          target  = $(href);
+    function select(e, self, links, targets, opts) {
+      var href = self.attr('href'),
+          hash = /^#\w/.test(href) && href.replace(/^#/, ''),
+          target,
+          preventScroll = !opts.scroll || $.isPlainObject(opts.scroll);
 
-      if (hash === '') return;
+      if (!hash) return true;
+
+      e.preventDefault(); 
+
+      target = $(href);
   
       if (ui(opts).select) ui(opts).select(target, links, targets, opts);
 
       // Remove the target id so the page doesn't scroll
-      if (opts.preventScroll) target.attr('id', '');
+      if (preventScroll) target.attr('id', '');
 
       // Smoothly scroll to the target element when passed an object. Requires https://github.com/balupton/jquery-scrollto
-      if ($.isPlainObject(opts.preventScroll)) target.ScrollTo(opts.preventScroll);
+      if ($.isPlainObject(opts.scroll)) target.ScrollTo(opts.scroll);
 
       if (opts.replaceHistory) {
         w.location.replace(('' + w.location).split('#')[0] + href);
@@ -60,7 +65,7 @@
         w.location.hash = hash;
       }
 
-      if (opts.preventScroll) target.attr('id', hash);
+      if (preventScroll) target.attr('id', hash);
 
       opts.afterSelect.call(self[0]);
     }
@@ -71,15 +76,14 @@
             var self   = $(this),
                 href   = self.data('target') || self.attr('href'),
                 target = /^#\w/.test(href) && $(href);
-            return target && target[0];
+            return target && target.length ? target[0] : null;
           }),
           active = $("." + opts.activeClass, self);
 
       ui(opts).setup.call(self, active, links, targets, opts);
 
       self.on(opts.event + '.okNav', 'a', function(e){ 
-        e.preventDefault(); 
-        select($(this), links, targets, opts); 
+        select(e,$(this), links, targets, opts); 
       });
     
       opts.afterSetup.call(self[0]);

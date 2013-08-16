@@ -50,11 +50,10 @@
     },
     scrollspy: {
       setup: function(active, links, targets, opts){
-        if (opts.preventScroll === undefined) opts.preventScroll = false;
-
         opts = $.extend({
           element: w,
-          offset: 10
+          offset: 10,
+          scroll: true
         }, opts);
 
         var element      = $(opts.element),
