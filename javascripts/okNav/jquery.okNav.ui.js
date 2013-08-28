@@ -17,7 +17,7 @@
   "use strict";
 
   function activate(target, opts) {
-    $("a[href=#"+target.attr('id')+"]")
+    $("a[href$=#"+target.attr('id')+"]")
       .closest(opts.activeElementSelector)
       .addClass(opts.activeClass)
       .siblings()
@@ -35,7 +35,7 @@
         opts.out.duration = opts.out.duration || 0;
 
         // If no active element is found, use the first
-        if (active.length === 0) active = $(opts.activeElementSelector+":first", this);
+        if (active.length === 0) active = $("a:first", this).closest(opts.activeElementSelector);
 
         active.addClass(opts.activeClass);
 
@@ -53,19 +53,20 @@
         opts = $.extend({
           element: w,
           offset: 10,
-          scroll: true
+          scroll: false
         }, opts);
 
         var element      = $(opts.element),
-            offsetMethod = element.is(w) ? 'offset' : 'position', 
+            isWin        = element[0] == w ,
+            offsetMethod = isWin ? 'offset' : 'position', 
             offsets      = [], 
             u            = $.fn.okNav.ui.scrollspy.update;
 
         // Sort the targets by their offset and store for later
         targets
-          .map(function(){ return $(this)[offsetMethod]().top + (!element.is(w) && element.scrollTop()); })
-          .sort(function(a, b) { return a - b; })
-          .each(function(i,v)  { offsets.push(v); });
+          .map(function(){ return $(this)[offsetMethod]().top + (!isWin && element.scrollTop()); })
+          .sort(function(a, b){ return a - b; })
+          .each(function(i, v){ offsets.push(v); });
 
         // Set active nav element based on current scroll position
         u(active, element, offsets, targets, opts);
@@ -92,6 +93,7 @@
     },
     accordian: {
       setup: function(active,links,targets,opts){
+        console.log(links,targets);
         targets.hide();
       },
       select: function(target, links, targets, opts){
@@ -114,13 +116,14 @@
           allowNested  : true,              // If we want to recurse into child nodes
           indent       : "&nbsp;",          // Character used to create indentation on nested links
           label        : "- Navigation -",  // Label for a 'no selection' option
+          filter       : "*",               // Only use links that match the given selector
           onChange     : function(e){       // Bound to when a select option is selected
             var selected = $("option:selected", this), 
                 value    = selected.val();
 
             if (value && $.trim(value) !== "") {
               if (value[0] == '#') { // in page link, just click the original element
-                $("a[href=#"+value+"]").click();
+                $("a[href='"+value+"']").click();
               } else {
                 window.location.href = value; 
               }
@@ -150,7 +153,7 @@
           }
 
           children.each(function(){
-            var link = $(this).find('a'),
+            var link = $(this).find('a').filter(opts.filter),
                 selected;
 
             if (link.length) {
@@ -180,7 +183,7 @@
           // Build the navigation and bind events
            $("<select />").addClass(opts.navClass).html(option(opts.label) + parse(this))
             .insertAfter(this)
-            .on('change.okNav', opts.onChange);
+            .on('change.okNav', opts.onChange).wrap("<div class='"+opts.navClass+"-container'></div>");
         });
       }
     }
