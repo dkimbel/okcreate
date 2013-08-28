@@ -125,10 +125,9 @@
 
 /* ........................................................... [03.MISC] */
 
-.hidden { display: none; }
-
-.visible-phone { display: none; }
-
-.visible-tablet { display: none; }
-
-.hidden-desktop { display: none; }
+.hidden,
+.visible-phone,
+.visible-tablet,
+.hidden-desktop { 
+  display: none !important;
+}

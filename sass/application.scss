@@ -78,7 +78,12 @@ body {
 
 /* Links */
 
-a, a:visited, a:hover, a:active , a:focus { text-decoration:none; outline: 0; color: $link-color; }
+a, a:visited, a:hover, a:active , a:focus { 
+  text-decoration:none; 
+  outline: 0; 
+  color: $link-color; 
+}
+
 a:hover, a:active , a:focus {}
 p a, p a:visited { line-height: inherit; }
 

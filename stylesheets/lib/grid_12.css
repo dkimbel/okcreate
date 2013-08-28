@@ -297,18 +297,9 @@
 }
 
 /* ........................................................... [03.MISC] */
-.hidden {
-  display: none;
-}
-
-.visible-phone {
-  display: none;
-}
-
-.visible-tablet {
-  display: none;
-}
-
+.hidden,
+.visible-phone,
+.visible-tablet,
 .hidden-desktop {
-  display: none;
+  display: none !important;
 }

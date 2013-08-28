@@ -17,7 +17,7 @@
   .hidden-desktop     { display: inherit; }
 
   .hidden-tablet ,
-  .visible-desktop    { display: none; }
+  .visible-desktop    { display: none !important; }
 
   .container          { width: 768px; }
 
@@ -62,7 +62,7 @@
   .hidden-desktop  { display: inherit; }
 
   .hidden-phone ,
-  .visible-desktop { display: none; }
+  .visible-desktop { display: none !important; }
 
   .container ,
   .container .one,
