@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/15/13
+ * Date: 08/27/13
  *
  * @description Tiny, modular, flexible slideshow
  * @author Asher Van Brunt
@@ -24,7 +24,7 @@
 
     opts = $.extend({
       transition    : 'scroll',            // Transition used to cycle between children
-      easing        : undefined,           // Easing used by the transition
+      easing        : 'swing',             // Easing used by the transition
       ui            : [],                  // Any UI elements that we should build. Appended to the UI container source order
       duration      : 2000,                // Time between animations
       speed         : 300,                 // Speed the children are transitioned between
@@ -204,7 +204,10 @@
         normal  = imgs.filter(":not([data-"+opts.dataAttribute+"])"),     // Non lazy images
         eager   = opts.eagerLoad ? imgs.slice(0, opts.eagerLoad) : $(''), // Store the images we're going to eagerLoad
         data    = $.extend($.Deferred(),{ loaded: 0, broken: 0, total : imgs.length }),
+        dfd     = $.Deferred(),
         initFn;
+
+    dfd.resolve();
 
     // Store image data
     self.data(imageData, data);
@@ -212,37 +215,41 @@
     // Store the index of current slide 
     self.data(active, 0);
 
-    // Initialize UI
-    if (opts.ui.length){
-      // Ensure that the UI is contained in a parent element
-      self.data('ui', self.addClass('okCycle').wrap("<div class='okCycle-ui'/>").parent());
+    // Ensure that the UI is contained in a parent element
+    if (opts.ui.length) self.data('ui', self.addClass('okCycle').wrap("<div class='okCycle-ui'/>").parent());
 
-      $.each(opts.ui, function(i, v){ 
-        if ((initFn = $.okCycle.ui[v].init)) 
-          initFn(self, self.data('ui'), opts); 
+    // Chain the loading of the UI. UI elements can block loading of subsequent elements until they
+    // are finished by returning a deferred for their init function
+    $.map(opts.ui, function(v,i) {
+      dfd = dfd.pipe(function(data) {
+         if ((initFn = $.okCycle.ui[v].init)) 
+           return initFn(self, self.data('ui'), opts); 
       });
-    }
-
-    // Initialize transition after all eager loaded images have loaded
-    eager.imagesLoaded().always(function(){ 
-      $.okCycle[opts.transition].init(self, opts); 
-
-      // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
-      if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){ 
-        setTimeout(function(){ 
-          play(self); 
-        }, isNaN(opts.autoplay) ? 0 : opts.autoplay);
-
-        // Setup hover behavior
-        if ($.isFunction(opts.hoverBehavior)) opts.hoverBehavior(self);
-      }
     });
-    
+
+    // Don't initialize until the UI is fully ready
+    dfd.always(function(){
+      // Initialize transition after all eager loaded images have loaded
+      eager.imagesLoaded().always(function(){ 
+        $.okCycle[opts.transition].init(self, opts); 
+
+        // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
+        if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){ 
+          setTimeout(function(){ 
+            play(self); 
+          }, isNaN(opts.autoplay) ? 0 : opts.autoplay);
+
+          // Setup hover behavior
+          if ($.isFunction(opts.hoverBehavior)) opts.hoverBehavior(self);
+        }
+      });
+
+      // Call after setup hook
+      opts.afterSetup(self);
+    });
+
     // Load all eager and normal images
     load(self, eager.add(normal));
-
-    // Call after setup hook
-    opts.afterSetup(self);
   }
 
 })(jQuery);

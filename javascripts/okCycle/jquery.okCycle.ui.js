@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/05/13
+ * Date: 08/27/13
  *
  * @description Provides UI elements for okCycle
  * @author Asher Van Brunt
@@ -25,8 +25,14 @@
    *
    * See okCycle.transitions for an explanation of the transition object.
    *
-   * Note that both `init` and `move` are optional, you only need to define
-   * them if you actually need to use them.
+   * Notes 
+   *
+   * - If a UI returns a deferred, it will block the loading of subsequent UI
+   *   elements until the deferred is resolved. You can use this feature if you
+   *   need to wait for certain actions to complete before rendering the UI
+   * 
+   * - Both `init` and `move` are optional, you only need to define * them if
+   *   you actually need to use them.
    *
    */
 
