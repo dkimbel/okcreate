@@ -70,11 +70,11 @@
 
       if (!opts.scroll) target.attr('id', hash);
 
-      opts.afterSelect.call(self[0]);
+      opts.afterSelect.call(self, links, targets, opts);
     }
 
-    function setup(self){
-      var links   = $("a", self),
+    function setup(el){
+      var links   = el.is('a') ? el : $('a', el),
           targets = links.map(function(){
             var self   = $(this),
                 href   = '#' + ((self.data('target') || self.attr('href')).split('#')[1] || ''),
@@ -82,19 +82,20 @@
 
             return target && target.length ? target[0] : null;
           }),
-          active = $("." + opts.activeClass, self);
+          active = links.closest(opts.activeElementSelector).filter("." + opts.activeClass );
 
-      ui(opts).setup.call(self, active, links, targets, opts);
+      ui(opts).setup.call(el, active, links, targets, opts);
 
-      self.on(opts.event + '.okNav', 'a', function(e){ 
-        select(e,$(this), links, targets, opts); 
+      links.on(opts.event + '.okNav', function(e){ 
+        select(e, $(this), links, targets, opts); 
       });
     
-      opts.afterSetup.call(self[0]);
+      opts.afterSetup.call(el, links, targets, opts);
+
+      return links;
     }
 
-    return this
-      .each(function(){ setup($(this)); })
+    return (this.is('a') ? setup(this) : this.each(function(){ setup($(this)); }))
       .extend({
         // Dynamically change the UI
         // Called without arguments, refreshes the current UI

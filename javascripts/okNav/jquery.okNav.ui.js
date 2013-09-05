@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/12/13
+ * Date: 09/05/13
  *
  * @description Customizable in-page navigation
  * @author Asher Van Brunt
@@ -35,7 +35,7 @@
         opts.out.duration = opts.out.duration || 0;
 
         // If no active element is found, use the first
-        if (active.length === 0) active = $("a:first", this).closest(opts.activeElementSelector);
+        if (active.length === 0) active = links.first().closest(opts.activeElementSelector);
 
         active.addClass(opts.activeClass);
 
@@ -93,13 +93,13 @@
     },
     accordian: {
       setup: function(active,links,targets,opts){
-        console.log(links,targets);
-        targets.hide();
+        if (opts.exclusive === undefined) opts.exclusive = true;
+        (active.length ? targets.filter(':not('+(active.is("a") ? active : active.find("a")).attr('href')+')') : targets).hide();
       },
       select: function(target, links, targets, opts){
         var vis = target.is(":visible");
 
-        targets.not(target).slideUp(opts).add(links.closest(opts.activeElementSelector)).removeClass(opts.activeClass);
+        if (opts.exclusive) targets.not(target).slideUp(opts).add(links.closest(opts.activeElementSelector)).removeClass(opts.activeClass);
 
         target[vis ? (opts.out.effect || 'slideUp') : (opts.in.effect || 'slideDown') ](opts.vis ? opts.out : opts.in)
           .add($("a[href=#"+target.attr('id')+"]")

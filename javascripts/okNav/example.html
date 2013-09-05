@@ -31,16 +31,18 @@
         <h2>Demonstration</h2>
         <p>
           okNav provides abstractions over several different types of
-          navigation interfaces. The basic requirements are that: 
+          navigation interfaces. The basic idea is that a set of links
+          corresponds to a set of content. Interacting with the links
+          produces affects to the content. 
         </p>
-        <ol>
-          <li>The navigation interface must be made up of links contained within an element. By default, it expects a list of links.</li>
-          <li>The anchors of the links must match the id of the content element that they correspond to.</li> 
-        </ol>
+        <p>The only requirement is <strong>that anchors of the links must match the id of the content element that they correspond to</strong>.</p> 
         <p>
-          While the example markup works, you're not purely limited to any
-          particular arrangement and the content can exist anywhere in page.
-          okNav does no styling for you, so don't be surprised if the tabs
+          You're not limited to any particular markup and the content can exist
+          anywhere in page.  okNav can be initialized with a collection of
+          links or their containing element
+        </p>
+        <p>
+          NOTE: okNav does no styling for you, so don't be surprised if the tabs
           don't look like they do in the demo.
         </p>
         <section>
@@ -198,7 +200,7 @@ $("#accordian").okNav({ui: 'accordian'});
               Came whiffling through the tulgey wood,
               And burbled as it came!
             </li>
-            <li class='heading'><a href="#a-two">Two</a></li>
+            <li class='heading active'><a href="#a-two">Two</a></li>
             <li id='a-two' class='content'>
               One, two! One, two! and through and through
               The vorpal blade went snicker-snack!
@@ -296,7 +298,7 @@ select.selectNav {
   </div> <!-- #doc -->
 
   <script>
-    $("#tabs").okNav();
+    $("#tabs").okNav({ scroll: false });
     $("#scrollspy").okNav({ 
       ui: 'scrollspy', 
       element: '#scrollspy-content',
@@ -304,7 +306,7 @@ select.selectNav {
         duration: 600
       }
     });
-    $("#accordian").okNav({ui: 'accordian'});
+    $("#accordian").okNav({ui: 'accordian', scroll: false});
     $("#selectNav").okNav({ui: 'selectNav'});
   </script>
 
