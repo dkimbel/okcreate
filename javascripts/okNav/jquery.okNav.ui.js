@@ -94,7 +94,7 @@
     accordian: {
       setup: function(active,links,targets,opts){
         if (opts.exclusive === undefined) opts.exclusive = true;
-        (active.length ? targets.filter(':not('+(active.is("a") ? active : active.find("a")).attr('href')+')') : targets).hide();
+        if (!opts.startExpanded) (active.length ? targets.filter(':not('+(active.is("a") ? active : active.find("a")).attr('href')+')') : targets).hide();
       },
       select: function(target, links, targets, opts){
         var vis = target.is(":visible");

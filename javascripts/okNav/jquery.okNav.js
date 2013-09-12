@@ -25,7 +25,7 @@
       out                   : { effect: null }, // (e.g. duration, easing) in addition to an 'effect' which the other
                                                 // options will be applied to in order to create the desired effect. The
                                                 // default the effect is determined by the UI used. http://api.jquery.com/category/effects/
-      replaceHistory        : true,             // If false, selecting will add hashchanges to the history
+      replaceHistory        : true,             // If true, hashchanges will be added to history
       scroll                : true,             // False to disable, true to get the default (jumping) or an object of options to pass to the scrollto plugin
                                                 // plugin (https://github.com/balupton/jquery-scrollto) to smoothly scroll to the target element
       activeClass           : 'active',         // className given to the currently selected tab
@@ -40,16 +40,19 @@
     }
 
     function select(e, self, links, targets, opts) {
-      var hash = self.attr('href').split('#')[1] || '',
-          href = '#' + hash,
+      var href = self.attr('href'),
+          hash = href.split('#')[1] || '',
           target;  
+
+      // http://blogs.msdn.com/b/ieinternals/archive/2011/02/28/internet-explorer-window-location-pathname-missing-slash-and-host-has-port.aspx
+      if (pathname[0] != '/') pathname = '/' + pathname;
 
       // Fail if we don't have a hash, or the link is not in page
       if (!hash || self[0].pathname.indexOf(window.location.pathname) !== 0) return true;
 
       e.preventDefault(); 
 
-      target = $(href);
+      target = $('#' + hash);
   
       if (ui(opts).select) {
         targets.stop();
@@ -62,9 +65,7 @@
       // Smoothly scroll to the target element when passed an object. Requires https://github.com/balupton/jquery-scrollto
       if ($.isPlainObject(opts.scroll)) target.ScrollTo(opts.scroll);
 
-      if (opts.replaceHistory) {
-        w.location.replace(('' + w.location).split('#')[0] + href);
-      } else {
+      if (!opts.replaceHistory) {
         w.location.hash = hash;
       }
 
