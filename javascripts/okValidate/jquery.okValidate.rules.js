@@ -55,6 +55,25 @@
       return !isNaN(value);
     },
 
+    // Poor man's typechecker. Mostly useful when using okValidate on an JS object rather than a form 
+    // ".property" - duck typing
+    // "type" - check if the input is a valid type
+    'type': function(value, params){
+      var valid = $.map(params, function(param,i){
+        if (param[0] == ".") {
+          return value[param.slice(1)];
+        } else {
+          try {
+            return Object.prototype.toString.call(value).match(/^\[object\s(.*)\]$/)[1].toLowerCase() == param;
+          } catch (e) {
+            return typeof value == param;
+          }
+        }
+      });
+
+      return $.inArray(true, valid) > -1;
+    },
+
     // Date - Validates if the value is either a valid dateString of number of milliseconds since the epoch.
     // Validate date strings:
     // 2010,
@@ -154,6 +173,7 @@
   $.okValidate.messages =  {
     'required'    : "This field is required.",
     'number'      : "Please enter a number",
+    'type'        : 'Invalid type',
     'email'       : "Please enter a valid email address.",
     'url'         : "Please enter a valid URL.",
     'date'        : "Please enter a valid date.",
