@@ -69,13 +69,14 @@
        move: function(slideshow,transition){
          var opts = fn(slideshow,transition);
 
-         transition.from.css({ zIndex : 2, position: 'absolute', 'float': 'none' }).removeClass('active');    
+         transition.from.css({ zIndex : 2, position: 'absolute', 'float': 'none' }).removeClass('active');
 
          return transition.to
           .addClass('active')
           .css($.extend({ zIndex : 3, 'float': 'left', position: 'relative' }, opts[0]))
+          .stop()
           .transition(opts[1], transition.speed, transition.easing, function(){
-            transition.from.css({ zIndex:1 }); 
+            transition.from.css({ zIndex:1 });
             transition.resolve();
           });
        }
@@ -98,7 +99,7 @@
         slideshow.children().first().addClass('active').end().css({ position: 'relative', 'float': 'left', width: '50%' }).slice(1).hide();
       },
       move: function(slideshow,transition) {
-        var diff   = transition.toIndex - transition.fromIndex, 
+        var diff   = transition.toIndex - transition.fromIndex,
             offset = (( transition.forward && diff < 0) || ( !transition.forward && diff > 0)) ? 1 : Math.abs(diff),
             child  = transition.forward ? slideshow.children().slice(0,offset) : slideshow.children().slice(-offset),
             prev   = slideshow.children('.active').removeClass('active'),
@@ -108,18 +109,19 @@
         child.slice(1).hide();
 
         if (transition.forward) {
-          slideshow.transition({ left: pos }, function(){ 
-            slideshow.append(child).css({ left:0 }); 
+          slideshow.stop().transition({ left: pos }, function(){
+            slideshow.append(child).css({ left:0 });
             child.hide();
-            transition.resolve(); 
+            transition.resolve();
           });
         } else {
           slideshow
             .prepend(child)
             .css({ left: pos })
+            .stop()
             .transition({left: 0}, function(){
               prev.hide();
-              transition.resolve(); 
+              transition.resolve();
             });
         }
 
