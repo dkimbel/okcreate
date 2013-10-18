@@ -16,22 +16,209 @@
 (function($){
   'use strict';
 
-  // Sorts the errors and returns the error with the lowest
-  // priority
-  function getErrorMessage(errors) {
-    var msgs = $.map(errors, function(msg,k) { return [$.okValidate.selectors[k] || 1, msg]; })
-                .sort(function(a,b){ return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0); });
-    // $.map flattens arrays
-    return $.map([msgs], function(v,i){ return v[1]; })[0] || opts.defaultMessage;
-  }
+  $.fn.okValidate = function(opts) {
+    opts = $.extend(true,{
+      ui              : 'inline',     // UI used for displaying error messages
+      validatingClass : "validating", // Class added to input while it is being validated
+      errorClass      : "error",      // Class added to input when it fails validation
+      validClass      : "valid",      // Class added to input when it passes validation
+      errorElement    : "label",      // Element used by the UI to append errors
+      defaultMessage  : "Please fix this field", // Default error message
+      // Determine whether or not a an event should trigger validations
+      // Can be a boolean to always/never trigger or a function which
+      // returns a boolean. 
+      events          : {
+        keyup         : false,
+        focusout      : true
+      },
+      onSubmit        : function(form){ form.submit(); } // Called when a form is valid and the form submitted
+    }, opts);
 
-  // The UI receives two lists: the list of valid inputs and the list of invalid inputs
-  // Invalid inputs are tupples where the first item is the input, and the second a list of errors
-  $.fn.okValidate.ui = {
-  
+
+    // Gather the rules from the form via selectors
+    // Parse a given input name like "user[tags][]" into an object like { user:
+    // {tags: RULES } } based on the selectors it matches
+    function compileRules(inputs){
+      var i = inputs.length, rules = {}, inputRules = {}, input, rule;
+
+      function add(input,rules) {
+        var obj  = {},
+            path = $.grep(input.name.replace(/\]/g, "").split(/\[/),function(v){ return $.trim(v) !== ""; }),
+            tmp  = obj,
+            key;
+
+        while(path.length){
+          key = path.shift();
+          tmp = tmp[key] = path.length ? {} : rules;
+        }
+
+        return obj;
+      }
+
+      while(i--) {
+        input      = inputs.eq(i);
+        inputRules = {};
+
+        for (var selector in $.okValidate.selectors) {
+          if (input.is(selector)) {
+            rule   = $.okValidate.selectors[selector];
+            // If our rule has a parameters function, run it otherwise just parse the values
+            inputRules[rule.rule] = rule.parameters ? rule.parameters(input) : parseParams(input,selector);
+          }
+        }
+
+        if (!$.isEmptyObject(inputRules)) {
+          $.extend(true, rules, add(input[0], inputRules));
+        }
+      }
+
+      return rules;
+    }
+
+    // Extract parameters from input attributes 
+    // Treat comma-separated values as a parameter list - if it looks like a
+    // digit, coerce it, otherwise leave it alone
+    function parseParams(input, selector) {
+      return (input.attr(selector.replace(/[\[\]]/g,'').split("=")[0]) || "")
+        .split(/\s*,\s*/)
+        .map(function(v,i){ return (/[\d\.]+$/).test(v) ? parseFloat(v, 10) : v; });
+    }
+
+    // Tie the UI into the validation process
+    // Radios and checkboxes are validated as a group
+    function validate(element, obj, rules) {
+      var dfd = $.Deferred(),
+          ui  = $.fn.okValidate.ui[opts.ui];
+
+      if (!ui) throw "No such ui '"+ui+"'";
+
+      dfd.progress(function(input,errors){
+        var nameAndValue = $.deserializeObject(input)[0],
+            element      = $("[name='"+nameAndValue.name+"']");
+            
+        ui.after({ valid: $.isEmptyObject(errors), element: element, errors: errors }, opts);
+      });
+
+      ui.before({ element: element }, opts);
+
+      $.okValidate(obj, rules, dfd, opts);
+
+      return dfd;
+    }
+
+    return this.each(function(){
+      var form   = $(this).attr( "novalidate", "novalidate" ),
+          inputs = $(':input:not([type=hidden],[type=button],[type=submit],[type=reset])', form);
+
+      // Bind optional events
+      inputs.bind($.map(opts.events, function(v,k){ return k; }).join(' '), function(event){
+        var input = $(this),
+            check = opts.events[event.type],
+            shouldValidate = check && ($.isFunction(check) ? opts.events[event.type](this, event) : check );
+
+        if (shouldValidate) validate(input, input.serializeObject(), compileRules(input) );
+      });
+
+      // Submit event is implicit
+      form.bind('submit',function(event){
+        event.preventDefault();
+
+        validate(form, inputs.serializeObject(), compileRules(inputs)).done(function(){
+          opts.onSubmit(form[0], event);
+        });
+
+        return false;
+      });
+    });
+  };
+
+  // Serialize form fields into an object
+  $.fn.serializeObject = function(value){
+    var serialized = {},
+        checkable  = /radio|checkbox/i;
+
+    function serialize(path, value, obj) {
+      var key, tmp;
+
+      if (path.length){
+        key = path.shift();
+
+        if (key) { // Object or value
+          obj[key] = serialize(path, value, obj[key] || {}); // Reuse the obj if it exists
+          return obj;
+        } else { // Blank string = some type of an array
+          if (path.length) { // Still more to go, therefore must be an array with objects
+            key = path.shift();
+            tmp = {};
+
+            if (obj.push) { // Array exists
+              // Rails decides to start accumulating values in a new hash
+              // whenever it encounters an input name that already exists in the
+              // current hash.
+              if (obj[obj.length-1][key]) {
+                tmp[key] = serialize(path, value, {});
+                obj.push(tmp);
+              } else {
+                obj[obj.length-1][key] = serialize(path, value, {});
+              }
+
+              return obj;
+            } else {
+              tmp[key] = serialize(path, value, {});
+              return [tmp];
+            }
+          } else { // Plain Array
+            if (obj.push) {
+              obj.push(value);
+              return obj;
+            } else {
+              return [value];
+            }
+          }
+        }
+      } else {
+        return value;
+      }
+    }
+
+    this.not('[type=button],[type=submit],[type=reset]').each(function(){
+      serialize(
+        this.name.replace(/\]/g, "").split(/\[/),
+        value || (checkable.test(this.type) && !this.checked ? null : this.value),
+        serialized
+      );
+    });
+
+    return serialized;
+  };
+
+  // http://guides.rubyonrails.org/form_helpers.html#understanding-parameter-naming-conventions
+  // Given an object returns what would be the correseponding name attribute for an input
+  $.deserializeObject = function(obj){
+    var param = $.param(obj).replace(/%5B/g,'[').replace(/%5D/g,']');
+    return $.map(param.split('&'),function(v,i){
+      var chunks = v.split('=');
+      return {name: chunks[0].replace(/\[\d+\]/g,'[]'), value:chunks[1]};
+    });
+  };
+
+  // The UI receives two lists: the list of valid inputs and the list of
+  // invalid inputs Invalid inputs are tupples where the first item is the
+  // input, and the second a list of errors
+  var ui = $.fn.okValidate.ui = {
+    // Helper function - Sorts the errors and returns the error with the lowest
+    // priority
+    getErrorMessage: function(errors) {
+      var msgs = $.map(errors, function(msg,k) { return [$.okValidate.selectors[k] || 1, msg]; })
+                  .sort(function(a,b){ return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0); });
+      // $.map flattens arrays
+      return $.map([msgs], function(v,i){ return v[1]; })[0] || opts.defaultMessage;
+    },
+
     // The default UI 'inline' will append the messages after the field inline
     // a label with an error class If a message cannot be found it will use the
     // defaultMessage option
+    //
     // Before is called right before validation occurs, and after is called
     // immediately after validation occurs
     inline: {
@@ -48,13 +235,13 @@
         element.removeClass(opts.validatingClass);
 
         if (input.valid) {
-          element.removeClass(opts.errorClass).addClass(opts.validClass); 
+          element.removeClass(opts.errorClass).addClass(opts.validClass);
 
           label.hide();
         } else {
           element.removeClass(opts.validClass).addClass(opts.errorClass);
 
-          msg = getErrorMessage(input.errors);
+          msg = ui.getErrorMessage(input.errors);
 
           if (label.length) {
             label.show().html(msg);
