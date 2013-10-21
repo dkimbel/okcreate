@@ -11,6 +11,10 @@
  * @mailto asher@okbreathe.com
  * @version 2.0 BETA
  *
+ * TODO
+ *
+ * Hash changes should be able to change the state
+ *
  */
 
 (function($,w){
@@ -21,17 +25,19 @@
     opts = $.extend({
       ui                    : 'tabs',           // Which navigation UI to use
       event                 : 'click',          // Which event will trigger a tab change
-      in                    : { effect: null }, // Options used to define the in/out transitions. Takes standard options
+      'in'                  : { effect: null }, // Options used to define the in/out transitions. Takes standard options
       out                   : { effect: null }, // (e.g. duration, easing) in addition to an 'effect' which the other
                                                 // options will be applied to in order to create the desired effect. The
                                                 // default the effect is determined by the UI used. http://api.jquery.com/category/effects/
-      replaceHistory        : true,             // If true, hashchanges will be added to history
+      history               : true,             // Whether selecting nav items changes the location hash. If false the hash will not change
       scroll                : true,             // False to disable, true to get the default (jumping) or an object of options to pass to the scrollto plugin
                                                 // plugin (https://github.com/balupton/jquery-scrollto) to smoothly scroll to the target element
-      activeClass           : 'active',         // className given to the currently selected tab
+      activeClass           : 'active',         // className given to the currently active item
+      combine               : false,            // Whether passing multiple containers will be treated as separate tab interfaces or one large interface
+      linkSelector          : 'a',              // How we grab target links from within the container
       activeElementSelector : 'li',             // Which element receives the active class
       afterSetup            : function(){},     // Called after the plugin has bound to each tabbed interface
-      afterSelect           : function(){}      // Called whenever a tab change occurs
+      afterSelect           : function(){}      // Called whenever a item is activated
     }, opts);
 
     function ui(opts){ 
@@ -40,19 +46,24 @@
     }
 
     function select(e, self, links, targets, opts) {
-      var href = self.attr('href'),
-          hash = href.split('#')[1] || '',
+      var hash     = self.attr('href').split('#')[1] || '',
+          href     = '#' + hash,
+          pathname = self[0].pathname,
+          cleanup  = function(){ 
+            if (opts.history) w.location.hash = hash;
+            if (!opts.scroll) target.attr('id', hash);
+          },
           target;  
 
       // http://blogs.msdn.com/b/ieinternals/archive/2011/02/28/internet-explorer-window-location-pathname-missing-slash-and-host-has-port.aspx
       if (pathname[0] != '/') pathname = '/' + pathname;
 
       // Fail if we don't have a hash, or the link is not in page
-      if (!hash || self[0].pathname.indexOf(window.location.pathname) !== 0) return true;
+      if (!hash || pathname.indexOf(window.location.pathname) !== 0) return true;
 
       e.preventDefault(); 
 
-      target = $('#' + hash);
+      target = $(href);
   
       if (ui(opts).select) {
         targets.stop();
@@ -60,22 +71,19 @@
       }
 
       // Remove the target id so the page doesn't scroll
+      // TODO Shouldn't use this, because it will mess with CSS
       if (!opts.scroll) target.attr('id', '');
 
       // Smoothly scroll to the target element when passed an object. Requires https://github.com/balupton/jquery-scrollto
-      if ($.isPlainObject(opts.scroll)) target.ScrollTo(opts.scroll);
+      if ($.isPlainObject(opts.scroll)) target.ScrollTo($.extend({ callback: cleanup }, opts.scroll));
 
-      if (!opts.replaceHistory) {
-        w.location.hash = hash;
-      }
+      if (!opts.scroll) cleanup();
 
-      if (!opts.scroll) target.attr('id', hash);
-
-      opts.afterSelect.call(self, links, targets, opts);
+      opts.afterSelect.call(self[0]);
     }
 
-    function setup(el){
-      var links   = el.is('a') ? el : $('a', el),
+    function setup(self){
+      var links   = $(opts.linkSelector, self),
           targets = links.map(function(){
             var self   = $(this),
                 href   = '#' + ((self.data('target') || self.attr('href')).split('#')[1] || ''),
@@ -83,31 +91,34 @@
 
             return target && target.length ? target[0] : null;
           }),
-          active = links.closest(opts.activeElementSelector).filter("." + opts.activeClass );
+          active = $("." + opts.activeClass, self);
 
-      ui(opts).setup.call(el, active, links, targets, opts);
+      ui(opts).setup.call(self, active, links, targets, opts);
 
-      links.on(opts.event + '.okNav', function(e){ 
-        select(e, $(this), links, targets, opts); 
+      self.on(opts.event + '.okNav', opts.linkSelector, function(e){ 
+        select(e,$(this), links, targets, opts); 
       });
     
-      opts.afterSetup.call(el, links, targets, opts);
+      opts.afterSetup.call(self[0]);
 
-      return links;
+      return self;
     }
 
-    return (this.is('a') ? setup(this) : this.each(function(){ setup($(this)); }))
+    // TODO This should be namespaced $().okNav('refresh')
+    return (opts.combine ? setup($(this)) : this.each(function(){ setup($(this)); }))
       .extend({
         // Dynamically change the UI
         // Called without arguments, refreshes the current UI
         // Called with the name of a UI - changes the UI 
         // Called with false - unbinds events
         refresh:function(str){
+          var self = $(this);
+
           if (str) opts.ui = str;
 
-          $(this).add(opts.element).off('.okNav'); // Remove all events
+          self.add(self.find('*')).off('.okNav'); // Remove all events
 
-          if (str !== false) setup($(this));
+          if (str !== false) setup(self);
         }
       });
   };

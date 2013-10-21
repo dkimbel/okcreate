@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 09/05/13
+ * Date: 08/12/13
  *
  * @description Customizable in-page navigation
  * @author Asher Van Brunt
@@ -22,6 +22,7 @@
       .addClass(opts.activeClass)
       .siblings()
       .removeClass(opts.activeClass);
+    return target;
   }
 
   /*
@@ -35,7 +36,7 @@
         opts.out.duration = opts.out.duration || 0;
 
         // If no active element is found, use the first
-        if (active.length === 0) active = links.first().closest(opts.activeElementSelector);
+        if (active.length === 0) active = $("a:first", this).closest(opts.activeElementSelector);
 
         active.addClass(opts.activeClass);
 
@@ -45,11 +46,11 @@
         activate(target,opts);
         // Show tab content and add active class
         targets.not(target)[opts.out.effect || 'hide'](opts.out).removeClass(opts.activeClass);
-        target[opts.in.effect || 'fadeIn'](opts.in).addClass(opts.activeClass);
+        target[opts['in'].effect || 'fadeIn'](opts['in']).addClass(opts.activeClass);
       }
     },
     scrollspy: {
-      setup: function(active, links, targets, opts){
+      setup: function(unused, links, targets, opts){
         opts = $.extend({
           element: w,
           offset: 10,
@@ -60,7 +61,8 @@
             isWin        = element[0] == w ,
             offsetMethod = isWin ? 'offset' : 'position', 
             offsets      = [], 
-            u            = $.fn.okNav.ui.scrollspy.update;
+            u            = $.fn.okNav.ui.scrollspy.update,
+            active       = $('');
 
         // Sort the targets by their offset and store for later
         targets
@@ -71,24 +73,28 @@
         // Set active nav element based on current scroll position
         u(active, element, offsets, targets, opts);
 
+        // Update active on scroll
         element.on('scroll.okNav', function(){
-          u(active, element, offsets, targets, opts);
+          active = u(active, element, offsets, targets, opts);
         });
       },
+      // So the scrolling is independent of the selecting
       update: function(active, element, offsets, targets, opts){
         var scrollTop    = element.scrollTop() + opts.offset,
             scrollHeight = element[0].scrollHeight || $('body')[0].scrollHeight,
             maxScroll    = scrollHeight - element.height(),
             i;
 
-        if (scrollTop >= maxScroll) return active[0] != (i = targets.last())[0] && activate(i,opts);
+        if (scrollTop >= maxScroll) return active[0] != (i = targets.last()) && activate(i,opts);
 
         for (i = offsets.length; i--;) {
           active[0] != targets[i] && 
-            scrollTop >= offsets[i] && 
-            (!offsets[i + 1] || scrollTop <= offsets[i + 1]) && 
-            activate(targets.eq(i), opts);
+          scrollTop >= offsets[i] && 
+          (!offsets[i + 1] || scrollTop <= offsets[i + 1]) &&
+          (active = activate(targets.eq(i), opts));
         }
+
+        return active;
       }
     },
     accordian: {
@@ -101,7 +107,7 @@
 
         if (opts.exclusive) targets.not(target).slideUp(opts).add(links.closest(opts.activeElementSelector)).removeClass(opts.activeClass);
 
-        target[vis ? (opts.out.effect || 'slideUp') : (opts.in.effect || 'slideDown') ](opts.vis ? opts.out : opts.in)
+        target[vis ? (opts.out.effect || 'slideUp') : (opts['in'].effect || 'slideDown') ](opts.vis ? opts.out : opts['in'])
           .add($("a[href=#"+target.attr('id')+"]")
           .closest(opts.activeElementSelector))[vis ? 'removeClass' : 'addClass'](opts.activeClass);
       }
