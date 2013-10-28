@@ -4,12 +4,12 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 01/15/13
+ * Date: 10/28/13
  *
  * @description Provides UI elements for okStylize.
  * @author Asher Van Brunt
  * @mailto asher@okbreathe.com
- * @version 0.10
+ * @version 2.0BETA
  */
 (function($){
 	"use strict";
@@ -40,7 +40,7 @@
       update: function(el,opts){
         // Retrieve all the radios in this group
         var inputs   = $(":radio[name='"+el.attr('name')+"']"),
-            selector = '.' + opts.className;           
+            selector = '.' + opts.className;
 
         inputs.not(":checked").each(function(){
           $(this).closest(selector).removeClass('checked');
@@ -53,7 +53,7 @@
       setup: function(el,opts){
         return el.wrap("<div/>").parent().prepend("<span/>");
       },
-      selector: "select",
+      selector: "select:not('.enhanced')",
       bind: 'change',
       update: function(el,opts){
         var p    = el.parent(),
@@ -63,7 +63,7 @@
 
         if (opts.selectAutoGrow) {
           span.width($.textMetrics(span).width + parseInt(span.css('paddingRight'),10));
-        } 
+        }
       }
     },
     file: {

@@ -4,14 +4,14 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 01/15/13
+ * Date: 10/28/13
  *
  * @description Lightweight plugin purely for styling unstyleable form
  * elements: checkboxes, radios, selects and file inputs, although it can be
  * extended to work on any type of element
  * @author Asher Van Brunt
  * @mailto asher@okbreathe.com
- * @version 0.10
+ * @version 2.0BETA
  */
 (function($){
 	"use strict";
@@ -23,27 +23,31 @@
 			activeClass    : "active",           // Class added to the container when the input is disabled
 			focusClass     : "focus",            // Class added to the container when the input is focused
 			hoverClass     : "hover",            // Class added to the container when the input is hovered over
+			selectedClass  : "selected",         // Class selected options
 			className      : "styled",           // Class added to the containing element for all all replaced inputs
 			fileButtonHtml : "Choose File",      // Text used for the file input's button
 			fileDefaultHtml: "No file selected", // Text used for an file input without a selected file
-      selectAutoGrow : !!$.textMetrics     // Autogrow the select if the textMetrics plugin is available
+      selectAutoGrow : !!$.textMetrics,    // Autogrow the select if the textMetrics plugin is available
+      namespace      : ".okStylize"        // Event namespace
     }, opts);
 
-    var selector = [], // All selectors
-        eventMap = {}; // Map our events to a list of selectors
+    var selector = [],           // All selectors
+        eventMap = {};           // Map our events to a list of selectors
 
-    if (!$.okStylize.ui) throw new Error("No UI elements defined");
+    if (!$.okStylize.ui) throw "No UI elements defined";
 
     /*
      * Parse our ui generators - set defaults and gather selectors
      */
-    $.each($.okStylize.ui,function(name,o){ 
+    $.each($.okStylize.ui,function(name,o){
       var bind = o.bind || 'click';
 
       selector.push(o.selector);
 
-      if (!o.name) o.name   = name;
+      if (!o.name)  o.name  = name;
       if (!o.setup) o.setup = setup;
+
+      if (o.bind === false) return;
 
       if (eventMap[bind]) {
         eventMap[bind].push(o.selector);
@@ -62,13 +66,12 @@
     selector = selector.join(",");
 
     /*
-     * If a given element matches the selector provided by a ui generator we'll
-     * use that particular generator to create markup
+     * Return the UI with a selector that matches the element
      */
-    function generate(el) {
+    function uiFor(el) {
       var ui;
 
-      $.each($.okStylize.ui,function(k,v){
+      $.each($.okStylize.ui, function(k,v){
         if (el.is(v.selector)) {
           ui = $.okStylize.ui[k];
           return false;
@@ -88,37 +91,35 @@
       return el.closest('label');
     }
 
-    // Dispatch update events
-    function update(e) { 
-      var el = $(this), 
-          ui = generate(el); 
-      if (ui && !el.is(":disabled")) ui.update(el,opts,e); 
-    }
-
     el.andSelf().find(selector).each(function(){
       var el      = $(this),
-          ui      = generate(el), 
-          classes = [opts.className, ui.name];
+          ui      = uiFor(el),
+          classes = [opts.className, ui.className || ui.name];
 
       if (ui) {
         if (el.is(':disabled')) classes.push(opts.disabledClass);
 
         ui.setup(el,opts).addClass(classes.join(' '));
         ui.update(el,opts);
-      } 
+      }
     });
 
     /*
      * Bind Interface Events
      */
     $.each(eventMap,function(event, selector){
-      $("body").on(event, selector.join(','), update);
+      $("body").on(event + opts.namespace, selector.join(','), function(e) {
+        var el = $(this),
+            ui = uiFor(el);
+        if (ui && !el.is(":disabled")) ui.update(el,opts,e);
+      });
     });
     
     /**
      * Bind the hover, active, focus, and blur UI updates
      */
     if (opts.addClassStates) {
+      // TODO Need to bind in NS
       $("." + opts.className).on({
         focus: function (){
           $(this).addClass(opts.focusClass);
@@ -130,7 +131,7 @@
           $(this).addClass(opts.hoverClass);
         },
         mouseleave: function (){
-          $(this).removeClass(opts.hoverClass + ' ' + opts.activeClass);
+          $(this).removeClass(opts.hoverClass);
         },
         "mousedown touchbegin": function () {
           if (!$(this).find(selector).is(":disabled")) {

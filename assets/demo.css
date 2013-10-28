@@ -786,13 +786,18 @@ ul.tabs:after {
   height: 30px;
   padding: 0 0 0 10px;
   position: relative;
-  overflow: hidden; 
   background: #BDC3C7;
   border-radius: 4px;
 }
 
+.styled.select.active,
 .styled.select:hover {
   background: #d9dcde;
+}
+
+.styled.select.active{
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .styled.select span {
@@ -829,6 +834,26 @@ ul.tabs:after {
   top: 2px;
   left: 0px;
   width: 100%; 
+  margin-bottom: 0;
+}
+
+.styled.select ul {
+  background: #d9dcde;
+  z-index:1;
+  overflow: auto;
+  display: block;
+  margin: 0;
+}
+
+.styled.select ul a {
+  display: block;
+  text-indent: 10px;
+}
+
+.styled.select ul a:hover ,
+.styled.select ul a.selected {
+  color: #fff;
+  background: #BDC3C7;
 }
 
 /* File */

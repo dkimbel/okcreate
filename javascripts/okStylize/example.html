@@ -10,8 +10,6 @@
   <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
   <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
   <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
-  <link href="screen.css" rel="stylesheet" type="text/css" media="screen">
-  <link href="okStylize.css" rel="stylesheet" type="text/css" media="screen">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="../../assets/rainbow-custom.min.js"></script>
   <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->  
@@ -20,6 +18,9 @@
   <script type="text/javascript" src="jquery.textmetrics.js"></script>
   <script type="text/javascript" src="jquery.okStylize.core.js"></script>
   <script type="text/javascript" src="jquery.okStylize.ui.js"></script>
+  <!-- Enhanced Select -->
+  <script type="text/javascript" src="jquery.okPosition.js"></script>
+  <script type="text/javascript" src="jquery.okStylize.ui.extra.js"></script>
 </head>
 
 <body>
@@ -33,7 +34,7 @@
       <div class='twelve'>
         <p class='box'>Styling for unstyleable form elements: checkboxes, radios, selects and file inputs</p> 
         <p>Note that as usual the styles are NOT part of the okcreate! framework, but are simply the demo styles.</p>
-        <p>okStylize can be used to style ANY input - though you probably <em>shouldn't</em>.</p>
+        <p>okStylize can be used to style ANY input - though you probably <em>shouldn't</em>, because it is unnecessary!</p>
         <pre>
           <code data-language='javascript'>
 $("form").okStylize();
@@ -45,10 +46,34 @@ $("form").okStylize();
             <h4>Select Dropdown</h4>
 
             <div class='four alpha'>
-              <select class=>
+              <label>Default (Reuse select dropdown)</label>
+              <select>
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
+                <option value="option4">Option 4</option>
+                <option value="option5">Option 5</option>
+                <option value="option6">Option 6</option>
+                <option value="option7">Option 7</option>
+                <option value="option8">Option 8</option>
+                <option value="option9">Option 9</option>
+                <option value="option10">Option 10</option>
+              </select>
+            </div>
+
+            <div class='four omega'>
+              <label>Enhanced (replace dropdown with a UL)</label>
+              <select class='enhanced'>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+                <option value="option4">Option 4</option>
+                <option value="option5">Option 5</option>
+                <option value="option6">Option 6</option>
+                <option value="option7">Option 7</option>
+                <option value="option8">Option 8</option>
+                <option value="option9">Option 9</option>
+                <option value="option10">Option 10</option>
               </select>
             </div>
           </fieldset>
