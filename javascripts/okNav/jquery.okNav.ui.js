@@ -13,6 +13,7 @@
  *
  */
 
+
 (function($,w) {
   "use strict";
 
@@ -59,8 +60,8 @@
 
         var element      = $(opts.element),
             isWin        = element[0] == w ,
-            offsetMethod = isWin ? 'offset' : 'position', 
-            offsets      = [], 
+            offsetMethod = isWin ? 'offset' : 'position',
+            offsets      = [],
             u            = $.fn.okNav.ui.scrollspy.update,
             active       = $('');
 
@@ -88,8 +89,8 @@
         if (scrollTop >= maxScroll) return active[0] != (i = targets.last()) && activate(i,opts);
 
         for (i = offsets.length; i--;) {
-          active[0] != targets[i] && 
-          scrollTop >= offsets[i] && 
+          active[0] != targets[i] &&
+          scrollTop >= offsets[i] &&
           (!offsets[i + 1] || scrollTop <= offsets[i + 1]) &&
           (active = activate(targets.eq(i), opts));
         }
@@ -124,14 +125,14 @@
           label        : "- Navigation -",  // Label for a 'no selection' option
           filter       : "*",               // Only use links that match the given selector
           onChange     : function(e){       // Bound to when a select option is selected
-            var selected = $("option:selected", this), 
+            var selected = $("option:selected", this),
                 value    = selected.val();
 
             if (value && $.trim(value) !== "") {
               if (value[0] == '#') { // in page link, just click the original element
                 $("a[href='"+value+"']").click();
               } else {
-                window.location.href = value; 
+                window.location.href = value;
               }
             }
           }
@@ -187,7 +188,7 @@
 
         return this.each(function(){
           // Build the navigation and bind events
-           $("<select />").addClass(opts.navClass).html(option(opts.label) + parse(this))
+           $("<select />").addClass(opts.navClass).html((opts.label ? option(opts.label) : '') + parse(this))
             .insertAfter(this)
             .on('change.okNav', opts.onChange).wrap("<div class='"+opts.navClass+"-container'></div>");
         });

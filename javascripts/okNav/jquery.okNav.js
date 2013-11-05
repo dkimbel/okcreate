@@ -17,6 +17,7 @@
  *
  */
 
+
 (function($,w){
   "use strict";
 
@@ -40,7 +41,7 @@
       afterSelect           : function(){}      // Called whenever a item is activated
     }, opts);
 
-    function ui(opts){ 
+    function ui(opts){
       if (!$.fn.okNav.ui[opts.ui]) throw("No such ui '"+opts.ui+"'"); // Fail early since we don't know what to do
       return $.fn.okNav.ui[opts.ui];
     }
@@ -49,11 +50,11 @@
       var hash     = self.attr('href').split('#')[1] || '',
           href     = '#' + hash,
           pathname = self[0].pathname,
-          cleanup  = function(){ 
+          cleanup  = function(){
             if (opts.history) w.location.hash = hash;
             if (!opts.scroll) target.attr('id', hash);
           },
-          target;  
+          target;
 
       // http://blogs.msdn.com/b/ieinternals/archive/2011/02/28/internet-explorer-window-location-pathname-missing-slash-and-host-has-port.aspx
       if (pathname[0] != '/') pathname = '/' + pathname;
@@ -61,7 +62,7 @@
       // Fail if we don't have a hash, or the link is not in page
       if (!hash || pathname.indexOf(window.location.pathname) !== 0) return true;
 
-      e.preventDefault(); 
+      e.preventDefault();
 
       target = $(href);
   
@@ -95,8 +96,8 @@
 
       ui(opts).setup.call(self, active, links, targets, opts);
 
-      self.on(opts.event + '.okNav', opts.linkSelector, function(e){ 
-        select(e,$(this), links, targets, opts); 
+      self.on(opts.event + '.okNav', opts.linkSelector, function(e){
+        select(e,$(this), links, targets, opts);
       });
     
       opts.afterSetup.call(self[0]);
