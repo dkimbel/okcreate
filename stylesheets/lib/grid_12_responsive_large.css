@@ -65,46 +65,46 @@
 
   /* Offsets */
   .container .offset-one {
-    margin-left: 100px;
+    padding-left: 100px;
   }
 
   .container .offset-two {
-    margin-left: 200px;
+    padding-left: 200px;
   }
 
   .container .offset-three {
-    margin-left: 300px;
+    padding-left: 300px;
   }
 
   .container .offset-four {
-    margin-left: 400px;
+    padding-left: 400px;
   }
 
   .container .offset-five {
-    margin-left: 500px;
+    padding-left: 500px;
   }
 
   .container .offset-six {
-    margin-left: 600px;
+    padding-left: 600px;
   }
 
   .container .offset-seven {
-    margin-left: 700px;
+    padding-left: 700px;
   }
 
   .container .offset-eight {
-    margin-left: 800px;
+    padding-left: 800px;
   }
 
   .container .offset-nine {
-    margin-left: 900px;
+    padding-left: 900px;
   }
 
   .container .offset-ten {
-    margin-left: 1000px;
+    padding-left: 1000px;
   }
 
   .container .offset-eleven {
-    margin-left: 1100px;
+    padding-left: 1100px;
   }
 }

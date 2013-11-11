@@ -92,47 +92,47 @@
 
 /* Offsets */
 .container .offset-one {
-  margin-left: 80px;
+  padding-left: 80px;
 }
 
 .container .offset-two {
-  margin-left: 160px;
+  padding-left: 160px;
 }
 
 .container .offset-three {
-  margin-left: 240px;
+  padding-left: 240px;
 }
 
 .container .offset-four {
-  margin-left: 320px;
+  padding-left: 320px;
 }
 
 .container .offset-five {
-  margin-left: 400px;
+  padding-left: 400px;
 }
 
 .container .offset-six {
-  margin-left: 480px;
+  padding-left: 480px;
 }
 
 .container .offset-seven {
-  margin-left: 560px;
+  padding-left: 560px;
 }
 
 .container .offset-eight {
-  margin-left: 640px;
+  padding-left: 640px;
 }
 
 .container .offset-nine {
-  margin-left: 720px;
+  padding-left: 720px;
 }
 
 .container .offset-ten {
-  margin-left: 800px;
+  padding-left: 800px;
 }
 
 .container .offset-eleven {
-  margin-left: 880px;
+  padding-left: 880px;
 }
 
 /* Fluid Grid */
@@ -202,47 +202,47 @@
 
 /* Offsets */
 .fluid.container .offset-one {
-  margin-left: 8.333%;
+  padding-left: 8.333%;
 }
 
 .fluid.container .offset-two {
-  margin-left: 16.666%;
+  padding-left: 16.666%;
 }
 
 .fluid.container .offset-three {
-  margin-left: 25%;
+  padding-left: 25%;
 }
 
 .fluid.container .offset-four {
-  margin-left: 33.333%;
+  padding-left: 33.333%;
 }
 
 .fluid.container .offset-five {
-  margin-left: 41.666%;
+  padding-left: 41.666%;
 }
 
 .fluid.container .offset-six {
-  margin-left: 50%;
+  padding-left: 50%;
 }
 
 .fluid.container .offset-seven {
-  margin-left: 58.333%;
+  padding-left: 58.333%;
 }
 
 .fluid.container .offset-eight {
-  margin-left: 66.666%;
+  padding-left: 66.666%;
 }
 
 .fluid.container .offset-nine {
-  margin-left: 75%;
+  padding-left: 75%;
 }
 
 .fluid.container .offset-ten {
-  margin-left: 83.333%;
+  padding-left: 83.333%;
 }
 
 .fluid.container .offset-eleven {
-  margin-left: 91.666%;
+  padding-left: 91.666%;
 }
 
 /* Remove margins */

@@ -74,47 +74,47 @@
 
   /* Offsets */
   .container .offset-one {
-    margin-left: 64px;
+    padding-left: 64px;
   }
 
   .container .offset-two {
-    margin-left: 128px;
+    padding-left: 128px;
   }
 
   .container .offset-three {
-    margin-left: 192px;
+    padding-left: 192px;
   }
 
   .container .offset-four {
-    margin-left: 256px;
+    padding-left: 256px;
   }
 
   .container .offset-five {
-    margin-left: 320px;
+    padding-left: 320px;
   }
 
   .container .offset-six {
-    margin-left: 384px;
+    padding-left: 384px;
   }
 
   .container .offset-seven {
-    margin-left: 448px;
+    padding-left: 448px;
   }
 
   .container .offset-eight {
-    margin-left: 512px;
+    padding-left: 512px;
   }
 
   .container .offset-nine {
-    margin-left: 576px;
+    padding-left: 576px;
   }
 
   .container .offset-ten {
-    margin-left: 640px;
+    padding-left: 640px;
   }
 
   .container .offset-eleven {
-    margin-left: 704px;
+    padding-left: 704px;
   }
 }
 /* ........................................................... [02.MOBILE (Portrait)] */
@@ -160,7 +160,7 @@
   .container .offset-nine,
   .container .offset-ten,
   .container .offset-eleven {
-    margin-left: 0;
+    padding-left: 0;
   }
 
   /* Fluid */

@@ -38,17 +38,17 @@
 
   /* Offsets */
 
-  .container .offset-one     { margin-left: 64px;  }
-  .container .offset-two     { margin-left: 128px; }
-  .container .offset-three   { margin-left: 192px; }
-  .container .offset-four    { margin-left: 256px; }
-  .container .offset-five    { margin-left: 320px; }
-  .container .offset-six     { margin-left: 384px; }
-  .container .offset-seven   { margin-left: 448px; }
-  .container .offset-eight   { margin-left: 512px; }
-  .container .offset-nine    { margin-left: 576px; }
-  .container .offset-ten     { margin-left: 640px; }
-  .container .offset-eleven  { margin-left: 704px; }
+  .container .offset-one     { padding-left: 64px;  }
+  .container .offset-two     { padding-left: 128px; }
+  .container .offset-three   { padding-left: 192px; }
+  .container .offset-four    { padding-left: 256px; }
+  .container .offset-five    { padding-left: 320px; }
+  .container .offset-six     { padding-left: 384px; }
+  .container .offset-seven   { padding-left: 448px; }
+  .container .offset-eight   { padding-left: 512px; }
+  .container .offset-nine    { padding-left: 576px; }
+  .container .offset-ten     { padding-left: 640px; }
+  .container .offset-eleven  { padding-left: 704px; }
 
 }
 
@@ -89,7 +89,7 @@
   .container .offset-eight,
   .container .offset-nine,
   .container .offset-ten,
-  .container .offset-eleven { margin-left: 0; }
+  .container .offset-eleven { padding-left: 0; }
 
   /* Fluid */
   .fluid.container .one,
