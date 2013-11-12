@@ -36,6 +36,8 @@
 
     if (!$.okStylize.ui) throw "No UI elements defined";
 
+    if (el.length === 0) return el;
+
     /*
      * Parse our ui generators - set defaults and gather selectors
      */
@@ -91,7 +93,7 @@
       return el.closest('label');
     }
 
-    el.andSelf().find(selector).each(function(){
+    (el.is("form") ? el.find(selector) : el.filter(selector)).each(function(){
       var el      = $(this),
           ui      = uiFor(el),
           classes = [opts.className, ui.className || ui.name];
