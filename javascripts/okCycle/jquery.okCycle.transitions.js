@@ -19,7 +19,7 @@
   // Delegate .transition() calls to .animate()
   // if the browser can't do CSS transitions.
   if (!$.support.transition)
-    $.fn.transition = $.fn.animate;
+    $.fn.transit = $.fn.animate;
 
   /**
    * Effects are objects that implement two methods: 'init' and 'move'.
@@ -75,7 +75,7 @@
           .addClass('active')
           .css($.extend({ zIndex : 3, 'float': 'left', position: 'relative' }, opts[0]))
           .stop()
-          .transition(opts[1], transition.speed, transition.easing, function(){
+          .transit(opts[1], transition.speed, transition.easing, function(){
             transition.from.css({ zIndex:1 });
             transition.resolve();
           });

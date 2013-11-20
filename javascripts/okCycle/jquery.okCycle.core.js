@@ -24,7 +24,7 @@
 
     opts = $.extend({
       transition    : 'scroll',            // Transition used to cycle between children
-      easing        : 'swing',             // Easing used by the transition
+      easing        : undefined,           // Easing used by the transition
       ui            : [],                  // Any UI elements that we should build. Appended to the UI container source order
       duration      : 2000,                // Time between animations
       speed         : 300,                 // Speed the children are transitioned between
