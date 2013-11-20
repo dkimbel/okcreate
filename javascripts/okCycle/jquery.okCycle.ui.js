@@ -50,7 +50,7 @@
         $.okCycle.ui.caption.setCaption(slideshow.children('.active'), $(".caption", ui));
       },
       setCaption: function(el,container){
-        var caption = el.data('caption') || ''; 
+        var caption = el.data('caption') || '';
 
         caption = caption[0] == '#' ? $(caption).html() : caption;
 
@@ -106,9 +106,9 @@
     mouseWheel: {
       init: function(slideshow, ui, opts) {
         ui.mousewheel(function(e, delta)  {
-          slideshow[delta < 0 ? 'next' : 'prev'](); 
+          $(slideshow).okCycle()[delta < 0 ? 'next' : 'prev']();
           return false;
-        });			
+        });
       }
     },
     // Show pecentage of loaded images
@@ -150,7 +150,7 @@
         slideshow[0].ontouchmove = function(e) {
           
           // only deal with one finger
-          if (e.touches.length == 1) {			
+          if (e.touches.length == 1) {
             var op     = false,
                 t      = e.touches[0],
                 deltaX = touch.x - t.clientX,
@@ -164,9 +164,9 @@
               if (deltaY < (opts.threshold.y*-1)) { op = 'prev'; }
             }
 
-            if (op) { 
-              e.preventDefault(); 
-              $(slideshow).okCycle()[op](); 
+            if (op) {
+              e.preventDefault();
+              $(slideshow).okCycle()[op]();
             }
           }
         };

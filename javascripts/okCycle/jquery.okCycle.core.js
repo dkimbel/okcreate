@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/27/13
+ * Date: 11/20/13
  *
  * @description Tiny, modular, flexible slideshow
  * @author Asher Van Brunt
@@ -12,6 +12,7 @@
  * @version 2.0 BETA
  *
  */
+
 
 (function($){
   'use strict';
@@ -29,7 +30,7 @@
       duration      : 2000,                // Time between animations
       speed         : 300,                 // Speed the children are transitioned between
       dataAttribute : "src",               // Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
-      eagerLoad     : 1,                   // During setup, force okCycle to N images before the slideshow is initialized. Set to 0 to load all images
+      eagerLoad     : 1,                   // During setup, force okCycle to N images before the slideshow is initialized.
       autoplay      : false,               // Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
       hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
         var api = $(slideshow).okCycle();
@@ -39,10 +40,20 @@
       afterSetup  : function(slideshow){},            // Called immediately after setup is performed
       beforeMove  : function(slideshow, transition){},// Called before moving to another slide
       afterMove   : function(slideshow, transition){},// Called after moving to another slide
-      onLoad      : function(slideshow, imageData){   // Control how images are shown when loaded. Default is to hide the image until it is loaded and then fade in
-        imageData.img.fadeTo.apply(imageData.img, imageData.isLoaded ? ['fast',1] : [0,0]);
+      onLoad      : function(slideshow, el, src){     // Control how images are shown when loaded. Default is to hide the image until it is loaded and then fade in
+        if (src) {
+          // If it's not an image set the background-imge property rather than the src
+          (el.is("img") ?  el.attr('src', src) : el.css('background-image','url('+ src +')')).fadeTo('fast',1);
+        } else {
+          el.fadeTo(0,0);
+        }
       }
     }, opts);
+
+    var ds = "[data-"+opts.dataAttribute+"]",
+        s  = 'img,' + ds;
+
+    $.extend(opts, { dataSelector: ds, selector: s });
 
     if (!$.okCycle[opts.transition]) throw("No such transition '"+opts.transition+"'"); // Fail early since we don't know what to do
 
@@ -78,26 +89,25 @@
       imageData   = 'imageData';
 
   // Lazy Load images
-  function load(self, imgs){
+  function load(self, els){
     var opts = self.data(cycle),
         data = self.data(imageData),
         fn   = opts.onLoad;
 
-    return imgs.each(function(i){
-      var img = $(this).addClass('loading'),
-          src = img.data(opts.dataAttribute) || this.src;
+    return els.each(function(i){
+      var el = $(this).addClass('loading'),
+          src = el.data(opts.dataAttribute) || this.src;
 
-      img.removeAttr('data-'+opts.dataAttribute);
+      el.removeAttr('data-'+opts.dataAttribute);
 
-      fn(self, { img: img });
+      fn(self, el, false);
 
       $("<img />")
         .attr("src", src)
         .imagesLoaded()
         .progress(function(inst, imageData){
-          img.attr("src", src)[0].loaded = true;
           notify(self, data, imageData);
-          fn(self, { isLoaded: imageData.isLoaded, img: img });
+          fn(self, el.removeClass('loading'), imageData.isLoaded ? src : false);
         });
     });
   }
@@ -153,7 +163,7 @@
 
   // Show another slide using the selected transition
   function transitionTo(self, prev, cur, forward){
-    var data, activeItems, fn, opts = self.data(cycle);
+    var data, activeItems, fn, opts = self.data(cycle), container;
 
     if (!self.data(animating) && prev != cur) {
     
@@ -182,12 +192,14 @@
       });
 
       // Transition to the next slide
-      activeItems = $.okCycle[opts.transition].move(self.data(active, cur), data);
+      activeItems = $.okCycle[opts.transition].move(self.data(active, cur), data) || transition.to;
 
       // We can't depend on the transition returning items in same same
       // order, so load whatever the transition returns as the active items
-      (activeItems || transition.to)
-        .find("img")
+      activeItems
+        .find(opts.selector)
+        .add(activeItems)
+        .filter(opts.selector)
         .each(function(){
           if ($(this).attr('data-'+opts.dataAttribute)) load(self, $(this)); // Load the next image if it hasn't already been loaded
         });
@@ -204,8 +216,8 @@
 
   // Setup our instance
   function initialize(self, opts){
-    var imgs    = $('img', self),
-        normal  = imgs.filter(":not([data-"+opts.dataAttribute+"])"),     // Non lazy images
+    var imgs    = $(opts.selector, self),
+        normal  = imgs.filter(":not("+opts.dataSelector+")"),  // Non lazy images
         eager   = opts.eagerLoad ? imgs.slice(0, opts.eagerLoad) : $(''), // Store the images we're going to eagerLoad
         data    = $.extend($.Deferred(),{ loaded: 0, broken: 0, total : imgs.length }),
         dfd     = $.Deferred(),
