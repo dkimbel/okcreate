@@ -56,10 +56,10 @@
     // e.g. $(element).okCycle().play()
     api = {
       element  : set,
-      pause    : function(){ return e(pause); }, 
-      play     : function(){ return e(play);  }, 
-      next     : function(){ return e(next);  }, 
-      prev     : function(){ return e(prev);  }, 
+      pause    : function(){ return e(pause); },
+      play     : function(){ return e(play);  },
+      next     : function(){ return e(next);  },
+      prev     : function(){ return e(prev);  },
       moveTo   : function(i){ return e(function(s){ moveTo(s, i); });},
       // Hook into the image loading process
       progress : function(f){ return e(function(s) { s.data(imageData).progress(f); }); },
@@ -78,13 +78,13 @@
       imageData   = 'imageData';
 
   // Lazy Load images
-  function load(self, imgs){ 
+  function load(self, imgs){
     var opts = self.data(cycle),
         data = self.data(imageData),
         fn   = opts.onLoad;
 
     return imgs.each(function(i){
-      var img = $(this).addClass('loading'), 
+      var img = $(this).addClass('loading'),
           src = img.data(opts.dataAttribute) || this.src;
 
       img.removeAttr('data-'+opts.dataAttribute);
@@ -96,7 +96,7 @@
         .imagesLoaded()
         .progress(function(inst, imageData){
           img.attr("src", src)[0].loaded = true;
-          notify(self, data, imageData); 
+          notify(self, data, imageData);
           fn(self, { isLoaded: imageData.isLoaded, img: img });
         });
     });
@@ -111,8 +111,8 @@
 
   // Disable autoplay
   function pause(self){
-    if (self.data(interval)) 
-      self.data(interval, clearTimeout(self.data(interval))); // Store it so we can cancel it
+    if (self.data(interval))
+      self.data(interval, clearTimeout(self.data(interval)));
 
     return self.data(autoplaying, false);
   }
@@ -121,12 +121,16 @@
   function play(self){
     self.data(autoplaying, true);
 
+    // Ensure interval is destroyed before creating a new one
+    clearTimeout(self.data(interval));
+
+    // Store it so we can cancel it
     return self.data(interval, setTimeout(function(){ next(self); }, self.data(cycle).duration));
   }
 
   // Move forwards
   function next(self){
-    var old = self.data(active), 
+    var old = self.data(active),
         cur = old+1;
 
     return transitionTo(self, old, cur == self.children().length ? 0 : cur, true);
@@ -134,7 +138,7 @@
 
   // Move backwards
   function prev(self){
-    var old = self.data(active), 
+    var old = self.data(active),
         cur = old-1;
 
     return transitionTo(self, old,  cur < 0 ? self.children().length-1 : cur, false);
@@ -142,9 +146,9 @@
 
   // Move to a specific slide
   function moveTo(self,idx){
-    var activeIdx = self.data(active); 
+    var activeIdx = self.data(active);
 
-    return transitionTo(self, activeIdx , idx, idx > activeIdx); 
+    return transitionTo(self, activeIdx , idx, idx > activeIdx);
   }
 
   // Show another slide using the selected transition
@@ -155,7 +159,7 @@
     
       self.data(animating, true);
 
-      data = $.extend($.Deferred(),{ 
+      data = $.extend($.Deferred(),{
         from      : self.children().eq(prev),
         to        : self.children().eq(cur),
         fromIndex : prev,
@@ -174,7 +178,7 @@
 
         opts.afterMove(self, data);
 
-        if (self.data(autoplaying)) play(self); 
+        if (self.data(autoplaying)) play(self);
       });
 
       // Transition to the next slide
@@ -184,14 +188,14 @@
       // order, so load whatever the transition returns as the active items
       (activeItems || transition.to)
         .find("img")
-        .each(function(){ 
+        .each(function(){
           if ($(this).attr('data-'+opts.dataAttribute)) load(self, $(this)); // Load the next image if it hasn't already been loaded
-        }); 
+        });
 
       // Update the UI
       $.each(opts.ui, function(){
-        if ((fn = $.okCycle.ui[this]) && fn.move) 
-          fn.move(self, self.data('ui'), data); 
+        if ((fn = $.okCycle.ui[this]) && fn.move)
+          fn.move(self, self.data('ui'), data);
       });
     }
 
@@ -200,7 +204,7 @@
 
   // Setup our instance
   function initialize(self, opts){
-    var imgs    = $('img', self), 
+    var imgs    = $('img', self),
         normal  = imgs.filter(":not([data-"+opts.dataAttribute+"])"),     // Non lazy images
         eager   = opts.eagerLoad ? imgs.slice(0, opts.eagerLoad) : $(''), // Store the images we're going to eagerLoad
         data    = $.extend($.Deferred(),{ loaded: 0, broken: 0, total : imgs.length }),
@@ -222,21 +226,21 @@
     // are finished by returning a deferred for their init function
     $.map(opts.ui, function(v,i) {
       dfd = dfd.pipe(function(data) {
-         if ((initFn = $.okCycle.ui[v].init)) 
-           return initFn(self, self.data('ui'), opts); 
+         if ((initFn = $.okCycle.ui[v].init))
+           return initFn(self, self.data('ui'), opts);
       });
     });
 
     // Don't initialize until the UI is fully ready
     dfd.always(function(){
       // Initialize transition after all eager loaded images have loaded
-      eager.imagesLoaded().always(function(){ 
-        $.okCycle[opts.transition].init(self, opts); 
+      eager.imagesLoaded().always(function(){
+        $.okCycle[opts.transition].init(self, opts);
 
         // Start autoplaying after a delay of opts.autoplays milliseconds if enabled
-        if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){ 
-          setTimeout(function(){ 
-            play(self); 
+        if (opts.autoplay === true || typeof(opts.autoplay) == 'number'){
+          setTimeout(function(){
+            play(self);
           }, isNaN(opts.autoplay) ? 0 : opts.autoplay);
 
           // Setup hover behavior
