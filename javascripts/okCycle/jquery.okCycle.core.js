@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 11/20/13
+ * Date: 11/25/13
  *
  * @description Tiny, modular, flexible slideshow
  * @author Asher Van Brunt
@@ -31,6 +31,7 @@
       speed         : 300,                 // Speed the children are transitioned between
       dataAttribute : "src",               // Lazy load images by setting the dataAttribute (e.g. data-src) attribute rather than src attribute
       eagerLoad     : 1,                   // During setup, force okCycle to N images before the slideshow is initialized.
+      lazyLoad      : true,                // Only load images when they become active. If false images will continue to load in the background after the eagerLoaded images are loaded
       autoplay      : false,               // Whether to start playing immediately. Provide a number (in milliseconds) to delay the inital start to the slideshow
       hoverBehavior : function(slideshow){ // During autoplay, we'll generally want to pause the slideshow at some point. The default behavior is to pause when hovering the UI
         var api = $(slideshow).okCycle();
@@ -257,6 +258,13 @@
 
           // Setup hover behavior
           if ($.isFunction(opts.hoverBehavior)) opts.hoverBehavior(self);
+        }
+
+        // Force all images to start loading if we're not using lazyloading
+        if (opts.lazyLoad === false) {
+          imgs.filter(opts.dataSelector).each(function(){
+            load(self, $(this));
+          });
         }
       });
 
