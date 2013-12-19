@@ -69,7 +69,7 @@
         if (keys.length === 0) {
           validate(property, rules, key, error);
         } else if ($.isArray(property)) {
-          if (!error[key]) error[key] = []; 
+          if (!error[key]) error[key] = [];
 
           for (var i=0; i < property.length; i++) {
             applyRules(property[i], keys.slice(0), rules, error[key][i]={});
@@ -84,6 +84,10 @@
       }
     }
 
+    function filterNulls(value) {
+      return $.isArray(value) ? $.grep(value,function(n){ return(n); }) : value;
+    }
+
     // TODO Add specs for how these are merged
     function validate(value, rules, key, error) {
       $.when.apply($, $.map(rules, function(params, rule){
@@ -94,7 +98,7 @@
         params = $.makeArray(params);
 
         // Apply the rule
-        result = $.okValidate.rules[rule].apply($.okValidate, [value, params]);
+        result = $.okValidate.rules[rule].apply($.okValidate, [filterNulls(value), params]);
         result = result.promise ? result : { valid: result, rule: rule, params: params };
 
         propertyQueue.push(result);

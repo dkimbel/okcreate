@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under MIT and GPL.
  * http://www.opensource.org/licenses/mit-license.php
- * Date: 08/07/13
+ * Date: 12/12/13
  *
  * @projectDescription Form and Object Validation
  * @author Asher Van Brunt
@@ -16,7 +16,13 @@
 (function($){
   'use strict';
 
-  $.fn.okValidate = function(opts) {
+  var inputSelector = ':input:not([type=hidden],[type=button],[type=submit],[type=reset])';
+
+  $.fn.okValidate = function() {
+    var args = Array.prototype.slice.call( arguments ),
+        opts = args.length == 2 ? args[1] : args[0],
+        validateNow = args[0] === true;
+
     opts = $.extend(true,{
       ui              : 'inline',     // UI used for displaying error messages
       validatingClass : "validating", // Class added to input while it is being validated
@@ -92,10 +98,10 @@
 
       if (!ui) throw "No such ui '"+ui+"'";
 
-      dfd.progress(function(input,errors){
+      dfd.progress(function(input, errors){
         var nameAndValue = $.deserializeObject(input)[0],
             element      = $("[name='"+nameAndValue.name+"']");
-            
+
         ui.after({ valid: $.isEmptyObject(errors), element: element, errors: errors }, opts);
       });
 
@@ -106,30 +112,37 @@
       return dfd;
     }
 
-    return this.each(function(){
-      var form   = $(this).attr( "novalidate", "novalidate" ),
-          inputs = $(':input:not([type=hidden],[type=button],[type=submit],[type=reset])', form);
+    if (validateNow) {
+      var inputs = this.is("form") ? $(inputSelector, this) : this.filter(inputSelector);
+      return validate(this, inputs.serializeObject(), compileRules(inputs));
+    } else {
+      return this.each(function(){
+        var form   = $(this).attr( "novalidate", "novalidate" ),
+            inputs = $(inputSelector, form);
 
-      // Bind optional events
-      inputs.bind($.map(opts.events, function(v,k){ return k; }).join(' '), function(event){
-        var input = $(this),
-            check = opts.events[event.type],
-            shouldValidate = check && ($.isFunction(check) ? opts.events[event.type](this, event) : check );
+        // Bind optional events
+        inputs.bind($.map(opts.events, function(v,k){ return k; }).join(' '), function(event){
+          var input = $("[name='"+this.name+"']"),
+              check = opts.events[event.type],
+              shouldValidate = check &&
+                ($.isFunction(check) ? opts.events[event.type](this, event) : check );
 
-        if (shouldValidate) validate(input, input.serializeObject(), compileRules(input) );
-      });
-
-      // Submit event is implicit
-      form.bind('submit',function(event){
-        event.preventDefault();
-
-        validate(form, inputs.serializeObject(), compileRules(inputs)).done(function(){
-          opts.onSubmit(form[0], event);
+          if (shouldValidate) validate(input, input.serializeObject(), compileRules(input) );
         });
 
-        return false;
+        // Submit event is implicit
+        form.bind('submit',function(event){
+          event.preventDefault();
+
+          validate(form, inputs.serializeObject(), compileRules(inputs))
+          .done(function(){
+            opts.onSubmit(form[0], event);
+          });
+
+          return false;
+        });
       });
-    });
+    }
   };
 
   // Serialize form fields into an object
@@ -144,7 +157,11 @@
         key = path.shift();
 
         if (key) { // Object or value
-          obj[key] = serialize(path, value, obj[key] || {}); // Reuse the obj if it exists
+          // Reuse the obj if it exists, and don't overwrite existing values
+          // with null values (can occur when validating radios)
+          if ((tmp = serialize(path, value, obj[key] || {})) !== null) {
+            obj[key] = tmp || obj[key];
+          }
           return obj;
         } else { // Blank string = some type of an array
           if (path.length) { // Still more to go, therefore must be an array with objects
@@ -181,7 +198,7 @@
       }
     }
 
-    this.not('[type=button],[type=submit],[type=reset]').each(function(){
+    this.filter(inputSelector).each(function(){
       serialize(
         this.name.replace(/\]/g, "").split(/\[/),
         value || (checkable.test(this.type) && !this.checked ? null : this.value),
@@ -202,25 +219,32 @@
     });
   };
 
-  // The UI receives two lists: the list of valid inputs and the list of
-  // invalid inputs Invalid inputs are tupples where the first item is the
-  // input, and the second a list of errors
+  /*
+   * The UI receives two lists: the list of valid inputs and the list of
+   * invalid inputs. Invalid inputs are tupples where the first item is the
+   * input, and the second a list of errors
+   */
   var ui = $.fn.okValidate.ui = {
-    // Helper function - Sorts the errors and returns the error with the lowest
-    // priority
+    // Helper function - Sorts the errors and returns the error with the lowest priority
     getErrorMessage: function(errors) {
-      var msgs = $.map(errors, function(msg,k) { return [$.okValidate.selectors[k] || 1, msg]; })
-                  .sort(function(a,b){ return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0); });
-      // $.map flattens arrays
-      return $.map([msgs], function(v,i){ return v[1]; })[0] || opts.defaultMessage;
+      var msgs = [];
+      $.each(errors, function(type,msg) {
+        var r;
+        $.each($.okValidate.selectors, function(k,v){ if (v.rule == type) { r = v; return false; } });
+        msgs.push([r.priority === undefined ? 1 : r.priority, msg]);
+      });
+      msgs = msgs.sort(function(a,b){  return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0); });
+      return msgs[0] ? msgs[0][1] : opts.defaultMessage;
     },
 
-    // The default UI 'inline' will append the messages after the field inline
-    // a label with an error class If a message cannot be found it will use the
-    // defaultMessage option
-    //
-    // Before is called right before validation occurs, and after is called
-    // immediately after validation occurs
+    /*
+     * The default UI 'inline' will append the messages after the field inline
+     * a label with an error class If a message cannot be found it will use the
+     * defaultMessage option
+
+     * Before is called right before validation occurs, and after is called
+     * immediately after validation occurs
+     */
     inline: {
       before: function(input, opts) {
         var element = input.element;
@@ -230,6 +254,7 @@
       after: function( input, opts ) {
         var element = input.element.eq(input.element.length-1),
             label   = $(opts.errorElement + '.' + opts.errorClass + "[for='"+element.attr('name')+"']"),
+            after,
             msg;
 
         element.removeClass(opts.validatingClass);
@@ -246,8 +271,11 @@
           if (label.length) {
             label.show().html(msg);
           } else {
+            after = element.parents().filter("label:last"); // Checkboxes are often inside labels
+            if (after.length === 0) after = element;
+
             $("<"+opts.errorElement+"/>")
-              .insertAfter(element.parent().is("label") ? element.parent() : element) // Checkboxes are often inside labels
+              .insertAfter(after)
               .addClass(opts.errorClass)
               .attr('for', element.attr('name'))
               .html(msg);

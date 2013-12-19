@@ -55,9 +55,14 @@
       return !isNaN(value);
     },
 
-    // Poor man's typechecker. Mostly useful when using okValidate on an JS object rather than a form 
-    // ".property" - duck typing
-    // "type" - check if the input is a valid type
+    // Poor man's typechecker. This is really only useful when using okValidate on an
+    // object rather than a form. Hence why there is no selector to trigger this rule.
+    //
+    // okValidate will try two different methods for type checking given the value of the type rule:
+    //
+    // Duck Typing   - If the value begins with a period (e.g. '.property') it
+    //                 will just check that the obj responds to that method
+    // Type Checking - Without a leading period it will check to make sure the value matches the type
     'type': function(value, params){
       var valid = $.map(params, function(param,i){
         if (param[0] == ".") {

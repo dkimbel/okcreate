@@ -65,7 +65,7 @@ $("form").okValidate();
             <div class='field'>
               <label>Favorite color</label>
               <select name="person[favorite_color]" required pattern='(red|blue|green|yellow)'>
-                <option value="">select colour</option>
+                <option value="">Select Color</option>
                 <option value="red">red</option>
                 <option value="blue">blue</option>
                 <option value="green">green</option>
@@ -84,11 +84,11 @@ $("form").okValidate();
             </div>
             <div class='field'>
               <label>OS of Choice</label>
-              <label><input type="radio" name="person[os][]" required value="Linux" />Linux</label> 
-              <label><input type="radio" name="person[os][]" value="OSX" />OSX</label> 
-              <label><input type="radio" name="person[os][]" value="FreeBSD" />FreeBSD</label> 
-              <label><input type="radio" name="person[os][]" value="Windows" />Windows</label> 
-              <label><input type="radio" name="person[os][]" value="GladOS" pattern='[^GladOS]' />GladOS</label> 
+              <label><input type="radio" name="person[os]" required value="Linux" />Linux</label> 
+              <label><input type="radio" name="person[os]" value="OSX" />OSX</label> 
+              <label><input type="radio" name="person[os]" value="FreeBSD" />FreeBSD</label> 
+              <label><input type="radio" name="person[os]" value="Windows" />Windows</label> 
+              <label><input type="radio" name="person[os]" value="GladOS" pattern='[^GladOS]' />GladOS</label> 
             </div>
           </fieldset>
           <div class='field submit'>
