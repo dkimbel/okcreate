@@ -455,6 +455,12 @@ label {
 /* ........................................................... [07.FOOTER] */
 /* ........................................................... [08.MEDIA QUERIES] */
 /* Larger than standard 960 (devices and browsers) */
+@media only screen and (min-width: 1200px) {
+  body:after {
+    content: 'desktop-large';
+    display: none;
+  }
+}
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (max-width: 959px) {
   body:after {

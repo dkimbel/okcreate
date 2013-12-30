@@ -384,6 +384,7 @@ label {
 
 /* Larger than standard 960 (devices and browsers) */
 @media only screen and (min-width: 1200px) {
+  body:after { content: 'desktop-large'; display: none; }
 }
 
 /* Smaller than standard 960 (devices and browsers) */

@@ -4,7 +4,7 @@
 
 01.BASE GRID
 02.CLEARING
-03.MISC
+03.UTILITIES
 ------------------------------------------------*/
 /* ........................................................... [01.BASE GRID] */
 .container {
@@ -296,10 +296,28 @@
   height: 0;
 }
 
-/* ........................................................... [03.MISC] */
-.hidden,
-.visible-phone,
-.visible-tablet,
+/* ........................................................... [03.UTILITIES] */
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.visible-phone {
+  display: none !important;
+}
+
+.visible-tablet {
+  display: none !important;
+}
+
 .hidden-desktop {
+  display: none !important;
+}
+
+.visible-desktop {
+  display: inherit !important;
+}
+
+.visible-print {
   display: none !important;
 }
