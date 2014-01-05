@@ -2,41 +2,16 @@
 ------------------------------------------------
 [Table of contents]
 
-01.PRINT
-02.TABLET (Portrait)
-03.PHONE (Portrait)
-04.PHONE (Landscape)
+01.TABLET (Portrait)
+02.MOBILE (Portrait)
+03.MOBILE (Landscape)
 ------------------------------------------------*/
 
-/* ........................................................... [01.PRINT] */
-@media print {
-  .visible-print {
-    display: inherit !important;
-  }
-  .hidden-print {
-    display: none !important;
-  }
-}
-
-/* ........................................................... [02.TABLET (Portrait)] */
+/* ........................................................... [01.TABLET (Portrait)] */
 
 /* Note: Design for a width of 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-
-  .hidden-desktop {
-    display: inherit !important;
-  }
-  .visible-desktop {
-    display: none !important ;
-  }
-  .visible-tablet {
-    display: inherit !important;
-  }
-  .hidden-tablet {
-    display: none !important;
-  }
-
   .container          { width: 768px; }
 
   /* Columns */
@@ -70,25 +45,11 @@
 
 }
 
-/* ........................................................... [02.PHONE (Portrait)] */
+/* ........................................................... [02.MOBILE (Portrait)] */
 
 /* Note: Design for a width of 320px */
 
 @media only screen and (max-width: 767px) {
-
-  .hidden-desktop {
-    display: inherit !important;
-  }
-  .visible-desktop {
-    display: none !important;
-  }
-  .visible-phone {
-    display: inherit !important;
-  }
-  .hidden-phone {
-    display: none !important;
-  }
-
   .container ,
   .container .one,
   .container .two,
@@ -131,7 +92,8 @@
   .fluid.container .twelve { width: 100%; }
 }
 
-/* ........................................................... [04.PHONE (Landscape)] */
+
+/* ........................................................... [03.MOBILE (Landscape)] */
 
 /* Note: Design for a width of 480px */
 

@@ -6,10 +6,6 @@
 ------------------------------------------------*/
 /* ........................................................... [01.LARGE DESKTOP] */
 @media (min-width: 1200px) {
-  .visible-desktop {
-    display: inherit;
-  }
-
   .container {
     width: 1200px;
   }
