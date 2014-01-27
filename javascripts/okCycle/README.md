@@ -73,13 +73,13 @@ onLoad           | Function(slideshow, imageData)     | Control how images are s
 
   okCycle can control any number of slideshows simultaneously or independently:
 
-      var slideshows = $(".slideshow").okCycle();
+      var slideshow = $(".slideshow").okCycle();
 
-      slideshow.next(); // Every .slideshow element will move to the next slides
+      slideshow.next(); // Every <code>.slideshow</code> element will move to the next slide
 
-      var slideshows = $(".slideshow:first").okCycle();
+      var slideshow = $(".slideshow:first").okCycle();
 
-      slideshow.next(); // Only the first .slideshow element will move to the next slides
+      slideshow.next(); // Only the first <code>.slideshow</code> element will move to the next slide
 
 ## Notes
 
