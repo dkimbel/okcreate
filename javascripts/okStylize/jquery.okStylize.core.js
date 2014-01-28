@@ -89,7 +89,7 @@
      * are expected to be wrapped in label tags;
      */
     function setup(el,opts) {
-      el.wrap("<span/><span></span></span>");
+      el.wrap("<span><span></span></span>");
       return el.closest('label');
     }
 
