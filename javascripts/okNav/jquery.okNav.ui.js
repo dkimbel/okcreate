@@ -37,11 +37,15 @@
         opts.out.duration = opts.out.duration || 0;
 
         // If no active element is found, use the first
-        if (active.length === 0) active = $("a:first", this).closest(opts.activeElementSelector);
+        if (active.length === 0) {
+          active = $("a:first", this).closest(opts.activeElementSelector).addClass(opts.activeClass);
+        }
 
-        active.addClass(opts.activeClass);
+        if (opts.autoActivate) {
+          targets = targets.filter(':not(#'+(active.is("a") ? active : active.find("a")).attr('href').split('#')[1]+')');
+        }
 
-        targets.filter(':not('+(active.is("a") ? active : active.find("a")).attr('href')+')').hide();
+        targets.hide();
       },
       select: function(target, links, targets, opts){
         activate(target,opts);

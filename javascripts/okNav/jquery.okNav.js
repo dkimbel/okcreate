@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/12/13
+ * Date: 03/17/14
  *
  * @description Customizable in-page navigation
  * @author Asher Van Brunt
@@ -37,6 +37,7 @@
       combine               : false,            // Whether passing multiple containers will be treated as separate tab interfaces or one large interface
       linkSelector          : 'a',              // How we grab target links from within the container
       activeElementSelector : 'li',             // Which element receives the active class
+      autoActivate          : true,             // Certain UIs use this to determine whether an element should activated if no elements are currently activated on ui init (only applicable to tabs)
       afterSetup            : function(){},     // Called after the plugin has bound to each tabbed interface
       afterSelect           : function(){}      // Called whenever a item is activated
     }, opts);
