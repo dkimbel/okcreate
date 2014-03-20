@@ -37,9 +37,10 @@
       combine               : false,            // Whether passing multiple containers will be treated as separate tab interfaces or one large interface
       linkSelector          : 'a',              // How we grab target links from within the container
       activeElementSelector : 'li',             // Which element receives the active class
-      autoActivate          : true,             // Certain UIs use this to determine whether an element should activated if no elements are currently activated on ui init (only applicable to tabs)
       afterSetup            : function(){},     // Called after the plugin has bound to each tabbed interface
-      afterSelect           : function(){}      // Called whenever a item is activated
+      afterSelect           : function(){},     // Called whenever a item is activated
+      // The following is only applicable to the tab interface
+      autoActivate          : true              // Whether an element should activated if no elements have the activeClass set on init
     }, opts);
 
     function ui(opts){

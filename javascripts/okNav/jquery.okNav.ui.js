@@ -49,8 +49,8 @@
       },
       select: function(target, links, targets, opts){
         activate(target,opts);
-        // Show tab content and add active class
         targets.not(target)[opts.out.effect || 'hide'](opts.out).removeClass(opts.activeClass);
+        // Show tab content and add active class
         target[opts['in'].effect || 'fadeIn'](opts['in']).addClass(opts.activeClass);
       }
     },

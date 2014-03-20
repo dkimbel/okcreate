@@ -33,9 +33,9 @@ replaceHistory        | true,                  | If false, selecting will add ha
 scroll                | false                  | False to disable, true to get the default (jumping) or an object of options to pass to the scrollto plugin plugin (https://github.com/balupton/jquery-scrollto) to smoothly scroll to the target element
 activeClass           | 'active'               | className given to the currently selected tab
 activeElementSelector | 'li'                   | Which element receives the active class
-autoActivate          | true                   | Certain UIs use this to determine whether an element should activated if no elements are currently activated on ui init (only applicable to tabs)
 afterSetup            | function(){}           | Called after the plugin has bound to each tabbed interface
 afterSelect           | function(){}           | Called whenever a tab change occurs
+autoActivate          | true                   | Whether an element should activated if no elements have the activeClass set on init (only applicable to tabs)
 
 ## Notes
 
