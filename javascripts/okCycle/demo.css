@@ -1,0 +1,104 @@
+/* Required for Responsive Images */
+
+.okCycle-ui,
+.okCycle,
+.okCycle li {
+  position: relative;
+  width:100%;
+}
+
+.okCycle li img {
+  max-width: 100%; 
+  height: auto; 
+}
+
+/* Visual Styles */
+
+.okCycle-ui li {
+  margin:0;
+  float:left;
+}
+
+.okCycle-ui ul {
+  padding:0;
+  margin:0;
+}
+
+.pagination {
+  float:right;
+}
+
+.navigation li,
+.pagination li {
+  margin:0 5px 5px 5px;
+}
+
+.navigation li a,
+.pagination li a{
+  padding:0 5px 5px 5px;
+}
+
+.pagination li.active a {
+  background:#222;
+  color:#fff;
+}
+
+.current-page .current:after {
+  content:'/';
+}
+
+.current-page {
+  float:left;
+  margin-left:20px;
+  font-size:1.2em;
+}
+
+.slideshow {
+  position: relative;
+  z-index:1;
+}
+
+.okCycle-ui {
+  margin-bottom:3em;
+}
+
+.okCycle-ui .caption{
+  position: absolute;
+  bottom:0;
+  left:0;
+  background: rgba(0,0,0,0.5);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#55000000, endColorstr=#55000000)"; /* ie8 */
+  color:#fff;
+  width:100%;
+  padding:10px 0;
+  z-index:2;
+  text-indent:10px;
+}
+
+#example_three li {
+  background: #fff url('images/spinner.gif') center center no-repeat;
+}
+
+.slideshow li {
+  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQYlWNgYGCQwoKxgqGgcJA5h3yFAAs8BRWVSwooAAAAAElFTkSuQmCC);
+}
+
+.okCycle-ui .progress {
+  border: 1px solid #999;
+  width: 100%;
+  height: 16px;
+  margin-top: 30px;
+}
+
+.okCycle-ui .progress div {
+  overflow: hidden;
+  background-color: #dd0;
+  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAADklEQVQIW2NgQAXGZHAAGioAza6+Hk0AAAAASUVORK5CYII=);
+  height: 100%;
+  width: 0%;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  line-height: 16px;
+}
+

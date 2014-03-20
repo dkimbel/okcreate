@@ -1,0 +1,14 @@
+input.error ,
+textarea.error ,
+select.error ,
+label.error {
+  color:#E9322D;
+  border-color:#E9322D;
+}
+
+input.valid ,
+input.valid {
+  color:#264409;
+  border-color:#264409;
+}
+
