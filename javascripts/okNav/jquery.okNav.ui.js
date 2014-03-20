@@ -4,7 +4,7 @@
  * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * Date: 08/12/13
+ * Date: 03/19/14
  *
  * @description Customizable in-page navigation
  * @author Asher Van Brunt
@@ -18,7 +18,7 @@
   "use strict";
 
   function activate(target, opts) {
-    $("a[href$=#"+target.attr('id')+"]")
+    $("a[href$='#!"+target.attr('id')+"']")
       .closest(opts.activeElementSelector)
       .addClass(opts.activeClass)
       .siblings()
@@ -42,7 +42,7 @@
         }
 
         if (opts.autoActivate) {
-          targets = targets.filter(':not(#'+(active.is("a") ? active : active.find("a")).attr('href').split('#')[1]+')');
+          targets = targets.filter(':not(#'+(active.is("a") ? active : active.find("a")).attr('href').split('#!')[1]+')');
         }
 
         targets.hide();
@@ -55,7 +55,7 @@
       }
     },
     scrollspy: {
-      setup: function(unused, links, targets, opts){
+      setup: function(_, links, targets, opts){
         opts = $.extend({
           element: w,
           offset: 10,
@@ -104,8 +104,10 @@
     },
     accordian: {
       setup: function(active,links,targets,opts){
+        var selector = (active.is("a") ? active : active.find("a")).attr('href').replace('#!','#');
         if (opts.exclusive === undefined) opts.exclusive = true;
-        if (!opts.startExpanded) (active.length ? targets.filter(':not('+(active.is("a") ? active : active.find("a")).attr('href')+')') : targets).hide();
+
+        if (!opts.startExpanded) (active.length ? targets.filter(':not('+ selector +')') : targets).hide();
       },
       select: function(target, links, targets, opts){
         var vis = target.is(":visible");
@@ -113,7 +115,7 @@
         if (opts.exclusive) targets.not(target).slideUp(opts).add(links.closest(opts.activeElementSelector)).removeClass(opts.activeClass);
 
         target[vis ? (opts.out.effect || 'slideUp') : (opts['in'].effect || 'slideDown') ](opts.vis ? opts.out : opts['in'])
-          .add($("a[href=#"+target.attr('id')+"]")
+          .add($("a[href='#!"+target.attr('id')+"']")
           .closest(opts.activeElementSelector))[vis ? 'removeClass' : 'addClass'](opts.activeClass);
       }
     },
@@ -132,9 +134,12 @@
             var selected = $("option:selected", this),
                 value    = selected.val();
 
+            // TODO - This should be able to take advantage of the code in core
+            // rather than do basically the same thing on its own
             if (value && $.trim(value) !== "") {
-              if (value[0] == '#') { // in page link, just click the original element
-                $("a[href='"+value+"']").click();
+              if (value[0] == '#') { // in page link, just jump to the original element
+                selected = $(value.replace(/^#!/,'#'));
+                if (selected.length) $(window).scrollTop(selected.offset().top);
               } else {
                 window.location.href = value;
               }

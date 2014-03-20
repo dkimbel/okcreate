@@ -30,28 +30,30 @@
       <div class='twelve'>
         <h2>Demonstration</h2>
         <p>
-          okNav provides abstractions over several different types of
-          navigation interfaces. The basic idea is that a set of links
-          corresponds to a set of content. Interacting with the links
-          produces affects to the content. 
+          okNav is a collection of various common UI paradigms. The unifying idea is
+          that a set of links corresponds to a set of content in somway.
+          Interacting with the links produces affects to the content. 
         </p>
-        <p>The only requirement is <strong>that anchors of the links must match the id of the content element that they correspond to</strong>.</p> 
+        <p>The only requirement is <strong>that anchors of the links must match the id of the element that they correspond to</strong>.</p> 
         <p>
           You're not limited to any particular markup and the content can exist
           anywhere in page.  okNav can be initialized with a collection of
           links or their containing element
         </p>
-        <p>
-          NOTE: okNav does no styling for you, so don't be surprised if the tabs
-          don't look like they do in the demo.
-        </p>
+        <h4>A Few Notes</h4>
+        <ol>
+          <li>When using history okNav will change the link hash from <code>#hash</code> to <code>#!hash</code> (note the !) in order to prevent unwanted page jumps</li>
+          
+          <li>It goes without saying that ids need to be unique.</li>
+          <li>okNav does not style content, so don't be surprised if the tabs don't look like they do in the demo.</li>
+        </ol>
         <section>
           <h4 class='box'>Tabs</h4>
           <p>This is the default user interface - if the ui option is omitted this is what will be used</p>
 
           <pre>
             <code data-language='javascript'>
-$("#tabs").okNav(); // Called on the navigation
+$("#tabs").okNav({ scroll: false }); // Called on the navigation
             </code>
           </pre>
           <ul id='tabs' class="tabs">
@@ -100,13 +102,14 @@ $("#tabs").okNav(); // Called on the navigation
           </p>
           <p>
             Optionally, if you include <a href='http://balupton.github.io/jquery-scrollto/'>jquery-scrollto</a>,
-            you can achieve a smooth scrolling effect by passing an options object for <code>preventScroll</code>.
+            you can achieve a smooth scrolling effect by passing an options object for <code>scroll</code>.
           </p>
           <pre>
             <code data-language='javascript'>
 $("#scrollspy").okNav({
   ui: 'scrollSpy', 
   element: '#scrollspy-content',
+  history: false,
   scroll: {
     duration: 600
   }
@@ -242,24 +245,24 @@ $("#selectNav").okNav({ui: 'selectNav'});
           </p>
           <ul id='selectNav'>
             <li>
-              <a href='#one'>One</a>
+              <a href='#sn-one'>One</a>
               <ul>
-                <li><a href='#one-two'>One-One</a></li>
-                <li><a href='#one-two'>One-Two</a></li>
+                <li><a href='#sn-one-two'>One-One</a></li>
+                <li><a href='#sn-one-two'>One-Two</a></li>
               </ul>
             </li>
             <li>
-              <a href='#two'>Two</a>
+              <a href='#sn-two'>Two</a>
               <ul>
                 <li>
-                  <a href='#two-one'>Two-One</a>
+                  <a href='#sn-two-one'>Two-One</a>
                   <ul>
-                    <li><a href='#two-one-one'>Two-One-One</a></li>
-                    <li><a href='#two-one-two'>Two-One-Two</a></li>
+                    <li><a href='#sn-two-one-one'>Two-One-One</a></li>
+                    <li><a href='#sn-two-one-two'>Two-One-Two</a></li>
                   </ul>
                 </li>
                 <li>
-                  <a href='#two-two'>Two-Two</a>
+                  <a href='#sn-two-two'>Two-Two</a>
                 </li>
               </ul>
             </li>
@@ -298,7 +301,7 @@ select.selectNav {
   </div> <!-- #doc -->
 
   <script>
-    $("#tabs").okNav({ scroll: false });
+    $("#tabs").okNav({scroll: false});
     $("#scrollspy").okNav({ 
       ui: 'scrollspy', 
       element: '#scrollspy-content',
