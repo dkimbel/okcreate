@@ -10,6 +10,7 @@
   <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
   <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
   <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="demo.css" rel="stylesheet" type="text/css" media="screen">
   <script src="../../assets/rainbow-custom.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->  
@@ -22,7 +23,8 @@
 
   <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
   <!-- Plugin -->
-  <script src="jquery.okMap.js"></script>
+  <script src="jquery.okMap.core.js"></script>
+  <script src="jquery.okMap.ui.js"></script>
 </head>
 <body>
 
@@ -167,7 +169,10 @@ var place = {
         <pre>
           <code data-language='javascript'>
 var map = $(".map").okMap({
-  eventName: 'eventHandler',
+  events: {
+    event: 'eventHandler'
+  },
+  scope: window, // It's advisable to not scope it to the window
   places: [{
     event: {
       eventName: 'anotherEventHandler' // This will override the default eventHanlder for THIS place only
@@ -177,7 +182,7 @@ var map = $(".map").okMap({
 });
 
 // Event Handlers receive the place that was clicked and the original google map event
-function eventHanlder(place,event) {
+function eventHandler(place,event) {
   // Do stuff...
 }
           </code>
@@ -193,7 +198,51 @@ function eventHanlder(place,event) {
           <br/>
           Map events can be one of: <code>'click', 'dblclick', 'mouseup', 'mousedown', 'mouseover', 'mouseout'</code>.
         </p>
-        <h3>That's it!</h3>
+        <h3>UI</h3>
+        <p>
+          Currently okMap provides one simple UI enhancement, which is a custom implementation
+          of an <a href='https://developers.google.com/maps/documentation/javascript/reference#OverlayView'>OverlayView</a>,
+          called an <strong>infoPane</strong>. It relies either on an existing in-page
+          element or a template passed in on initialization to render the OverlayView. 
+          The infoPane is then controlled by binding an event to
+          <code>infoPane</code>. Additionally, you can provide an
+          <code>render</code> function which will be called when the event is
+          triggered, this will allow you to customize the infoPane.
+        </p>
+        <p>
+          infoPanes bind a click event to the any element with a <code>data-close</code> attribute. You can however
+          manually close an infoPane by calling the close method: <code>$(map).okMap('infoPane').close()</code>.
+        </p>
+        <p>
+          Note that the scope option must be omitted (to scope to the map itself) for this to work
+        </p>
+        <pre>
+          <code data-language='html'>
+&lt;div class='infoPane'&gt;&lt;div&gt;
+          </code>
+        </pre>
+        <pre>
+          <code data-language='javascript'>
+var map = $(".map").okMap({
+  click: 'infoPane',
+  infoPane: {
+    selector: ".infoPane", // Change to suit your needs
+    template: null, // Pass in inline HTML 
+    render: function(infoPane, place, event){
+      infoPane.html("I'm an infoPane - read about me below!&lt;br/&gt;&lt;a data-close href='#'&gt;Click me to close!&lt;/a&gt;");
+    },
+    places: [
+      // ...
+      { 
+        title: 'In-N-Out Burger 7', 
+        address: '1417 Fitzgerald Dr, Pinole, CA 94564', 
+        events: { click: 'infoPane.open' }, 
+      }
+    ]
+  }
+});
+          </code>
+        </pre>
       </div>
     </article>
 
@@ -201,11 +250,17 @@ function eventHanlder(place,event) {
       <h1><a href='http://okbreathe.com'>okbreathe</a></h1>
     </footer>
   </div> <!-- #doc -->
+  <div class='infoPane'></div>
 
   <script>
     window.map  = $("#map").okMap({
       events: {
-        click: 'handleClick'
+        click: 'handleClick',
+      },
+      infoPane: { 
+        render: function(ip){ 
+          ip.html("I'm an infoPane - read about me below!<br/><a data-close href='#'>Click me to close!</a>");
+        } 
       },
       places: [
         { title: 'In-N-Out Burger 1', address: '260 Washington St, Daly City, CA 94015' },
@@ -214,13 +269,20 @@ function eventHanlder(place,event) {
         { title: 'In-N-Out Burger 4', address: '8300 Oakport St, Oakland, CA 94621' },
         { title: 'In-N-Out Burger 5', address: '798 Redwood Hwy, Mill Valley, CA 94941' },
         { title: 'In-N-Out Burger 6', address: '11 Rollins Rd, Millbrae, California 94030' },
-        { title: 'In-N-Out Burger 7', address: '1417 Fitzgerald Dr, Pinole, CA 94564' }
+        { 
+          title: 'In-N-Out Burger 7', 
+          address: '1417 Fitzgerald Dr, Pinole, CA 94564', 
+          events: { click: 'infoPane.open' }, 
+        }
       ]
     });
 
-    function handleClick(place,event){
+    // A click handler method to the map instance
+    var instance = $("#map").data('okMap');
+
+    instance. handleClick = function(place,event){
       alert("You clicked: " + place.title);
-    }
+    };
 
   </script>
 

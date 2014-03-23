@@ -1,7 +1,7 @@
 /**
- * jquery.okNav.js
+ * jquery.okMap.core.js
  *
- * Copyright (c) 2013 Asher Van Brunt | http://www.okbreathe.com
+ * Copyright (c) 2014 Asher Van Brunt | http://www.okbreathe.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  * Date: 02/21/14
@@ -14,7 +14,7 @@
  */
 (function($){
 
-  function okMap(el, opts){
+  window.okMap = function(el, opts){
     this.element   = el;
     this.places    = {};
     this.bounds    = new google.maps.LatLngBounds();
@@ -22,7 +22,7 @@
     this.options   = $.extend(true, {
       events     : {},      // Specify marker events globally in event, handler pairs. Events can be one of 'click', 'dblclick', 'mouseup', 'mousedown', 'mouseover', 'mouseout'.
                             // Note that the default behavior can be overriden on a per-marker basis by passing in an events object for the given marker
-      scope      : window,  // Object that event methods will be called on. Probably should not leave this as window - globals are bad mmkay?
+      scope      : null,    // Object that event methods will be called on. If omitted it will either default to the map okMap object itself
       autoFit    : true,    // Resize to fit when places are added or removed
       keepZoom   : true,    // Used in conjunction with autoFit. Will keep current zoom level if the markers are already visible, otherwise will zoom to fit
       maxZoom    : 15,      // Used in conjunction with autoFit. If during autofit the map zooms in too far, it will be set to this level.
@@ -37,11 +37,18 @@
 
     this.map = new google.maps.Map(this.element, this.options.mapOptions);
     this.set(this.options.places);
-  }
+  };
 
-  function bindEvents(scope, place) {
-    $.each(place.events,function(event, fn){
-      if (fn && scope[fn]) {
+  function bindEvents(self, scope, place) {
+    $.each(place.events, function(event, fn){
+
+      if (fn) {
+        fn = fn.split('.'); // Allow shallow method access
+
+        if (fn.length == 2) scope = self[fn.shift()]();
+
+        fn = fn.shift();
+
         google.maps.event.addListener(place.marker, event, function(event) {
           scope[fn](place, event);
         });
@@ -77,7 +84,7 @@
           place.marker = new google.maps.Marker($.extend({},place,{ position: place.latLng, map: self.map }));
           place.events = place.events || self.options.events;
 
-          bindEvents(self.options.scope, place);
+          bindEvents(self, self.options.scope || self, place);
 
           self.bounds.extend(place.marker.getPosition());
           self.places[place._id] = place;
@@ -210,7 +217,8 @@
           console.log( "cannot call methods on okMap prior to initialization; " + "attempted to call method '" + opts + "'" );
           return;
         }
-        if ( !$.isFunction( instance[opts] ) || opts.charAt(0) === "_" ) {
+
+        if ( !$.isFunction( instance[opts] ) ) {
           console.log( "no such method '" + opts + "' for okMap instance" );
           return;
         }
@@ -220,13 +228,22 @@
 
     } else {
       this.each(function() {
-        var instance = $.data( this, 'okMap' );
+        var map, instance = $.data( this, 'okMap' );
         if ( instance ) {
           // apply options & init
           instance.option( opts );
         } else {
           // initialize new instance
-          $.data( this, 'okMap', new okMap( this, opts ) );
+          map = new okMap( this, opts );
+
+          // Add UI
+          if ($.fn.okMap.ui) {
+            $.each($.fn.okMap.ui, function(_,ui){
+              if (opts[ui]) map[ui](opts[ui]);
+            });
+          }
+
+          $.data( this, 'okMap',  map );
         }
       });
     }
