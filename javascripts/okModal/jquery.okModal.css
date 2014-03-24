@@ -1,0 +1,63 @@
+/* Base Styles */
+
+#ui-overlay {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0;
+  bottom: 0;
+  z-index:1000;
+  width: 100%;
+  height: 100%;
+}
+
+.ui-modal {
+  margin: auto;
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  bottom: 0; 
+  right: 0;
+}
+
+.ui-modal .iframe-scaler {
+  height: 0;
+  overflow: hidden;
+  padding-top: 56.25%;
+  width: 100%;
+}
+
+.ui-modal .iframe-scaler iframe {
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.ui-modal img {
+  max-width: 100%;
+}
+
+/* Cosmetic Styles */
+
+#ui-overlay {
+  background: rgba(0,0,0,0.2);
+}
+
+.ui-modal {
+  background: #fff;
+  border: solid 1px #333;
+  overflow: auto;
+  z-index: 1001;
+  padding: 0;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+}
+
+.ui-modal .iframe-scaler iframe {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}

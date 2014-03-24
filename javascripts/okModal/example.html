@@ -1,0 +1,261 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>okModal</title>
+  <link href="../../stylesheets/lib/grid_12.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../stylesheets/application.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="../../assets/demo.css" rel="stylesheet" type="text/css" media="screen">
+  <script src="../../assets/rainbow-custom.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->  
+
+  <!-- Plugin -->
+  <link href="jquery.okModal.css" rel="stylesheet" type="text/css" media="screen">
+  <script src="jquery.transit.js"></script>
+  <script src="imagesloaded.js"></script>
+  <script src="jquery.okModal.core.js"></script>
+  <script src="jquery.okModal.transitions.js"></script>
+  <script src="jquery.okModal.ui.js"></script>
+</head>
+<body>
+  <div id="doc">
+    <header>
+      <h1>okModal</h1>
+    </header>
+    <article id="main" class='container'>
+      <section class='twelve'>
+        <p class='box'>
+          Smart, easy and responsive modal windows.
+        </p>
+        <h3>Content Type Detection</h3>
+        <p>
+          okModal tries to take care of common use cases while getting out of your way if you want to do something crazy.
+          The defautl invocation will intelligently determine the content type based on the triggering element.
+        </p>
+<pre>
+  <code data-language='javascript'>
+  // Call on the selector of the elements that will trigger a modal 
+  // (see jquery.okModal.core.js for initialization options)
+  $(".modal").okModal();
+  </code>
+</pre>
+        <p>When the element's href points to an image, it is treated at an image.</p>
+        <ul>
+          <li><a class='modal' href='../../assets/images/one.png'>Load a small image</a></li>
+          <li><a class='modal' href='../../assets/images/huge.png'>Load an very wide image</a> (Naturally <strong>wider</strong> than the viewport)</li>
+          <li><a class='modal' href='../../assets/images/tall.png'>Load an very tall image</a> (Naturally <strong>taller</strong> than the viewport)</li>
+          <li><a class='modal' href='../../assets/images/giant.png'>Load a very big image</a> (Naturally bigger in <strong>both dimensions</strong> than the viewport)</li>
+        </ul>
+        <p>When the href points to a known video provider, it's treated as a embedded video. Only youtube and vimeo are supported by default, but it can be extended to support additional providers</p>
+        <ul>
+          <li><a class='modal' href='http://vimeo.com/39792837'>Load a Video</a></li>
+        </ul>
+        <p>When the href points to a known map provider, it's treated as a map. Only Google Maps, but again, it can be extended to support additional providers</p>
+        <ul>
+          <li><a class='modal' data-height='500' data-width='500' href='http://maps.google.com/maps?q=San+Francisco,+CA'>Load a Map</a></li>
+        </ul>
+        <p>If the href is an anchor, it is inferred to correspond to the id of an element somewhere in the page</p>
+        <ul>
+          <li><a class='modal' href='#hello-world'>Load In-page content</a></li>
+        </ul>
+        <p>If it doesn't match any other matcher, it is assumed to be an get request to retrieve some content. Note this won't work unless this file accessed through a server</p>
+        <ul>
+          <li><a class='modal' href='/okcreate/javascripts/okModal/ajax.html'>Load HTML</a></li>
+        </ul>
+        <p>
+          Aside from setting the dimensions in plugin initialzation, you can also specify dimensions in page on the element itself
+        </p>
+<pre>
+  <code data-language='html'>
+&lt;a class='modal' data-height='500' data-width='500' href='...'&gt;Link&lt;/a&gt;
+  </code>
+</pre>
+        <h3>Extending Content Types</h3>
+        <p>
+          You can add additional content types by extending the <code>OkModal.prototype.contentTypes</code> object.
+        </p>
+<pre>
+  <code data-language='javascript'>
+$.extend(OkModal.prototype.contentTypes, {
+  myContentType: {
+    // The matcher should return a result if the given element matches the content type
+    // What it returns is up to your implementation, but the result will be fed into 
+    // the content function
+    matcher: function(element){ return matcherResult; },
+    // The content function should return a DOM Element, jQuery object or an HTML string
+    content: function(element, matcherResult){ return html; }
+  }
+});
+  </code>
+</pre>
+      </section>
+      <section class='twelve'>
+        <h3>Transitions</h3>
+        <p>
+          okModal provides a few transitions that you can use to control how the content is shown on the screen.
+        </p>
+        <p>
+          Note that these transitions require the <a href='https://github.com/rstacruz/jquery.transit'>jquery.transit</a>
+          plugin to be loaded.  Without it, the transitions will simply fade
+          the modal in.
+        </p>
+        <a class='modal' href='../../assets/images/one.png'>Fade In (Default)</a>
+<pre>
+  <code data-language='javascript'>
+$(".modal").okModal();
+  </code>
+</pre>
+        <a class='slide-top' href='../../assets/images/three.png'>Slide In (Top)</a>
+<pre>
+  <code data-language='javascript'>
+$(".slide-top").okModal({ transition: 'slide' });
+  </code>
+</pre>
+        <a class='slide-right' href='../../assets/images/two.png'>Slide In (Right)</a>
+<pre>
+  <code data-language='javascript'>
+$(".slide-right").okModal({ transition: 'slide', direction: 'right'});
+  </code>
+</pre>
+        <a class='flip-h' href='../../assets/images/four.png'>3D Flip (Horizontal)</a>
+<pre>
+  <code data-language='javascript'>
+$(".flip-h").okModal({ transition: 'flip' });
+  </code>
+</pre>
+        <a class='flip-v' href='../../assets/images/five.png'>3D Flip (Vertical)</a>
+<pre>
+  <code data-language='javascript'>
+$(".flip-v").okModal({ transition: 'flip', vertical: true });
+  </code>
+</pre>
+        <a class='super-scale' href='../../assets/images/six.png'>Super Scaled</a>
+<pre>
+  <code data-language='javascript'>
+$(".super-scale").okModal({ transition: 'fade', scale: 2 });
+  </code>
+</pre>
+        <a class='full' href='#hello-world'>Full Screen</a>
+<pre>
+  <code data-language='javascript'>
+// Can be used with any transition. Just toggles the html element to overflow:hidden
+$(".full").okModal({ dimensions: { height: 'natural', width: '100%' }, fullscreen: true, scale: 1 });
+  </code>
+</pre>
+        <h3>Adding Transitions</h3>
+        <p>
+          Similar to content types, you can add additinal transitions by extending <code>OkModal.prototype.transitions</code> 
+        </p>
+<pre>
+  <code data-language='javascript'>
+$.extend(OkModal.prototype.transitions, {
+  myTransition: {
+    onOpen: function(modal, options){
+      // Do some visual wizardy
+    },
+    onClose: function(modal, options){
+      // Do some visual wizardy
+    }
+  }
+});
+
+// You can then use your fancy new transition by passing in the transition option
+$(".modal").okModal({ transition: 'myTransition' });
+  </code>
+</pre>
+      </section>
+      <section class='twelve'>
+        <h3>UI</h3>
+        <p>
+          okModal comes with one prebuilt UI - a gallery.  All the items that
+          match the given selector will be treated as part of the same gallery.
+        </p>
+        <ul id='gallery-example'>
+          <li><a href='../../assets/images/one.png'><img src='../../assets/images/thumbs/one.png' alt='' /></a></li>
+          <li><a href='../../assets/images/giant.png'><img src='../../assets/images/thumbs/giant.png' alt='' /></a></li>
+          <li><a href='../../assets/images/three.png'><img src='../../assets/images/thumbs/three.png' alt='' /></a></li>
+          <li><a href='../../assets/images/huge.png'><img src='../../assets/images/thumbs/huge.png' alt='' /></a></li>
+          <li><a href='../../assets/images/five.png'><img src='../../assets/images/thumbs/five.png' alt='' /></a></li>
+        </ul>
+<pre>
+  <code data-language='javascript'>
+$("#gallery-example a").okModal({ ui: 'gallery', dimensions: { scale: 80 } });
+  </code>
+</pre>
+      </section>
+      <section class='twelve'>
+        <h3>Manual Usage</h3>
+        <p>
+          Instead of invoking okModal through <code>$.fn.okModal</code>, you
+          can invoke it through <code>$.okModal</code>, which will allow you
+          manually control the modal.
+          There are three methods you should be concerned with
+          <code>open</code>,<code>close</code> and <code>destroy</code>.  Open
+          and close show and hide the modal respectively, and destroy will
+          remove the modal from the page and unbind events.
+        </p>
+        <p>
+          <a class='manual' href='#'>Click Me</a>
+        </p>
+        <p>
+          Note that no events are bound for you in manual mode.
+        </p>
+<pre>
+  <code data-language='javascript'>
+var modal = $.okModal();
+
+$("a.manual").click(function(e){
+  e.preventDefault();
+
+  // modal.open takes the content that you want to show
+  modal.open("&lt;div&gt;Hello World!&lt;/div&gt;");
+
+  setTimeout(function(){
+    modal.close();
+  },2000);
+});
+  </code>
+</pre>
+      </section>
+    </article>
+    <footer>
+      <h1><a href='http://okbreathe.com'>okbreathe</a></h1>
+    </footer>
+    <div id='hello-world' style='display:none'>
+      <h1>Hello World</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+        sint occaecat cupidatat non proident, sunt in culpa qui officia
+        deserunt mollit anim id est laborum
+      </p>
+    </div>
+  </div> <!-- #doc -->
+  <script>
+    $(".modal").okModal({ dimensions: { scale: 80 } });
+    $(".slide-top").okModal({ dimensions: { scale: 80 }, transition: 'slide' });
+    $(".slide-right").okModal({ dimensions: { scale: 80 }, transition: 'slide', direction: 'right'});
+    $(".flip-h").okModal({ dimensions: { scale: 80 }, transition: 'flip' });
+    $(".flip-v").okModal({ dimensions: { scale: 80 }, transition: 'flip', vertical: true });
+    $(".super-scale").okModal({ dimensions: { scale: 80 }, transition: 'fade', scale: 2 });
+    $(".full").okModal({ dimensions: { height: 'natural', width: '100%' }, fullscreen: true, scale: 1 });
+    $("#gallery-example a").okModal({ ui: 'gallery', dimensions: { scale: 80 } });
+    var modal = $.okModal();
+    $("a.manual").click(function(e){
+      e.preventDefault();
+      modal.open("<div>Hello World</div>");
+      setTimeout(function(){
+        modal.close();
+      },2000);
+    });
+  </script>
+</body>
+</html>
