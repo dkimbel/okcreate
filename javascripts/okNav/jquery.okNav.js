@@ -111,7 +111,6 @@
         $.fn.okNav.history.push(function(e){
           var selected = links.filter("[href='"+window.location.hash+"']");
 
-
           if (window.location.hash && selected.length) {
             select(e, selected, links, targets, opts);
           }
