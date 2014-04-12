@@ -204,17 +204,23 @@ function eventHandler(place,event) {
           of an <a href='https://developers.google.com/maps/documentation/javascript/reference#OverlayView'>OverlayView</a>,
           called an <strong>infoPane</strong>. It relies either on an existing in-page
           element or a template passed in on initialization to render the OverlayView. 
-          The infoPane is then controlled by binding an event to
-          <code>infoPane</code>. Additionally, you can provide an
-          <code>render</code> function which will be called when the event is
-          triggered, this will allow you to customize the infoPane.
+          The infoPane is controlled by binding an event to the
+          <code>infoPane.open</code> method. 
         </p>
         <p>
-          infoPanes bind a click event to the any element with a <code>data-close</code> attribute. You can however
-          manually close an infoPane by calling the close method: <code>$(map).okMap('infoPane').close()</code>.
+          You must provide an <code>render</code> function which will be called
+          when the event is triggered. This will where you set the content
+          within the infoPane. You can manually open an infoPane by calling the open method:
+          <code>$("#map").okMap('infoPane','open', place)</code>
         </p>
         <p>
-          Note that the scope option must be omitted (to scope to the map itself) for this to work
+          infoPanes bind a click event to the any element with a
+          <code>data-close</code> attribute within the map instance. You can
+          however manually close an infoPane by calling the close method:
+          <code>$("#map").okMap('infoPane', 'close')</code>.
+        </p>
+        <p>
+          Note that you must not set the scope when using the UI. This is to ensure scope remains set to the map instance.
         </p>
         <pre>
           <code data-language='html'>
@@ -224,22 +230,23 @@ function eventHandler(place,event) {
         <pre>
           <code data-language='javascript'>
 var map = $(".map").okMap({
-  click: 'infoPane',
+  ui: 'infoPane', // Can also be an array of UIs
+  // infoPane ui options
   infoPane: {
     selector: ".infoPane", // Change to suit your needs
     template: null, // Pass in inline HTML 
     render: function(infoPane, place, event){
       infoPane.html("I'm an infoPane - read about me below!&lt;br/&gt;&lt;a data-close href='#'&gt;Click me to close!&lt;/a&gt;");
-    },
-    places: [
-      // ...
-      { 
-        title: 'In-N-Out Burger 7', 
-        address: '1417 Fitzgerald Dr, Pinole, CA 94564', 
-        events: { click: 'infoPane.open' }, 
-      }
-    ]
-  }
+    }
+  },
+  places: [
+    // ...
+    { 
+      title: 'In-N-Out Burger 7', 
+      address: '1417 Fitzgerald Dr, Pinole, CA 94564', 
+      events: { click: 'infoPane.open' }, 
+    }
+  ]
 });
           </code>
         </pre>
@@ -257,6 +264,7 @@ var map = $(".map").okMap({
       events: {
         click: 'handleClick',
       },
+      ui: 'infoPane',
       infoPane: { 
         render: function(ip){ 
           ip.html("I'm an infoPane - read about me below!<br/><a data-close href='#'>Click me to close!</a>");

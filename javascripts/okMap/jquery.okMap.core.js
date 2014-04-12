@@ -15,16 +15,15 @@
 (function($){
 
   window.okMap = function(el, opts){
-    this.element   = el;
-    this.places    = {};
-    this.bounds    = new google.maps.LatLngBounds();
-    this.currentId = 0;
-    this.options   = $.extend(true, {
+    var self = this;
+
+    opts  = $.extend(true, {
       events     : {},      // Specify marker events globally in event, handler pairs. Events can be one of 'click', 'dblclick', 'mouseup', 'mousedown', 'mouseover', 'mouseout'.
                             // Note that the default behavior can be overriden on a per-marker basis by passing in an events object for the given marker
       scope      : null,    // Object that event methods will be called on. If omitted it will either default to the map okMap object itself
       autoFit    : true,    // Resize to fit when places are added or removed
       keepZoom   : true,    // Used in conjunction with autoFit. Will keep current zoom level if the markers are already visible, otherwise will zoom to fit
+      ui         : null,    // String or array of strings. Name or names of UI's to use with this map.
       maxZoom    : 15,      // Used in conjunction with autoFit. If during autofit the map zooms in too far, it will be set to this level.
       places     : [],      // Initial list of places
       whiney     : true,    // Whether or not failing geocoding logs the error
@@ -35,8 +34,20 @@
       }
     }, $(el).data(opts.dataAttribute || 'map'), opts); // data attribute of inlined json that can be used as options when initializing okMap
 
+    this.element   = el;
+    this.places    = {};
+    this.bounds    = new google.maps.LatLngBounds();
+    this.currentId = 0;
+    this.options   = opts;
     this.map = new google.maps.Map(this.element, this.options.mapOptions);
     this.set(this.options.places);
+
+    // Initialize UI components
+    $.each(makeArray(opts.ui),function(){
+      var args = opts[this],
+          scope = opts.scope || self;
+      if (scope[this]) scope[this](args);
+    });
   };
 
   function bindEvents(self, scope, place) {
@@ -62,9 +73,9 @@
     });
   }
 
+  // So each of these functions can either take an array of places or just multiple arguments,
   $.extend(okMap.prototype,{
     // Set the current set of places. Removes any existing places
-    // Can either take multiple places as an argument list or an array of places
     set: function(){
       this.remove();
       this.bounds = new google.maps.LatLngBounds();
@@ -236,13 +247,6 @@
           // initialize new instance
           map = new okMap( this, opts );
 
-          // Add UI
-          if ($.fn.okMap.ui) {
-            $.each($.fn.okMap.ui, function(_,ui){
-              if (opts[ui]) map[ui](opts[ui]);
-            });
-          }
-
           $.data( this, 'okMap',  map );
         }
       });
@@ -251,8 +255,11 @@
     return this;
   };
 
+  // Since many of the functions can either take an array of arguments or a
+  // series of arguments we want sure ensure we're consistently working with a
+  // 1d array
   function makeArray(args) {
-    return args[0] instanceof Array ? args[0] : args;
+    return $.isArray(args) ? ($.isArray(args[0]) ? args[0] : args) : (args ? [args] : []);
   }
 
 })(jQuery);

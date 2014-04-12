@@ -14,11 +14,11 @@
  */
 (function($){
 
-  $.fn.okMap.ui = [
-    'infoPane'
-  ];
-
   okMap.prototype.infoPane = function(options){
+    var args = Array.prototype.slice.call( arguments, 1 );
+    if ( typeof options === 'string' ) {
+      this._infoPane[options].apply( this._infoPane, args );
+    }
     return this._infoPane || (this._infoPane = new InfoPane(options));
   };
 
