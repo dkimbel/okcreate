@@ -134,6 +134,10 @@
   border-radius: 4px;
 }
 
+.styled.select option {
+  color: #444;
+}
+
 .styled.select.active,
 .styled.select:hover {
   background: #d9dcde;

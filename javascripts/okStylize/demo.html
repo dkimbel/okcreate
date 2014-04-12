@@ -34,15 +34,26 @@
     <article id="main" class='container'>
       <div class='twelve'>
         <p class='box'>Styling for unstyleable form elements: checkboxes, radios, selects and file inputs</p> 
-        <p>Note that as usual the styles are NOT part of the okcreate! framework, but are simply the demo styles.</p>
         <p>okStylize can be used to style ANY input - though you probably <em>shouldn't</em>, because it is unnecessary!</p>
         <pre>
           <code data-language='javascript'>
+// On every input in a form
 $("form").okStylize();
+
+// Or on an individual input
+$("form :input").okStylize();
           </code>
         </pre>
 
+        <p>okStylize essentially does three things to inputs:</p>
+        <ol>
+          <li>Wraps the input in additional elements to assist with styling (customizable)</li>
+          <li>Sets appropriate classes on the wrapped input regarding state (selected, hover, disabled etc.)</li>
+          <li>Proxies events to the original input so changes to the UI are mirrored in the actual form input</li>
+        </ol>
+
         <form id='example' action=''>
+          <p>Note that the styles are <strong>not</strong> part of the okcreate! framework, but are simply for demonstration.</p>
           <fieldset>
             <h4>Select Dropdown</h4>
 
@@ -110,6 +121,57 @@ $("form").okStylize();
             </div>
           </fieldset>
         </form>
+        <h2>Extending Fields</h2>
+        <p>
+          If you wish to add new styled inputs or alter the behavior of an
+          existing wrapper, you must extend the <code>$.okStylize.ui</code>
+          object. Each wrapper is a plain object with a number of properties
+          that control how it is rendered and which events it responds to.
+        </p>
+        <p>
+          Let's take a look the implementation of the file wrapper:
+        </p>
+        <pre>
+          <code data-language='javascript'>
+$.okStylize.ui = {
+  file: {
+    // This function should wrap the input in as much extra markup as needed
+    // to achieve the look you're going for. This function should return
+    // element that events should be bound to.
+    setup: function(input,options){
+      var html   = "&lt;span class='filename'&gt;&lt;/span&gt;&lt;span class='action'&gt;"+opts.fileButtonHtml+"&lt;/span&gt;",
+          parent = input.wrap("&lt;div/&gt;").parent().append(html);
+
+      if (input.prop("size")) input.prop("size", parent.width() / 10); 
+
+      return parent;
+    },
+    // Determines if this wrapper should be applied to a given input. Should be a jQuery selector
+    selector: ":file",
+    // Determines which event will cause the update function to fire
+    bind: 'change',
+    // In this function you should apply any UI changes to the wrapper. In the
+    // case of the file, if a file is selected, we want to show the filename
+    // inside the input. Conversely, if no file is selected we want to clear the
+    // file name. This function will be called both when the event is triggered
+    // and immediately after setup is performed
+    update: function(input,options){
+      var filename  = input.val(),
+          container = input.parent();
+
+      if (filename === "") {
+        filename = opts.fileDefaultHtml;
+      } else {
+        filename = filename.split(/[\/\\]+/);
+        filename = filename[(filename.length - 1)];
+      }
+
+      container.find(".filename").text(filename);
+    }
+  }
+};
+          </code>
+        </pre>
       </div>
     </article>
 
@@ -123,4 +185,3 @@ $("form").okStylize();
   </script>
 </body>
 </html>
-
