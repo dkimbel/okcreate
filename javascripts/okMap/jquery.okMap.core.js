@@ -40,14 +40,15 @@
     this.currentId = 0;
     this.options   = opts;
     this.map = new google.maps.Map(this.element, this.options.mapOptions);
-    this.set(this.options.places);
 
     // Initialize UI components
     $.each(makeArray(opts.ui),function(){
-      var args = opts[this],
-          scope = opts.scope || self;
-      if (scope[this]) scope[this](args);
+      var args = opts[this];
+      if (self[this]) self[this](args);
     });
+
+    // Add initial place set
+    this.set(this.options.places);
   };
 
   function bindEvents(self, scope, place) {

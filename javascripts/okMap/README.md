@@ -33,6 +33,7 @@ events           | {}                                 | Specify marker events gl
 scope            | window                             | Object that event methods will be called on. Probably should not leave this as window - globals are bad mmkay?
 autoFit          | true                               | Resize to fit when places are added or removed
 keepZoom         | true                               | Used in conjunction with autoFit. Will keep current zoom level if the markers are already visible, otherwise will zoom to fit
+ui               | null                               | String or array of strings. Name or names of UI's to use with this map.
 maxZoom          | 15                                 | Used in conjunction with autoFit. If during autofit the map zooms in too far, it will be set to this level.
 places           | []                                 | Initial list of places
 whiney           | true                               | Whether or not failing geocoding logs the error
