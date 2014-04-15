@@ -19,7 +19,7 @@
   // Delegate .transition() calls to .animate()
   // if the browser can't do CSS transitions.
   if (!$.support.transition)
-    $.fn.transit = $.fn.animate;
+    $.fn.transition = $.fn.animate;
 
   /**
    * Effects are objects that implement two methods: 'init' and 'move'.
@@ -28,7 +28,7 @@
    *
    * @param {Object} options the original options that the plugin was initialized with
    *
-   * @method move called when transitioning between slides with an transition object. A transition object has everything a 
+   * @method move called when transitioning between slides with an transition object. A transition object has everything a
    *              growing boy needs to transition between slides:
    *
    * @param {DeferredObject} transition
